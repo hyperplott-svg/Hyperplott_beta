@@ -3,6 +3,7 @@ import { motion, useInView } from 'framer-motion';
 import { Canvas } from '@react-three/fiber';
 import { Environment, Float, PerspectiveCamera } from '@react-three/drei';
 import FeatureIcon3D from '../3d/FeatureIcon3D';
+import ThreeErrorBoundary from '../common/ThreeErrorBoundary';
 import { ChevronRight, Zap, Boxes, Activity, FlaskConical, Database, Globe } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
@@ -106,7 +107,7 @@ const Features = () => {
 
 const FeatureCard = ({ feature, index }) => {
     const ref = useRef(null);
-    const isInView = useInView(ref, { once: true, margin: "-50px" });
+    const isInView = useInView(ref, { once: false, margin: "-50px" });
     const Icon = feature.icon;
 
     return (
@@ -121,17 +122,21 @@ const FeatureCard = ({ feature, index }) => {
                 {/* Visual Header */}
                 <div className="relative w-full h-64 rounded-[36px] bg-slate-950 border border-white/5 overflow-hidden mb-8">
                     <div className="absolute inset-0 bg-gradient-to-b from-primary/5 to-transparent pointer-events-none" />
-                    <Canvas dpr={[1, 2]}>
-                        <Suspense fallback={null}>
-                            <PerspectiveCamera makeDefault position={[0, 0, 4]} />
-                            <Environment preset="night" />
-                            <ambientLight intensity={0.5} />
-                            <pointLight position={[10, 10, 10]} intensity={1.5} color={feature.color} />
-                            <Float speed={3} rotationIntensity={1.5} floatIntensity={1.2}>
-                                <FeatureIcon3D type={feature.type} color={feature.color} />
-                            </Float>
-                        </Suspense>
-                    </Canvas>
+                    {isInView && (
+                        <ThreeErrorBoundary>
+                            <Canvas dpr={[1, 2]}>
+                                <Suspense fallback={null}>
+                                    <PerspectiveCamera makeDefault position={[0, 0, 4]} />
+                                    <Environment preset="night" />
+                                    <ambientLight intensity={0.5} />
+                                    <pointLight position={[10, 10, 10]} intensity={1.5} color={feature.color} />
+                                    <Float speed={3} rotationIntensity={1.5} floatIntensity={1.2}>
+                                        <FeatureIcon3D type={feature.type} color={feature.color} />
+                                    </Float>
+                                </Suspense>
+                            </Canvas>
+                        </ThreeErrorBoundary>
+                    )}
 
                     {/* Micro-label on Card Visual */}
                     <div className="absolute top-6 left-6 flex items-center gap-2 px-3 py-1 rounded-full bg-black/40 backdrop-blur-md border border-white/10">

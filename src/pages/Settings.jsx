@@ -26,6 +26,7 @@ import Card from '../components/common/Card';
 import { Container, Grid } from '../components/common/Layout';
 import { Badge } from '../components/common/UIElements';
 import { clsx } from 'clsx';
+import SEO from '../components/common/SEO';
 
 const Settings = () => {
     const [activeTab, setActiveTab] = useState('profile');
@@ -40,6 +41,7 @@ const Settings = () => {
 
     return (
         <div className="max-w-7xl mx-auto space-y-12 pb-20">
+            <SEO title="Settings" />
             <div className="flex items-center justify-between px-4">
                 <div>
                     <h1 className="text-4xl font-black text-slate-900 tracking-tight mb-2">Workspace Controls</h1>

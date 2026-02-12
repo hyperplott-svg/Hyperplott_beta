@@ -2,12 +2,14 @@ import React, { useState } from 'react';
 import { AnimatePresence } from 'framer-motion';
 import DesignOfExperimentView from '../doe/components/DesignOfExperimentView';
 import WelcomeScreen from '../doe/components/WelcomeScreen';
+import SEO from '../components/common/SEO';
 
 const DOEToolPage = () => {
     const [showWelcome, setShowWelcome] = useState(true);
 
     return (
         <div className="h-full w-full text-slate-900 font-sans flex overflow-hidden bg-white rounded-[2.5rem] shadow-2xl border border-slate-100">
+            <SEO title="Workspace" />
             <AnimatePresence mode="wait">
                 {showWelcome ? (
                     <WelcomeScreen key="welcome" onAnimationEnd={() => setShowWelcome(false)} />

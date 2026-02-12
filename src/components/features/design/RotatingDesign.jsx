@@ -7,6 +7,7 @@ import {
     PointMaterial,
 } from '@react-three/drei';
 import * as THREE from 'three';
+import ThreeErrorBoundary from '../../common/ThreeErrorBoundary';
 
 const DataPoints = () => {
     const points = useMemo(() => {
@@ -88,19 +89,21 @@ const FactorialCube = () => {
 const RotatingDesign = () => {
     return (
         <div className="w-full h-full relative">
-            <Canvas camera={{ position: [0, 0, 8], fov: 45 }}>
-                <ambientLight intensity={0.8} />
-                <pointLight position={[10, 10, 10]} intensity={1} color="#EEF2FF" />
-                <spotLight position={[-10, 10, 10]} angle={0.15} penumbra={1} intensity={1} />
+            <ThreeErrorBoundary>
+                <Canvas camera={{ position: [0, 0, 8], fov: 45 }}>
+                    <ambientLight intensity={0.8} />
+                    <pointLight position={[10, 10, 10]} intensity={1} color="#EEF2FF" />
+                    <spotLight position={[-10, 10, 10]} angle={0.15} penumbra={1} intensity={1} />
 
-                <Float speed={2} rotationIntensity={0.5} floatIntensity={0.5}>
-                    <FactorialCube />
-                </Float>
+                    <Float speed={2} rotationIntensity={0.5} floatIntensity={0.5}>
+                        <FactorialCube />
+                    </Float>
 
-                <DataPoints />
+                    <DataPoints />
 
-                <OrbitControls enableZoom={false} enablePan={false} autoRotate speed={0.5} />
-            </Canvas>
+                    <OrbitControls enableZoom={false} enablePan={false} autoRotate speed={0.5} />
+                </Canvas>
+            </ThreeErrorBoundary>
         </div>
     );
 };

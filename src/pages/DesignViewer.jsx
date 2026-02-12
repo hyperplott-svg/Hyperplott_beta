@@ -46,6 +46,7 @@ import Card from '../components/common/Card';
 import { Container, Grid } from '../components/common/Layout';
 import { Badge } from '../components/common/UIElements';
 import { clsx } from 'clsx';
+import SEO from '../components/common/SEO';
 
 const DesignViewer = () => {
     const { id } = useParams();
@@ -83,6 +84,7 @@ const DesignViewer = () => {
 
     return (
         <div className="space-y-10 pb-32 max-w-[1600px] mx-auto">
+            <SEO title={`Design: ${designName}`} />
             {/* Header Area */}
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-8 bg-white p-10 rounded-[2.5rem] shadow-xl shadow-black/5">
                 <div className="flex items-center gap-6">

@@ -1,14 +1,17 @@
-import React, { useState, Suspense } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import React, { useState, Suspense, useRef } from 'react';
+import { motion, AnimatePresence, useInView } from 'framer-motion';
 import { Maximize2, Download, Terminal, Database, Presentation } from 'lucide-react';
 import { Canvas } from '@react-three/fiber';
 import { Environment, OrbitControls, ContactShadows } from '@react-three/drei';
 import ResponseSurface from '../3d/ResponseSurface';
 import Pareto3D from '../3d/Pareto3D';
 import MatrixGrid3D from '../3d/MatrixGrid3D';
+import ThreeErrorBoundary from '../common/ThreeErrorBoundary';
 
 const VisualizationShowcase = () => {
     const [activeTab, setActiveTab] = useState(0);
+    const ref = useRef(null);
+    const isInView = useInView(ref, { once: false, amount: 0.1 });
 
     const plots = [
         {
@@ -116,26 +119,30 @@ const VisualizationShowcase = () => {
                                     </div>
                                 </div>
 
-                                {/* Interactive 3D Canvas */}
-                                <div className="w-full md:w-2/3 h-full relative">
-                                    <Canvas dpr={[1, 2]} camera={{ position: [0, 5, 12], fov: 40 }}>
-                                        <Suspense fallback={null}>
-                                            <Environment preset="night" />
-                                            <ambientLight intensity={0.3} />
-                                            <pointLight position={[10, 10, 10]} intensity={2} color="#6366F1" />
-                                            <pointLight position={[-10, -10, -10]} intensity={1} color="#C084FC" />
+                                { /* Interactive 3D Canvas */}
+                                <div className="w-full md:w-2/3 h-full relative" ref={ref}>
+                                    {isInView && (
+                                        <ThreeErrorBoundary>
+                                            <Canvas dpr={[1, 2]} camera={{ position: [0, 5, 12], fov: 40 }}>
+                                                <Suspense fallback={null}>
+                                                    <Environment preset="night" />
+                                                    <ambientLight intensity={0.3} />
+                                                    <pointLight position={[10, 10, 10]} intensity={2} color="#6366F1" />
+                                                    <pointLight position={[-10, -10, -10]} intensity={1} color="#C084FC" />
 
-                                            <group scale={1.2}>
-                                                {activeTab === 0 && <ResponseSurface position={[0, -2.5, 0]} />}
-                                                {activeTab === 1 && <ResponseSurface position={[0, 0, 0]} rotation={[Math.PI / 2, 0, 0]} />}
-                                                {activeTab === 2 && <Pareto3D position={[0, -2, 0]} scale={1.2} />}
-                                                {activeTab === 3 && <MatrixGrid3D position={[0, 0, 0]} scale={1.2} />}
-                                            </group>
+                                                    <group scale={1.2}>
+                                                        {activeTab === 0 && <ResponseSurface position={[0, -2.5, 0]} />}
+                                                        {activeTab === 1 && <ResponseSurface position={[0, 0, 0]} rotation={[Math.PI / 2, 0, 0]} />}
+                                                        {activeTab === 2 && <Pareto3D position={[0, -2, 0]} scale={1.2} />}
+                                                        {activeTab === 3 && <MatrixGrid3D position={[0, 0, 0]} scale={1.2} />}
+                                                    </group>
 
-                                            <ContactShadows position={[0, -4, 0]} opacity={0.6} scale={20} blur={2.5} far={4.5} />
-                                            <OrbitControls enableZoom={false} autoRotate={activeTab === 0} autoRotateSpeed={0.5} makeDefault />
-                                        </Suspense>
-                                    </Canvas>
+                                                    <ContactShadows position={[0, -4, 0]} opacity={0.6} scale={20} blur={2.5} far={4.5} />
+                                                    <OrbitControls enableZoom={false} autoRotate={activeTab === 0} autoRotateSpeed={0.5} makeDefault />
+                                                </Suspense>
+                                            </Canvas>
+                                        </ThreeErrorBoundary>
+                                    )}
 
                                     {/* Engine Status Label */}
                                     <div className="absolute bottom-10 right-10 px-4 py-2 bg-black/60 backdrop-blur-xl border border-white/10 rounded-full flex items-center gap-3">
@@ -157,8 +164,8 @@ const VisualizationShowcase = () => {
                                 key={i}
                                 onClick={() => setActiveTab(i)}
                                 className={`p-8 rounded-[2rem] border transition-all duration-500 text-left group relative overflow-hidden ${activeTab === i
-                                        ? 'bg-white/5 border-primary shadow-glow scale-[1.02]'
-                                        : 'bg-white/[0.02] border-white/10 hover:border-white/20 hover:bg-white/[0.04]'
+                                    ? 'bg-white/5 border-primary shadow-glow scale-[1.02]'
+                                    : 'bg-white/[0.02] border-white/10 hover:border-white/20 hover:bg-white/[0.04]'
                                     }`}
                             >
                                 <div className={`absolute top-0 left-0 w-full h-1 bg-gradient-to-r ${plot.gradient} opacity-${activeTab === i ? '100' : '0'} transition-opacity`} />

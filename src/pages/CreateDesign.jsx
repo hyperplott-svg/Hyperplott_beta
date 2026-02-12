@@ -30,6 +30,7 @@ import Card from '../components/common/Card';
 import { Container, Grid } from '../components/common/Layout';
 import { Badge } from '../components/common/UIElements';
 import { clsx } from 'clsx';
+import SEO from '../components/common/SEO';
 
 const factorSchema = z.object({
     name: z.string().min(1, 'Factor name is required'),
@@ -93,6 +94,7 @@ const CreateDesign = () => {
 
     return (
         <div className="pb-32 max-w-7xl mx-auto">
+            <SEO title="Create Design" />
             {/* Progress Indicator */}
             <div className="mb-20 px-8">
                 <div className="flex items-center justify-between relative">

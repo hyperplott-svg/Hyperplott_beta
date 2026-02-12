@@ -34,6 +34,7 @@ import Card from '../components/common/Card';
 import Button from '../components/common/Button';
 import { Container, Grid } from '../components/common/Layout';
 import { Badge, Stat } from '../components/common/UIElements';
+import SEO from '../components/common/SEO';
 
 const Dashboard = () => {
     const [activeTab, setActiveTab] = useState('all');
@@ -48,6 +49,7 @@ const Dashboard = () => {
 
     return (
         <div className="space-y-10 pb-20 max-w-[1400px] mx-auto">
+            <SEO title="Dashboard" />
 
             {/* 1. Welcome Banner - Redesigned with Premium Gradient */}
             <AnimatePresence>

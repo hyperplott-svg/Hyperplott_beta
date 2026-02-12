@@ -1,4 +1,5 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { HelmetProvider } from 'react-helmet-async';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import LandingPage from './pages/LandingPage';
 import DashboardPage from './pages/Dashboard';
@@ -45,32 +46,34 @@ const RootRedirect = () => {
 
 function App() {
   return (
-    <AuthProvider>
-      <Router>
-        <Routes>
-          {/* Public Routes */}
-          <Route path="/" element={<RootRedirect />} />
-          <Route path="/login" element={<PublicRoute><LoginPage /></PublicRoute>} />
-          <Route path="/signup" element={<PublicRoute><SignupPage /></PublicRoute>} />
-          <Route path="/privacy" element={<PrivacyPolicy />} />
-          <Route path="/terms" element={<TermsAndConditions />} />
+    <HelmetProvider>
+      <AuthProvider>
+        <Router>
+          <Routes>
+            {/* Public Routes */}
+            <Route path="/" element={<RootRedirect />} />
+            <Route path="/login" element={<PublicRoute><LoginPage /></PublicRoute>} />
+            <Route path="/signup" element={<PublicRoute><SignupPage /></PublicRoute>} />
+            <Route path="/privacy" element={<PrivacyPolicy />} />
+            <Route path="/terms" element={<TermsAndConditions />} />
 
-          {/* Private Routes */}
-          <Route path="/dashboard" element={<ProtectedRoute><MainLayout><DashboardPage /></MainLayout></ProtectedRoute>} />
-          <Route path="/workspace" element={<ProtectedRoute><MainLayout noPadding><DOEToolPage /></MainLayout></ProtectedRoute>} />
-          <Route path="/create" element={<ProtectedRoute><MainLayout><CreateDesign /></MainLayout></ProtectedRoute>} />
-          <Route path="/designs" element={<ProtectedRoute><MainLayout><DashboardPage /></MainLayout></ProtectedRoute>} />
-          <Route path="/templates" element={<ProtectedRoute><MainLayout><DashboardPage /></MainLayout></ProtectedRoute>} />
-          <Route path="/analytics" element={<ProtectedRoute><MainLayout><DashboardPage /></MainLayout></ProtectedRoute>} />
-          <Route path="/design/:id" element={<ProtectedRoute><MainLayout><DesignViewer /></MainLayout></ProtectedRoute>} />
-          <Route path="/settings" element={<ProtectedRoute><MainLayout><Settings /></MainLayout></ProtectedRoute>} />
-          <Route path="/help" element={<ProtectedRoute><MainLayout><Settings /></MainLayout></ProtectedRoute>} />
+            {/* Private Routes */}
+            <Route path="/dashboard" element={<ProtectedRoute><MainLayout><DashboardPage /></MainLayout></ProtectedRoute>} />
+            <Route path="/workspace" element={<ProtectedRoute><MainLayout noPadding><DOEToolPage /></MainLayout></ProtectedRoute>} />
+            <Route path="/create" element={<ProtectedRoute><MainLayout><CreateDesign /></MainLayout></ProtectedRoute>} />
+            <Route path="/designs" element={<ProtectedRoute><MainLayout><DashboardPage /></MainLayout></ProtectedRoute>} />
+            <Route path="/templates" element={<ProtectedRoute><MainLayout><DashboardPage /></MainLayout></ProtectedRoute>} />
+            <Route path="/analytics" element={<ProtectedRoute><MainLayout><DashboardPage /></MainLayout></ProtectedRoute>} />
+            <Route path="/design/:id" element={<ProtectedRoute><MainLayout><DesignViewer /></MainLayout></ProtectedRoute>} />
+            <Route path="/settings" element={<ProtectedRoute><MainLayout><Settings /></MainLayout></ProtectedRoute>} />
+            <Route path="/help" element={<ProtectedRoute><MainLayout><Settings /></MainLayout></ProtectedRoute>} />
 
-          {/* Fallback */}
-          <Route path="*" element={<Navigate to="/" replace />} />
-        </Routes>
-      </Router>
-    </AuthProvider>
+            {/* Fallback */}
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </Routes>
+        </Router>
+      </AuthProvider>
+    </HelmetProvider>
   );
 }
 

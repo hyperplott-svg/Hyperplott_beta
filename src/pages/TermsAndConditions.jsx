@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import Navbar from '../components/landing/Navbar';
 import Footer from '../components/landing/Footer';
+import SEO from '../components/common/SEO';
 
 const TermsAndConditions = () => {
     useEffect(() => {
@@ -9,6 +10,10 @@ const TermsAndConditions = () => {
 
     return (
         <div className="min-h-screen bg-bg-primary text-gray-300 font-sans selection:bg-blue-500/30">
+            <SEO
+                title="Terms & Conditions"
+                description="Our terms and conditions outline the agreement between you and Hyperplott regarding the use of our platform."
+            />
             <Navbar />
 
             <main className="max-w-4xl mx-auto px-6 py-24 sm:py-32">

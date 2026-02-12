@@ -7,6 +7,7 @@ import { Link } from 'react-router-dom';
 import FactorialCube from '../3d/FactorialCube';
 import ResponseSurface from '../3d/ResponseSurface';
 import FloatingParticles from '../3d/FloatingParticles';
+import ThreeErrorBoundary from '../common/ThreeErrorBoundary';
 
 const Hero = () => {
     const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
@@ -48,28 +49,30 @@ const Hero = () => {
 
             {/* 3D Scene */}
             <div className="absolute inset-0 z-10 pointer-events-none opacity-80">
-                <Canvas camera={{ position: [0, 0, 15], fov: 45 }}>
-                    <Suspense fallback={null}>
-                        <Environment preset="night" />
-                        <ambientLight intensity={0.2} />
-                        <pointLight position={[10, 10, 10]} intensity={2} color="#6366F1" />
-                        <pointLight position={[-10, -10, -10]} intensity={1} color="#C084FC" />
+                <ThreeErrorBoundary>
+                    <Canvas camera={{ position: [0, 0, 15], fov: 45 }}>
+                        <Suspense fallback={null}>
+                            <Environment preset="night" />
+                            <ambientLight intensity={0.2} />
+                            <pointLight position={[10, 10, 10]} intensity={2} color="#6366F1" />
+                            <pointLight position={[-10, -10, -10]} intensity={1} color="#C084FC" />
 
-                        <Float speed={2} rotationIntensity={1.5} floatIntensity={1.5}>
-                            <motion.group style={{ x: mouseX, y: mouseY }}>
-                                <FactorialCube position={[7, 1.5, -3]} scale={1.5} />
-                            </motion.group>
-                        </Float>
+                            <Float speed={2} rotationIntensity={1.5} floatIntensity={1.5}>
+                                <motion.group style={{ x: mouseX, y: mouseY }}>
+                                    <FactorialCube position={[7, 1.5, -3]} scale={1.5} />
+                                </motion.group>
+                            </Float>
 
-                        <Float speed={1.5} rotationIntensity={0.8} floatIntensity={1}>
-                            <motion.group style={{ x: useSpring(mousePos.x * -0.5, springConfig), y: useSpring(mousePos.y * -0.5, springConfig) }}>
-                                <ResponseSurface position={[-9, -3, -2]} scale={1} />
-                            </motion.group>
-                        </Float>
+                            <Float speed={1.5} rotationIntensity={0.8} floatIntensity={1}>
+                                <motion.group style={{ x: useSpring(mousePos.x * -0.5, springConfig), y: useSpring(mousePos.y * -0.5, springConfig) }}>
+                                    <ResponseSurface position={[-9, -3, -2]} scale={1} />
+                                </motion.group>
+                            </Float>
 
-                        <FloatingParticles count={60} color="#818CF8" />
-                    </Suspense>
-                </Canvas>
+                            <FloatingParticles count={60} color="#818CF8" />
+                        </Suspense>
+                    </Canvas>
+                </ThreeErrorBoundary>
             </div>
 
             <div className="container mx-auto px-6 relative z-20">
