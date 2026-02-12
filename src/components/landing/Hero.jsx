@@ -21,7 +21,6 @@ const Hero = () => {
 
         window.addEventListener('mousemove', handleMouseMove);
         return () => {
-            clearInterval(interval);
             window.removeEventListener('mousemove', handleMouseMove);
         };
     }, []);
