@@ -8,7 +8,6 @@ import UseCases from '../components/landing/UseCases';
 import Workflow from '../components/landing/Workflow';
 import VisualizationShowcase from '../components/landing/VisualizationShowcase';
 import Testimonials from '../components/landing/Testimonials';
-import Founders from '../components/landing/Founders';
 import VideoSection from '../components/landing/VideoSection';
 import Pricing from '../components/landing/Pricing';
 import FAQ from '../components/landing/FAQ';
@@ -29,7 +28,6 @@ const LandingPage = () => {
                 <Workflow />
                 <VisualizationShowcase />
                 <Testimonials />
-                <Founders />
                 <Pricing />
                 <FAQ />
                 <CTA />
