@@ -2,22 +2,16 @@ import React, { useRef, Suspense, useState, useEffect } from 'react';
 import { motion, AnimatePresence, useScroll, useTransform, useSpring } from 'framer-motion';
 import { Canvas } from '@react-three/fiber';
 import { Environment, Float, OrbitControls, ContactShadows } from '@react-three/drei';
-import { ArrowRight, Play, Sparkles, ChevronRight, Zap } from 'lucide-react';
+import { ArrowRight, Play, Sparkles, ChevronRight, Zap, CheckCircle } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import FactorialCube from '../3d/FactorialCube';
 import ResponseSurface from '../3d/ResponseSurface';
 import FloatingParticles from '../3d/FloatingParticles';
 
 const Hero = () => {
-    const [wordIndex, setWordIndex] = useState(0);
-    const words = ["Optimal", "Faster", "Validated", "Intelligent"];
     const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
 
     useEffect(() => {
-        const interval = setInterval(() => {
-            setWordIndex((prev) => (prev + 1) % words.length);
-        }, 3000);
-
         const handleMouseMove = (e) => {
             const { clientX, clientY } = e;
             const moveX = (clientX - window.innerWidth / 2) / 60;
@@ -88,33 +82,20 @@ const Hero = () => {
                         className="inline-flex items-center gap-3 px-5 py-2 rounded-full bg-white/5 border border-white/10 text-primary-purple text-xs font-black uppercase tracking-[0.3em] mb-12 shadow-inner-glow backdrop-blur-md"
                     >
                         <Zap className="w-4 h-4 text-accent-teal fill-accent-teal animate-pulse" />
-                        AI-Empowered experimental systems
+                        Beta Access Now Open • 50% Early Bird Discount
                     </motion.div>
 
                     {/* Headline */}
-                    <div className="relative mb-12 max-w-5xl">
+                    <div className="relative mb-8 max-w-5xl">
                         <motion.h1
                             initial={{ opacity: 0, y: 30 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.8, ease: "easeOut" }}
-                            className="text-7xl md:text-9xl font-black tracking-tighter leading-[0.85] text-white"
+                            className="text-6xl md:text-8xl lg:text-9xl font-black tracking-tighter leading-[0.9] text-white"
                         >
-                            Design <br />
-                            <div className="relative inline-block h-[1.1em] min-w-[300px] md:min-w-[600px] align-middle">
-                                <AnimatePresence mode="wait">
-                                    <motion.span
-                                        key={words[wordIndex]}
-                                        initial={{ opacity: 0, y: 50, rotateX: 60 }}
-                                        animate={{ opacity: 1, y: 0, rotateX: 0 }}
-                                        exit={{ opacity: 0, y: -50, rotateX: -60 }}
-                                        transition={{ type: "spring", damping: 15, stiffness: 100 }}
-                                        className="absolute inset-0 text-transparent bg-clip-text bg-gradient-to-r from-primary via-secondary to-accent-pink py-2"
-                                    >
-                                        {words[wordIndex]}
-                                    </motion.span>
-                                </AnimatePresence>
-                            </div>
-                            <br /> Experiments
+                            Design Better <br />
+                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-secondary to-accent-pink">Experiments</span> <br />
+                            <span className="text-4xl md:text-6xl lg:text-7xl">In Minutes, Not Weeks</span>
                         </motion.h1>
                     </div>
 
@@ -123,11 +104,29 @@ const Hero = () => {
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.4, duration: 0.8 }}
-                        className="text-xl md:text-2xl text-text-secondary max-w-2xl mb-16 leading-relaxed font-medium opacity-90"
+                        className="text-lg md:text-xl text-text-secondary max-w-3xl mb-12 leading-relaxed font-medium opacity-90"
                     >
-                        Precision engineering meets statistical intelligence.
-                        Orchestrate complex discovery cycles with <span className="text-white font-bold underline decoration-primary decoration-4 underline-offset-4">clinical accuracy</span>.
+                        AI-powered Design of Experiments (DoE) platform that helps researchers, scientists, and students optimize their experimental designs with statistical precision.
                     </motion.p>
+
+                    {/* Value Props */}
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.5, duration: 0.8 }}
+                        className="flex flex-wrap justify-center gap-x-8 gap-y-4 mb-16 text-sm md:text-base text-text-secondary/80 font-bold"
+                    >
+                        {[
+                            "Generate optimal designs in 60 seconds",
+                            "Reduce experiments by 60%",
+                            "No statistics PhD required"
+                        ].map((prop, i) => (
+                            <div key={i} className="flex items-center gap-2">
+                                <CheckCircle className="w-5 h-5 text-accent-teal" />
+                                {prop}
+                            </div>
+                        ))}
+                    </motion.div>
 
                     {/* High-Contrast Actions */}
                     <motion.div

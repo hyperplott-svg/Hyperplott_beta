@@ -40,8 +40,8 @@ const CTA = () => {
                     transition={{ delay: 0.2 }}
                     className="text-xl md:text-2xl text-text-secondary mb-16 font-medium max-w-3xl mx-auto leading-relaxed opacity-80"
                 >
-                    Join thousands of elite researchers optimizing experimental design with hyper-compute power.
-                    Shift from intuition-led trials to mathematically certain discovery.
+                    Be among the first 100 researchers to access Hyperplott.
+                    Lock in early-bird pricing and help co-create the tool that will redefine scientific discovery.
                 </motion.p>
 
                 <motion.div

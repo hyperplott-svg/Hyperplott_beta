@@ -77,9 +77,11 @@ const Pricing = () => {
                         Flexible <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-secondary to-accent-pink">Plans</span>.
                     </motion.h2>
 
-                    <p className="text-xl md:text-2xl text-text-secondary max-w-3xl mx-auto font-medium opacity-80 mb-16">
-                        Start for free. Scale horizontally as your discovery pipeline grows.
-                        Trusted by researchers in 50+ countries.
+                    <p className="text-xl md:text-2xl text-text-secondary max-w-3xl mx-auto font-medium opacity-80 mb-8">
+                        Start with a <span className="text-white font-bold">14-day FREE trial</span>. No credit card required.
+                    </p>
+                    <p className="text-sm text-text-tertiary max-w-2xl mx-auto font-bold uppercase tracking-widest mb-16 px-6 py-3 bg-white/5 border border-white/5 rounded-2xl inline-block">
+                        🎁 Beta Launch: Join 100+ early adopters and lock in 50% discount forever.
                     </p>
 
                     {/* Toggle - Premium Dark Design */}
@@ -110,8 +112,8 @@ const Pricing = () => {
                             viewport={{ once: true }}
                             transition={{ delay: i * 0.1, duration: 0.8, ease: "easeOut" }}
                             className={`group relative p-12 rounded-[48px] border transition-all duration-700 flex flex-col h-full ${plan.popular
-                                    ? 'bg-white/[0.04] border-primary shadow-glow scale-[1.05] z-10'
-                                    : 'bg-white/[0.02] border-white/10 hover:border-white/20 hover:bg-white/[0.04]'
+                                ? 'bg-white/[0.04] border-primary shadow-glow scale-[1.05] z-10'
+                                : 'bg-white/[0.02] border-white/10 hover:border-white/20 hover:bg-white/[0.04]'
                                 }`}
                         >
                             {plan.popular && (
@@ -147,8 +149,8 @@ const Pricing = () => {
                             </div>
 
                             <button className={`w-full py-6 rounded-[24px] font-black text-xs uppercase tracking-[0.2em] flex items-center justify-center gap-3 transition-all duration-500 active:scale-95 ${plan.popular
-                                    ? 'bg-primary text-white shadow-xl hover:shadow-glow'
-                                    : 'bg-white/5 border border-white/10 text-white hover:bg-white/10'
+                                ? 'bg-primary text-white shadow-xl hover:shadow-glow'
+                                : 'bg-white/5 border border-white/10 text-white hover:bg-white/10'
                                 }`}>
                                 {plan.cta} <ArrowRight className="w-5 h-5" />
                             </button>

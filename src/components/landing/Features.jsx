@@ -3,7 +3,8 @@ import { motion, useInView } from 'framer-motion';
 import { Canvas } from '@react-three/fiber';
 import { Environment, Float, PerspectiveCamera } from '@react-three/drei';
 import FeatureIcon3D from '../3d/FeatureIcon3D';
-import { ChevronRight, ArrowUpRight, Zap, Boxes, Activity, FlaskConical, Database, Globe } from 'lucide-react';
+import { ChevronRight, Zap, Boxes, Activity, FlaskConical, Database, Globe } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const Features = () => {
     const features = [
@@ -114,42 +115,44 @@ const FeatureCard = ({ feature, index }) => {
             initial={{ opacity: 0, y: 40 }}
             animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
             transition={{ duration: 0.8, delay: index * 0.1, ease: [0.16, 1, 0.3, 1] }}
-            className="group relative flex flex-col items-start p-1 bg-white/5 rounded-[40px] border border-white/10 hover:border-white/20 hover:bg-white/[0.08] transition-all duration-700 shadow-premium overflow-hidden cursor-pointer"
+            className="group relative flex flex-col items-start p-1 bg-white/5 rounded-[40px] border border-white/10 hover:border-white/20 hover:bg-white/[0.08] transition-all duration-700 shadow-premium overflow-hidden cursor-pointer h-full"
         >
-            {/* Visual Header */}
-            <div className="relative w-full h-64 rounded-[36px] bg-slate-950 border border-white/5 overflow-hidden mb-8">
-                <div className="absolute inset-0 bg-gradient-to-b from-primary/5 to-transparent pointer-events-none" />
-                <Canvas dpr={[1, 2]}>
-                    <Suspense fallback={null}>
-                        <PerspectiveCamera makeDefault position={[0, 0, 4]} />
-                        <Environment preset="night" />
-                        <ambientLight intensity={0.5} />
-                        <pointLight position={[10, 10, 10]} intensity={1.5} color={feature.color} />
-                        <Float speed={3} rotationIntensity={1.5} floatIntensity={1.2}>
-                            <FeatureIcon3D type={feature.type} color={feature.color} />
-                        </Float>
-                    </Suspense>
-                </Canvas>
+            <Link to="/signup" className="flex flex-col h-full w-full">
+                {/* Visual Header */}
+                <div className="relative w-full h-64 rounded-[36px] bg-slate-950 border border-white/5 overflow-hidden mb-8">
+                    <div className="absolute inset-0 bg-gradient-to-b from-primary/5 to-transparent pointer-events-none" />
+                    <Canvas dpr={[1, 2]}>
+                        <Suspense fallback={null}>
+                            <PerspectiveCamera makeDefault position={[0, 0, 4]} />
+                            <Environment preset="night" />
+                            <ambientLight intensity={0.5} />
+                            <pointLight position={[10, 10, 10]} intensity={1.5} color={feature.color} />
+                            <Float speed={3} rotationIntensity={1.5} floatIntensity={1.2}>
+                                <FeatureIcon3D type={feature.type} color={feature.color} />
+                            </Float>
+                        </Suspense>
+                    </Canvas>
 
-                {/* Micro-label on Card Visual */}
-                <div className="absolute top-6 left-6 flex items-center gap-2 px-3 py-1 rounded-full bg-black/40 backdrop-blur-md border border-white/10">
-                    <Icon className="w-3 h-3 text-white" />
-                    <span className="text-[10px] font-bold text-white uppercase tracking-widest">{feature.type}</span>
+                    {/* Micro-label on Card Visual */}
+                    <div className="absolute top-6 left-6 flex items-center gap-2 px-3 py-1 rounded-full bg-black/40 backdrop-blur-md border border-white/10">
+                        <Icon className="w-3 h-3 text-white" />
+                        <span className="text-[10px] font-bold text-white uppercase tracking-widest">{feature.type}</span>
+                    </div>
                 </div>
-            </div>
 
-            <div className="px-8 pb-10">
-                <h3 className="text-3xl font-black text-white mb-4 tracking-tight group-hover:text-primary transition-colors">
-                    {feature.title}
-                </h3>
-                <p className="text-text-secondary leading-relaxed text-lg font-medium opacity-80 mb-8">
-                    {feature.description}
-                </p>
+                <div className="px-8 pb-10 flex flex-col h-full">
+                    <h3 className="text-3xl font-black text-white mb-4 tracking-tight group-hover:text-primary transition-colors uppercase">
+                        {feature.title}
+                    </h3>
+                    <p className="text-text-secondary leading-relaxed text-lg font-medium opacity-80 mb-8 flex-grow">
+                        {feature.description}
+                    </p>
 
-                <div className="flex items-center gap-2 text-white font-black text-xs uppercase tracking-[0.2em] group-hover:gap-4 transition-all duration-500">
-                    Explore Intelligence <ChevronRight className="w-4 h-4 text-primary" />
+                    <div className="flex items-center gap-2 text-white font-black text-xs uppercase tracking-[0.2em] group-hover:gap-4 transition-all duration-500">
+                        Explore Intelligence <ChevronRight className="w-4 h-4 text-primary" />
+                    </div>
                 </div>
-            </div>
+            </Link>
 
             {/* Glowing Aura on Hover */}
             <div className="absolute -bottom-20 -right-20 w-40 h-40 bg-primary/20 blur-[60px] opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />

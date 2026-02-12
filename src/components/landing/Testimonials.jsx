@@ -4,51 +4,57 @@ import { Star } from 'lucide-react';
 
 const Testimonials = () => {
     return (
-        <section className="py-32 bg-bg-secondary overflow-hidden">
+        <section className="py-40 bg-bg-primary overflow-hidden">
             <div className="container mx-auto px-6 max-w-7xl">
                 <div className="flex flex-col items-center">
                     <motion.div
-                        initial={{ opacity: 0, y: 20 }}
+                        initial={{ opacity: 0, y: 30 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
-                        className="w-full max-w-4xl bg-white rounded-[2.5rem] border-2 border-gray-100 p-12 md:p-20 shadow-2xl relative"
+                        className="w-full max-w-5xl bg-gradient-to-br from-white/[0.05] to-transparent rounded-[3rem] border border-white/10 p-12 md:p-24 shadow-2xl relative overflow-hidden"
                     >
-                        {/* Quote mark decoration */}
-                        <div className="absolute top-10 left-10 text-8xl font-serif text-indigo-50 leading-none select-none">“</div>
+                        {/* Atmosphere decoration */}
+                        <div className="absolute -top-24 -right-24 w-64 h-64 bg-primary/20 rounded-full blur-[100px] pointer-events-none" />
+                        <div className="absolute -bottom-24 -left-24 w-64 h-64 bg-secondary/10 rounded-full blur-[100px] pointer-events-none" />
 
                         <div className="relative z-10 flex flex-col items-center text-center">
-                            <motion.p
-                                initial={{ opacity: 0 }}
-                                whileInView={{ opacity: 1 }}
-                                viewport={{ once: true }}
-                                transition={{ delay: 0.2 }}
-                                className="text-2xl md:text-3xl font-medium text-text-primary italic mb-12 leading-relaxed"
-                            >
-                                "HyperPlott has completely transformed our R&D workflow. We've reduced our
-                                experimental iterations by 60% and achieved higher precision in our
-                                formulation studies."
-                            </motion.p>
-
                             <motion.div
                                 initial={{ opacity: 0, scale: 0.9 }}
                                 whileInView={{ opacity: 1, scale: 1 }}
-                                viewport={{ once: true }}
-                                className="flex flex-col items-center"
+                                className="inline-flex items-center gap-3 px-5 py-2 rounded-full bg-white/5 border border-white/10 text-white text-[10px] font-black uppercase tracking-[0.4em] mb-12 shadow-inner-glow"
                             >
-                                <img
-                                    src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=200&h=200&auto=format&fit=crop"
-                                    className="w-20 h-20 rounded-full border-4 border-white shadow-xl mb-6 object-cover"
-                                    alt="Dr. Priya Sharma"
-                                />
-                                <h4 className="text-xl font-bold text-text-primary mb-1">Dr. Priya Sharma</h4>
-                                <p className="text-text-secondary font-medium mb-1">Senior Scientist, Pharma R&D</p>
-                                <p className="text-text-muted text-sm uppercase tracking-widest font-black">Leading Pharmaceutical Company</p>
+                                <Star className="w-4 h-4 text-accent-pink fill-accent-pink animate-pulse" />
+                                Exclusive Beta Access
                             </motion.div>
 
-                            <div className="flex gap-1 mt-8">
-                                {[...Array(5)].map((_, i) => (
-                                    <Star key={i} className="w-5 h-5 fill-yellow-400 text-yellow-400" />
+                            <h2 className="text-4xl md:text-6xl font-black text-white leading-[1.1] tracking-tighter uppercase mb-10">
+                                Become a <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-secondary to-accent-pink">Founding Researcher</span>.
+                            </h2>
+
+                            <p className="text-xl md:text-2xl font-medium text-text-secondary mb-16 leading-relaxed max-w-3xl opacity-80">
+                                We're opening 50 exclusive spots for our founding member program. Help us shape the future of DoE and receive lifetime benefits.
+                            </p>
+
+                            <div className="grid md:grid-cols-3 gap-8 w-full mb-16">
+                                {[
+                                    { title: "Free Beta", desc: "Full access for 6 months" },
+                                    { title: "Lifetime Discount", desc: "50% off forever" },
+                                    { title: "Direct Input", desc: "Shape the product roadmap" }
+                                ].map((benefit, i) => (
+                                    <div key={i} className="p-8 rounded-3xl bg-white/5 border border-white/5 text-center transition-all hover:bg-white/10">
+                                        <h4 className="text-xl font-bold text-white mb-2">{benefit.title}</h4>
+                                        <p className="text-sm text-text-secondary opacity-60 font-bold uppercase tracking-widest">{benefit.desc}</p>
+                                    </div>
                                 ))}
+                            </div>
+
+                            <div className="flex flex-col sm:flex-row items-center gap-6">
+                                <button className="px-12 py-5 rounded-2xl bg-white text-bg-primary text-sm font-black uppercase tracking-widest hover:scale-105 transition-all shadow-glow">
+                                    Apply for Beta Access
+                                </button>
+                                <span className="text-text-tertiary text-xs font-black uppercase tracking-widest">
+                                    ⏰ 23 spots remaining
+                                </span>
                             </div>
                         </div>
                     </motion.div>
