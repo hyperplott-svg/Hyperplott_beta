@@ -7,7 +7,7 @@ const Founders = () => {
         {
             name: "Shiva Kailash",
             role: "Founder & CEO",
-            image: "/founder-shiva.jpg",
+            image: "/founder-shiva.png",
             bio: "Visionary researcher bridging complex statistics with intuitive tools. Leads the scientific mission of Hyperplott.",
             linkedin: "https://www.linkedin.com/in/madduluri-shiva-kailash-355166281/",
             degree: "Founder"

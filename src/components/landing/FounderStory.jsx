@@ -21,7 +21,7 @@ const FounderStory = () => {
                     <div className="p-1 rounded-[4rem] bg-gradient-to-br from-primary/20 to-transparent">
                         <div className="bg-slate-950 p-12 rounded-[3.8rem] h-full flex flex-col items-center text-center">
                             <div className="w-40 h-40 rounded-[2.5rem] bg-indigo-500/20 border-2 border-primary/30 overflow-hidden mb-8 shadow-glow group">
-                                <img src="/founder-shiva.jpg" alt="Shiva Kailash" className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500" />
+                                <img src="/founder-shiva.png" alt="Shiva Kailash" className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500" />
                             </div>
                             <h3 className="text-3xl font-black text-white mb-2">Shiva Kailash</h3>
                             <a href="https://www.linkedin.com/in/madduluri-shiva-kailash-355166281/" target="_blank" rel="noreferrer" className="text-primary-purple font-black uppercase tracking-[0.2em] text-xs mb-8 hover:underline">Founder</a>
