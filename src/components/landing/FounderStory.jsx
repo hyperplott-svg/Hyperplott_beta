@@ -20,15 +20,15 @@ const FounderStory = () => {
                     {/* Founder 1 */}
                     <div className="p-1 rounded-[4rem] bg-gradient-to-br from-primary/20 to-transparent">
                         <div className="bg-slate-950 p-12 rounded-[3.8rem] h-full flex flex-col items-center text-center">
-                            <div className="w-40 h-40 rounded-[2.5rem] bg-indigo-500/20 border-2 border-primary/30 overflow-hidden mb-8 shadow-glow">
-                                <img src="https://i.pravatar.cc/200?img=11" alt="Piyush Jaiswal" className="w-full h-full object-cover grayscale focus-within:grayscale-0 hover:grayscale-0 transition-all duration-500" />
+                            <div className="w-40 h-40 rounded-[2.5rem] bg-indigo-500/20 border-2 border-primary/30 overflow-hidden mb-8 shadow-glow group">
+                                <img src="/founder-shiva.jpg" alt="Shiva Kailash" className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500" />
                             </div>
-                            <h3 className="text-3xl font-black text-white mb-2">Piyush Jaiswal</h3>
-                            <p className="text-primary-purple font-black uppercase tracking-[0.2em] text-xs mb-8">Co-Founder & Lead Developer</p>
+                            <h3 className="text-3xl font-black text-white mb-2">Shiva Kailash</h3>
+                            <a href="https://www.linkedin.com/in/madduluri-shiva-kailash-355166281/" target="_blank" rel="noreferrer" className="text-primary-purple font-black uppercase tracking-[0.2em] text-xs mb-8 hover:underline">Founder</a>
                             <p className="text-text-secondary text-lg leading-relaxed opacity-80">
-                                PhD Researcher in Pharmaceutical Sciences. Frustrated with
-                                expensive, clunky DoE software during my experiments, I built Hyperplott to make high-end statistical
-                                design accessible to researchers worldwide.
+                                Visionary researcher dedicated to bridging the gap between complex statistical theories
+                                and intuitive laboratory tools. Shiva leads the strategic direction of Hyperplott's
+                                scientific mission.
                             </p>
                         </div>
                     </div>
@@ -36,15 +36,15 @@ const FounderStory = () => {
                     {/* Founder 2 */}
                     <div className="p-1 rounded-[4rem] bg-gradient-to-br from-secondary/20 to-transparent">
                         <div className="bg-slate-950 p-12 rounded-[3.8rem] h-full flex flex-col items-center text-center">
-                            <div className="w-40 h-40 rounded-[2.5rem] bg-purple-500/20 border-2 border-secondary/30 overflow-hidden mb-8 shadow-glow">
-                                <img src="https://i.pravatar.cc/200?img=12" alt="Atul Dixit" className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-500" />
+                            <div className="w-40 h-40 rounded-[2.5rem] bg-purple-500/20 border-2 border-secondary/30 overflow-hidden mb-8 shadow-glow group">
+                                <img src="/founder-madhan.jpg" alt="J Madhan" className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500" />
                             </div>
-                            <h3 className="text-3xl font-black text-white mb-2">Atul Dixit</h3>
-                            <p className="text-secondary font-black uppercase tracking-[0.2em] text-xs mb-8">Founder & Product Lead</p>
+                            <h3 className="text-3xl font-black text-white mb-2">J Madhan</h3>
+                            <a href="https://www.linkedin.com/in/jmadhan/" target="_blank" rel="noreferrer" className="text-secondary font-black uppercase tracking-[0.2em] text-xs mb-8 hover:underline">Co-Founder</a>
                             <p className="text-text-secondary text-lg leading-relaxed opacity-80">
-                                Industrial quality specialist with years of DoE implementation experience.
-                                Passionate about simplifying complex analytical workflows and bringing modern cloud
-                                capabilities to the scientific community.
+                                Technical architect specializing in AI-driven optimization and high-fidelity cloud computing.
+                                Madhan drives the engineering excellence and algorithmic precision behind
+                                the Hyperplott engine.
                             </p>
                         </div>
                     </div>

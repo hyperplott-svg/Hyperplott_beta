@@ -5,19 +5,19 @@ import { Linkedin, Github, GraduationCap, Quote } from 'lucide-react';
 const Founders = () => {
     const team = [
         {
-            name: "Piyush Jaiswal",
-            role: "Co-Founder & CMO",
-            image: "https://via.placeholder.com/400x400?text=PJ", // Will be replaced by real images in assets
-            bio: "PhD Researcher specializing in Pharmaceutical Optimization. Frustrated by legacy tools, he envisioned Hyperplott to democratize DoE.",
-            linkedin: "https://www.linkedin.com/in/piyush-jaiswal/",
-            degree: "PhD, Pharmaceutics"
+            name: "Shiva Kailash",
+            role: "Founder & CEO",
+            image: "/founder-shiva.jpg",
+            bio: "Visionary researcher bridging complex statistics with intuitive tools. Leads the scientific mission of Hyperplott.",
+            linkedin: "https://www.linkedin.com/in/madduluri-shiva-kailash-355166281/",
+            degree: "Founder"
         },
         {
-            name: "Atul Dixit",
+            name: "J Madhan",
             role: "Co-Founder & CTO",
-            image: "https://via.placeholder.com/400x400?text=AD",
-            bio: "Architect of AI Systems. Focused on integrating advanced generative models with statistical rigor for scientific clarity.",
-            linkedin: "https://www.linkedin.com/in/atul-dixit-01/",
+            image: "/founder-madhan.jpg",
+            bio: "Architect of AI systems and cloud optimization. Drives the algorithmic precision behind Hyperplott.",
+            linkedin: "https://www.linkedin.com/in/jmadhan/",
             degree: "Tech Architect"
         }
     ];
