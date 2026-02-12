@@ -30,7 +30,7 @@ const CTA = () => {
                     viewport={{ once: true }}
                     className="text-6xl md:text-8xl font-black text-white mb-10 tracking-tighter leading-none"
                 >
-                    Ready to <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-secondary to-accent-pink">Innovate</span>?
+                    Ready to Design <br /> Better <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-secondary to-accent-pink">Experiments</span>?
                 </motion.h2>
 
                 <motion.p
@@ -40,8 +40,8 @@ const CTA = () => {
                     transition={{ delay: 0.2 }}
                     className="text-xl md:text-2xl text-text-secondary mb-16 font-medium max-w-3xl mx-auto leading-relaxed opacity-80"
                 >
-                    Be among the first 100 researchers to access Hyperplott.
-                    Lock in early-bird pricing and help co-create the tool that will redefine scientific discovery.
+                    Join researchers who are tired of expensive, complicated DoE software.
+                    Start your free trial today.
                 </motion.p>
 
                 <motion.div
@@ -53,7 +53,7 @@ const CTA = () => {
                 >
                     <button className="group relative w-full sm:w-auto px-12 py-6 rounded-2xl bg-white text-bg-primary text-xl font-black overflow-hidden shadow-2xl transition-all hover:-translate-y-1 active:scale-95">
                         <span className="relative z-10 flex items-center gap-3">
-                            Start Computing Free
+                            Start Free Trial
                             <ArrowRight className="w-6 h-6 group-hover:translate-x-2 transition-transform" />
                         </span>
                         <div className="absolute inset-0 bg-slate-100 opacity-0 group-hover:opacity-100 transition-opacity" />
@@ -61,7 +61,7 @@ const CTA = () => {
 
                     <button className="w-full sm:w-auto px-12 py-6 rounded-2xl bg-white/5 border border-white/10 text-white text-xl font-black hover:bg-white/10 transition-all backdrop-blur-md flex items-center justify-center gap-3 group">
                         <Calendar className="w-6 h-6 text-primary" />
-                        Schedule Deep Dive
+                        Watch 2-Min Demo
                     </button>
                 </motion.div>
 
@@ -76,10 +76,13 @@ const CTA = () => {
                         <div className="w-1 h-1 rounded-full bg-accent-teal" /> No Credit Card Required
                     </div>
                     <div className="flex items-center gap-2">
-                        <div className="w-1 h-1 rounded-full bg-accent-teal" /> Enterprise Ready
+                        <div className="w-1 h-1 rounded-full bg-accent-teal" /> 14-day Free Trial
                     </div>
                     <div className="flex items-center gap-2">
                         <div className="w-1 h-1 rounded-full bg-accent-teal" /> Cancel Anytime
+                    </div>
+                    <div className="flex items-center gap-2">
+                        <div className="w-1 h-1 rounded-full bg-accent-teal" /> Setup in 5 Minutes
                     </div>
                 </motion.div>
             </div>

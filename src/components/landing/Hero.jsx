@@ -32,6 +32,17 @@ const Hero = () => {
 
     return (
         <section className="relative min-h-screen flex flex-col items-center justify-center pt-20 overflow-hidden bg-bg-primary">
+            {/* Beta Banner */}
+            <div className="absolute top-20 left-0 w-full z-50 py-3 bg-gradient-to-r from-orange-500 to-yellow-500 text-slate-900 shadow-2xl">
+                <div className="container mx-auto px-6 text-center">
+                    <p className="text-sm md:text-base font-black uppercase tracking-tight">
+                        🚀 <strong>Now in Beta</strong> — Join 50 researchers testing Hyperplott
+                        <span className="mx-4 opacity-50">|</span>
+                        <span className="text-slate-900 underline decoration-2">First 100 users get 50% off forever</span>
+                    </p>
+                </div>
+            </div>
+
             {/* Ambient Background Glows */}
             <div className="absolute inset-0 z-0 pointer-events-none">
                 <div className="absolute top-[-10%] left-[-10%] w-[60%] h-[60%] rounded-full bg-primary/20 blur-[120px] animate-pulse-subtle" />

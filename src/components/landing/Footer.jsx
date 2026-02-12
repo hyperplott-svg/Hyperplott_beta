@@ -70,13 +70,16 @@ const Footer = () => {
                         </div>
                         <div className="mt-12 space-y-4">
                             <div className="flex items-center gap-3 text-text-tertiary text-[10px] uppercase tracking-widest font-black opacity-60">
-                                <Shield className="w-4 h-4 text-accent-teal" /> 256-bit SSL Encryption
+                                <Shield className="w-4 h-4 text-accent-teal" /> 🔒 256-bit SSL Encryption
                             </div>
                             <div className="flex items-center gap-3 text-text-tertiary text-[10px] uppercase tracking-widest font-black opacity-60">
-                                <Shield className="w-4 h-4 text-accent-teal" /> GDPR & HIPAA Compliant
+                                <Shield className="w-4 h-4 text-accent-teal" /> ✓ GDPR Compliant
                             </div>
                             <div className="flex items-center gap-3 text-text-tertiary text-[10px] uppercase tracking-widest font-black opacity-60">
-                                <Shield className="w-4 h-4 text-accent-teal" /> 30-Day Money-Back Guarantee
+                                <Shield className="w-4 h-4 text-accent-teal" /> 💰 30-Day Money-Back Guarantee
+                            </div>
+                            <div className="flex items-center gap-3 text-text-tertiary text-[10px] uppercase tracking-widest font-black opacity-60">
+                                <Shield className="w-4 h-4 text-accent-teal" /> 🌍 Accessible Worldwide
                             </div>
                         </div>
                     </div>
@@ -86,7 +89,7 @@ const Footer = () => {
                 <div className="pt-16 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-10">
                     <div className="flex items-center gap-6">
                         <p className="text-text-tertiary text-sm font-medium opacity-50">
-                            © 2026 Hyperplott Universal. All Rights Reserved.
+                            © 2026 Hyperplott. Built with ❤️ by researchers, for researchers.
                         </p>
                     </div>
                     <div className="flex gap-10">

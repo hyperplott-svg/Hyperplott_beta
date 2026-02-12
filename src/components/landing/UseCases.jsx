@@ -13,7 +13,8 @@ const UseCases = () => {
             tasks: [
                 "Drug formulation optimization",
                 "Stability studies",
-                "Process validation"
+                "Process validation",
+                "Quality by Design (QbD)"
             ]
         },
         {
@@ -25,7 +26,8 @@ const UseCases = () => {
             tasks: [
                 "Cell culture optimization",
                 "Protein expression studies",
-                "Fermentation process design"
+                "Fermentation process design",
+                "Bioprocess development"
             ]
         },
         {
@@ -36,8 +38,9 @@ const UseCases = () => {
             border: "border-orange-500/20",
             tasks: [
                 "Process optimization",
+                "Yield improvement",
                 "Quality control",
-                "Yield improvement"
+                "Reaction condition screening"
             ]
         },
         {
@@ -49,7 +52,8 @@ const UseCases = () => {
             tasks: [
                 "Thesis projects",
                 "Research papers",
-                "Teaching DoE concepts"
+                "Teaching DoE concepts",
+                "Student experiments"
             ]
         }
     ];

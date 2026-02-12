@@ -5,24 +5,28 @@ import { Plus, Minus, HelpCircle } from 'lucide-react';
 const FAQ = () => {
     const questions = [
         {
-            q: "Do I need statistics knowledge to use Hyperplott?",
-            a: "No! Our AI guides you through the entire process, suggested factors, and interpreting results. It's designed to be used by researchers, not just statisticians."
+            q: "Do I need statistics knowledge?",
+            a: "No! Our AI guides you through the entire process. Perfect for beginners and experts alike."
         },
         {
-            q: "Can I export my designs to Excel/CSV?",
-            a: "Yes, you can export your designs, matrixes, and analysis results to Excel, CSV, PDF, and publication-ready Word documents."
+            q: "How is this different from Minitab/JMP?",
+            a: "We're 10x cheaper, AI-powered, cloud-based, and have beautiful interactive 3D visualizations. Plus, no steep learning curve."
         },
         {
-            q: "What makes Hyperplott different from Minitab or JMP?",
-            a: "Hyperplott is 10x more affordable, browser-based, and powered by AI agents. We focus on modern UX and 3D interactivity rather than just tables and static charts."
+            q: "Can I export my results?",
+            a: "Yes! Export to Excel, CSV, PDF, and publication-ready formats with high-resolution plots."
         },
         {
             q: "Is my data secure?",
-            a: "Absolutely. We use enterprise-grade AES-256 encryption. Your experimental data is stored in secure, private containers and is never used for training models without consent."
+            a: "Absolutely. Enterprise-grade encryption, secure cloud storage, and we never share your data."
         },
         {
-            q: "Do you offer student discounts?",
-            a: "Yes! Students and academic researchers with a valid .edu email get 50% off all plans. Contact support for your discount code."
+            q: "What if I need help?",
+            a: "Professional plan includes priority support. Plus, we have comprehensive tutorials and documentation."
+        },
+        {
+            q: "Can I try before buying?",
+            a: "Yes! 14-day free trial, no credit card required. Test all features risk-free."
         }
     ];
 
