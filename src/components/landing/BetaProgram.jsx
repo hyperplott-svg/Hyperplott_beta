@@ -38,8 +38,8 @@ const BetaProgram = () => {
                     Founding Member Program
                 </motion.div>
 
-                <h2 className="text-5xl md:text-8xl font-black text-white mb-10 tracking-tighter leading-none">
-                    Be Among the First <br /> <span className="text-accent-pink text-6xl md:text-9xl">100 Researchers</span>.
+                <h2 className="text-5xl md:text-8xl font-black text-white mb-10 tracking-tight leading-[1.1]">
+                    Be Among the First <br /> <span className="text-accent-pink text-3xl md:text-6xl lg:text-7xl">100 Researchers</span>.
                 </h2>
 
                 <p className="text-xl md:text-2xl text-text-secondary max-w-3xl mx-auto font-medium opacity-80 mb-24">

@@ -62,7 +62,7 @@ const UseCases = () => {
         <section className="py-32 bg-bg-primary relative">
             <div className="container mx-auto px-6 max-w-7xl">
                 <div className="text-center mb-20">
-                    <h2 className="text-4xl md:text-6xl font-black text-white mb-6 uppercase tracking-tighter">
+                    <h2 className="text-4xl md:text-6xl font-black text-white mb-6 uppercase tracking-tight leading-[1.1]">
                         Who Uses <span className="text-primary-purple underline decoration-primary-purple/30">Hyperplott</span>?
                     </h2>
                     <p className="text-text-secondary text-lg max-w-2xl mx-auto opacity-70">

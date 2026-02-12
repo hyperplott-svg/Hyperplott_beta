@@ -42,7 +42,7 @@ const FAQ = () => {
                         <HelpCircle className="w-4 h-4" />
                         Common inquiries
                     </motion.div>
-                    <h2 className="text-5xl md:text-7xl font-black text-white tracking-tighter uppercase mb-6">
+                    <h2 className="text-5xl md:text-7xl font-black text-white tracking-tight uppercase mb-6 leading-tight">
                         FAQ.
                     </h2>
                     <p className="text-text-secondary text-lg opacity-70">

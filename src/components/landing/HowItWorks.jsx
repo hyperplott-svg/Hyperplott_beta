@@ -39,7 +39,7 @@ const HowItWorks = () => {
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
                         transition={{ duration: 0.8 }}
-                        className="text-6xl md:text-8xl font-black text-white mb-10 tracking-tighter leading-none"
+                        className="text-6xl md:text-8xl font-black text-white mb-10 tracking-tight leading-[1.1]"
                     >
                         Three Steps to <br /> <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-secondary to-accent-pink">Optimization</span>.
                     </motion.h2>

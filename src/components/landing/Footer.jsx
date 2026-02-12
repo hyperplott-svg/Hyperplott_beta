@@ -20,7 +20,7 @@ const Footer = () => {
                                 <Zap className="w-6 h-6 text-primary fill-primary" />
                             </div>
                             <div className="flex flex-col">
-                                <span className="text-2xl font-black tracking-tighter leading-none">Hyperplott</span>
+                                <span className="text-2xl font-black tracking-tight leading-none">Hyperplott</span>
                                 <span className="text-[9px] uppercase tracking-[0.4em] font-black text-primary-purple mt-1 opacity-70">Scientific AI</span>
                             </div>
                         </div>

@@ -18,29 +18,29 @@ const WhyDifferent = () => {
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
-                        className="text-5xl md:text-7xl font-black text-white mb-6 tracking-tighter"
+                        className="text-5xl md:text-7xl font-black text-white mb-6 tracking-tight leading-[1.1]"
                     >
                         Why <span className="text-primary-purple">Hyperplott</span>?
                     </motion.h2>
                     <p className="text-text-secondary text-xl opacity-70">The modern alternative to legacy statistical software.</p>
                 </div>
 
-                <div className="overflow-hidden rounded-[2.5rem] border border-white/10 bg-white/[0.02] backdrop-blur-sm shadow-premium">
+                <div className="overflow-hidden rounded-[2rem] border border-white/10 bg-white/[0.02] backdrop-blur-sm shadow-premium max-w-4xl mx-auto">
                     <div className="overflow-x-auto">
                         <table className="w-full text-left border-collapse">
                             <thead>
-                                <tr className="border-b border-white/10 uppercase tracking-[0.2em] text-[10px] font-black text-text-secondary">
-                                    <th className="px-8 py-10">Feature</th>
-                                    <th className="px-8 py-10">Traditional DoE Software</th>
-                                    <th className="px-8 py-10 text-primary-purple">Hyperplott</th>
+                                <tr className="border-b border-white/10 uppercase tracking-[0.2em] text-[9px] font-black text-text-muted">
+                                    <th className="px-4 md:px-6 py-6 border-r border-white/5">Metric</th>
+                                    <th className="px-4 md:px-6 py-6 border-r border-white/5">Traditional Softwares</th>
+                                    <th className="px-4 md:px-6 py-6 text-primary-purple">Hyperplott AI</th>
                                 </tr>
                             </thead>
                             <tbody className="text-white/80">
                                 {comparison.map((item, i) => (
-                                    <tr key={i} className="border-b border-white/5 hover:bg-white/[0.02] transition-colors group">
-                                        <td className="px-8 py-8 font-black text-sm uppercase tracking-wider">{item.feature}</td>
-                                        <td className="px-8 py-8 text-lg font-medium opacity-60 group-hover:opacity-100 transition-opacity">{item.traditional}</td>
-                                        <td className="px-8 py-8 text-lg font-black text-primary-purple bg-primary-purple/5">
+                                    <tr key={i} className="border-b border-white/5 hover:bg-white/[0.01] transition-colors group">
+                                        <td className="px-4 md:px-6 py-5 font-bold text-[10px] md:text-[11px] uppercase tracking-wider text-text-tertiary border-r border-white/5">{item.feature}</td>
+                                        <td className="px-6 py-6 text-base font-medium opacity-50 group-hover:opacity-80 transition-opacity">{item.traditional}</td>
+                                        <td className="px-6 py-6 text-base font-black text-primary-purple bg-primary-purple/[0.02]">
                                             {item.hyperplott}
                                         </td>
                                     </tr>

@@ -28,7 +28,7 @@ const CTA = () => {
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
-                    className="text-6xl md:text-8xl font-black text-white mb-10 tracking-tighter leading-none"
+                    className="text-6xl md:text-8xl font-black text-white mb-10 tracking-tight leading-[1.1]"
                 >
                     Ready to Design <br /> Better <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-secondary to-accent-pink">Experiments</span>?
                 </motion.h2>

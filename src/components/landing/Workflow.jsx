@@ -39,7 +39,7 @@ const Workflow = () => {
                         initial={{ opacity: 0, scale: 0.9 }}
                         whileInView={{ opacity: 1, scale: 1 }}
                         viewport={{ once: true }}
-                        className="text-4xl md:text-5xl lg:text-7xl font-black text-slate-900 font-display tracking-tighter uppercase"
+                        className="text-4xl md:text-5xl lg:text-7xl font-black text-slate-900 font-display tracking-tight uppercase leading-[1.1]"
                     >
                         Streamlined <br /> <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-purple to-secondary">Discovery Grid</span>.
                     </motion.h2>

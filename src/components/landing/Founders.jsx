@@ -38,7 +38,7 @@ const Founders = () => {
                                 <GraduationCap className="w-4 h-4" />
                                 Our Scientific Roots
                             </div>
-                            <h2 className="text-5xl md:text-7xl font-black text-white leading-[0.9] tracking-tighter uppercase mb-10">
+                            <h2 className="text-5xl md:text-7xl font-black text-white leading-[1.1] tracking-tight uppercase mb-10">
                                 Built by <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary">Scientists</span>, <br /> For Scientists.
                             </h2>
                             <p className="text-xl text-text-secondary opacity-80 leading-relaxed mb-10 font-medium italic">

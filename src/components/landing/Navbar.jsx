@@ -127,7 +127,7 @@ const Navbar = () => {
                                     initial={{ opacity: 0, x: -20 }}
                                     animate={{ opacity: 1, x: 0 }}
                                     transition={{ delay: 0.1 + i * 0.1 }}
-                                    className="text-5xl font-black text-text-primary tracking-tighter hover:text-primary-purple transition-colors"
+                                    className="text-5xl font-black text-text-primary tracking-tight hover:text-primary-purple transition-colors"
                                     onClick={() => setMobileMenuOpen(false)}
                                 >
                                     {link.name}

@@ -51,7 +51,7 @@ const ProblemStatement = () => {
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
-                        className="text-6xl md:text-8xl font-black text-white mb-10 tracking-tighter leading-none"
+                        className="text-6xl md:text-8xl font-black text-white mb-10 tracking-tight leading-[1.1]"
                     >
                         Why Researchers Struggle with <br /> <span className="text-red-500">Traditional</span> DoE.
                     </motion.h2>

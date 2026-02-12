@@ -72,7 +72,7 @@ const Pricing = () => {
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
-                        className="text-6xl md:text-8xl font-black text-white mb-10 tracking-tighter leading-none"
+                        className="text-6xl md:text-8xl font-black text-white mb-10 tracking-tight leading-[1.1]"
                     >
                         Flexible <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-secondary to-accent-pink">Plans</span>.
                     </motion.h2>
@@ -127,7 +127,7 @@ const Pricing = () => {
                                     {plan.name}
                                 </span>
                                 <div className="flex items-baseline gap-2 mb-6">
-                                    <span className="text-6xl font-black text-white tracking-tighter">
+                                    <span className="text-6xl font-black text-white tracking-tight">
                                         {plan.price !== "Custom" ? `₹${plan.price}` : plan.price}
                                     </span>
                                     {plan.price !== "Custom" && <span className="text-xl text-text-tertiary font-bold">/mo</span>}

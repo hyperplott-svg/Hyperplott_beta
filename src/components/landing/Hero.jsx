@@ -31,14 +31,14 @@ const Hero = () => {
     const mouseY = useSpring(mousePos.y, springConfig);
 
     return (
-        <section className="relative min-h-screen flex flex-col items-center justify-center pt-20 overflow-hidden bg-bg-primary">
-            {/* Beta Banner */}
-            <div className="absolute top-20 left-0 w-full z-50 py-3 bg-gradient-to-r from-orange-500 to-yellow-500 text-slate-900 shadow-2xl">
+        <section className="relative min-h-screen flex flex-col items-center justify-center pt-48 pb-20 overflow-hidden bg-bg-primary">
+            {/* Beta Banner - Better Positioning */}
+            <div className="absolute top-[100px] left-0 w-full z-40 py-3 bg-gradient-to-r from-orange-500/90 to-yellow-500/90 text-slate-900 shadow-2xl backdrop-blur-md">
                 <div className="container mx-auto px-6 text-center">
-                    <p className="text-sm md:text-base font-black uppercase tracking-tight">
+                    <p className="text-sm md:text-base font-black uppercase tracking-wide">
                         🚀 <strong>Now in Beta</strong> — Join 50 researchers testing Hyperplott
-                        <span className="mx-4 opacity-50">|</span>
-                        <span className="text-slate-900 underline decoration-2">First 100 users get 50% off forever</span>
+                        <span className="mx-4 opacity-30">|</span>
+                        <span className="text-slate-900 font-extrabold border-b-2 border-slate-900/30">First 100 users get 50% off forever</span>
                     </p>
                 </div>
             </div>
@@ -87,7 +87,7 @@ const Hero = () => {
             </div>
 
             <div className="container mx-auto px-6 relative z-20">
-                <div className="flex flex-col items-center text-center">
+                <div className="flex flex-col items-center text-center mt-20 md:mt-0">
                     {/* Ultra Badge */}
                     <motion.div
                         initial={{ opacity: 0, y: -20, scale: 0.8 }}
@@ -99,16 +99,16 @@ const Hero = () => {
                     </motion.div>
 
                     {/* Headline */}
-                    <div className="relative mb-8 max-w-5xl">
+                    <div className="relative mb-12 max-w-6xl">
                         <motion.h1
                             initial={{ opacity: 0, y: 30 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.8, ease: "easeOut" }}
-                            className="text-6xl md:text-8xl lg:text-9xl font-black tracking-tighter leading-[0.9] text-white"
+                            className="text-6xl md:text-8xl lg:text-[10rem] font-black tracking-tight leading-[1.05] text-white"
                         >
                             Design Better <br />
                             <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-secondary to-accent-pink">Experiments</span> <br />
-                            <span className="text-4xl md:text-6xl lg:text-7xl">In Minutes, Not Weeks</span>
+                            <span className="text-3xl md:text-5xl lg:text-6xl font-extrabold tracking-tight opacity-90 mt-4 block">In Minutes, Not Weeks</span>
                         </motion.h1>
                     </div>
 
@@ -117,9 +117,9 @@ const Hero = () => {
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.4, duration: 0.8 }}
-                        className="text-lg md:text-xl text-text-secondary max-w-3xl mb-12 leading-relaxed font-medium opacity-90"
+                        className="text-xl md:text-2xl text-text-secondary max-w-4xl mb-16 leading-relaxed font-medium"
                     >
-                        AI-powered Design of Experiments (DoE) platform that helps researchers, scientists, and students optimize their experimental designs with statistical precision.
+                        The AI-powered Design of Experiments (DoE) platform built for researchers who need to optimize complex designs with statistical precision.
                     </motion.p>
 
                     {/* Value Props */}

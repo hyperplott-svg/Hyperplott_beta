@@ -36,7 +36,7 @@ const Validation = () => {
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
-                        className="text-5xl md:text-7xl font-black text-white mb-6 tracking-tighter"
+                        className="text-5xl md:text-7xl font-black text-white mb-6 tracking-tight leading-[1.1]"
                     >
                         Proven Methodology, <br />
                         <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-secondary to-accent-pink">Modern Interface</span>.
