@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { AnimatePresence } from 'framer-motion';
-import DesignOfExperimentView from '../doe/components/DesignOfExperimentView';
+import DesignOfExperimentView from '../doe/DesignOfExperimentView';
 import WelcomeScreen from '../doe/components/WelcomeScreen';
 import SEO from '../components/common/SEO';
 

@@ -45,9 +45,9 @@ const Hero = () => {
 
             {/* Ambient Background Glows */}
             <div className="absolute inset-0 z-0 pointer-events-none">
-                <div className="absolute top-[-10%] left-[-10%] w-[60%] h-[60%] rounded-full bg-primary/20 blur-[120px] animate-pulse-subtle" />
-                <div className="absolute bottom-[-10%] right-[-10%] w-[60%] h-[60%] rounded-full bg-secondary/20 blur-[120px]" />
-                <div className="absolute top-[20%] right-[10%] w-[30%] h-[30%] rounded-full bg-accent-pink/10 blur-[100px]" />
+                <div className="absolute top-[-10%] left-[-10%] w-[60%] h-[60%] rounded-full bg-emerald-500/10 blur-[120px] animate-pulse-subtle" />
+                <div className="absolute bottom-[-10%] right-[-10%] w-[60%] h-[60%] rounded-full bg-primary/10 blur-[120px]" />
+                <div className="absolute top-[20%] right-[10%] w-[30%] h-[30%] rounded-full bg-emerald-500/5 blur-[100px]" />
             </div>
 
             {/* Grid Overlay */}
@@ -65,8 +65,8 @@ const Hero = () => {
                         <Suspense fallback={null}>
                             <Environment preset="night" />
                             <ambientLight intensity={0.2} />
-                            <pointLight position={[10, 10, 10]} intensity={2} color="#6366F1" />
-                            <pointLight position={[-10, -10, -10]} intensity={1} color="#C084FC" />
+                            <pointLight position={[10, 10, 10]} intensity={2} color="#10b981" />
+                            <pointLight position={[-10, -10, -10]} intensity={1} color="#34d399" />
 
                             <Float speed={2} rotationIntensity={1.5} floatIntensity={1.5}>
                                 <motion.group style={{ x: mouseX, y: mouseY }}>
@@ -80,7 +80,7 @@ const Hero = () => {
                                 </motion.group>
                             </Float>
 
-                            <FloatingParticles count={60} color="#818CF8" />
+                            <FloatingParticles count={60} color="#10b981" />
                         </Suspense>
                     </Canvas>
                 </ThreeErrorBoundary>
@@ -92,23 +92,23 @@ const Hero = () => {
                     <motion.div
                         initial={{ opacity: 0, y: -20, scale: 0.8 }}
                         animate={{ opacity: 1, y: 0, scale: 1 }}
-                        className="inline-flex items-center gap-3 px-5 py-2 rounded-full bg-white/5 border border-white/10 text-primary-purple text-xs font-black uppercase tracking-[0.3em] mb-12 shadow-inner-glow backdrop-blur-md"
+                        className="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-500 text-[10px] font-black uppercase tracking-[0.3em] mb-12 shadow-inner-glow backdrop-blur-md"
                     >
-                        <Zap className="w-4 h-4 text-accent-teal fill-accent-teal animate-pulse" />
-                        Beta Access Now Open • 50% Early Bird Discount
+                        <Zap className="w-3.5 h-3.5 fill-emerald-500 animate-pulse" />
+                        Beta access now open • 50% lifetime discount
                     </motion.div>
 
                     {/* Headline */}
-                    <div className="relative mb-12 max-w-6xl">
+                    <div className="relative mb-10 max-w-5xl px-4">
                         <motion.h1
                             initial={{ opacity: 0, y: 30 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.8, ease: "easeOut" }}
-                            className="text-6xl md:text-8xl lg:text-[10rem] font-black tracking-tight leading-[1.05] text-white"
+                            className="text-5xl md:text-7xl lg:text-8xl font-black tracking-tighter leading-[0.95] text-white"
                         >
-                            Design Better <br />
-                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-secondary to-accent-pink">Experiments</span> <br />
-                            <span className="text-3xl md:text-5xl lg:text-6xl font-extrabold tracking-tight opacity-90 mt-4 block">In Minutes, Not Weeks</span>
+                            Design better <br />
+                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-emerald-600">experiments.</span> <br />
+                            <span className="text-2xl md:text-4xl lg:text-5xl font-extrabold tracking-tight text-white/40 mt-6 block">Precision optimization in minutes.</span>
                         </motion.h1>
                     </div>
 
@@ -122,45 +122,48 @@ const Hero = () => {
                         The AI-powered Design of Experiments (DoE) platform built for researchers who need to optimize complex designs with statistical precision.
                     </motion.p>
 
-                    {/* Value Props */}
+                    {/* Value Props - Floating Glass Card */}
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.5, duration: 0.8 }}
-                        className="flex flex-wrap justify-center gap-x-8 gap-y-4 mb-16 text-sm md:text-base text-text-secondary/80 font-bold"
+                        className="flex flex-wrap justify-center gap-6 sm:gap-12 mb-16 p-6 sm:p-8 rounded-[2.5rem] bg-white/[0.02] border border-white/5 backdrop-blur-md shadow-2xl"
                     >
                         {[
-                            "Generate optimal designs in 60 seconds",
-                            "Reduce experiments by 60%",
-                            "No statistics PhD required"
+                            { text: "Fast Matrix Generation", detail: "60 seconds vs. days" },
+                            { text: "Resource Optimization", detail: "Reduce runs by 40-60%" },
+                            { text: "AI-Powered Insight", detail: "No Statistics PhD needed" }
                         ].map((prop, i) => (
-                            <div key={i} className="flex items-center gap-2">
-                                <CheckCircle className="w-5 h-5 text-accent-teal" />
-                                {prop}
+                            <div key={i} className="flex flex-col items-center sm:items-start transition-transform hover:scale-105">
+                                <div className="flex items-center gap-2 mb-1">
+                                    <CheckCircle className="w-4 h-4 text-emerald-400" />
+                                    <span className="text-white text-sm font-black uppercase tracking-widest">{prop.text}</span>
+                                </div>
+                                <span className="text-[10px] sm:text-xs font-bold text-slate-500 uppercase tracking-widest">{prop.detail}</span>
                             </div>
                         ))}
                     </motion.div>
 
-                    {/* High-Contrast Actions */}
+                    {/* High-Impact Actions */}
                     <motion.div
-                        initial={{ opacity: 0, scale: 0.9 }}
-                        animate={{ opacity: 1, scale: 1 }}
+                        initial={{ opacity: 0, y: 30 }}
+                        animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.7 }}
-                        className="flex flex-col sm:flex-row items-center justify-center gap-6 w-full"
+                        className="flex flex-col sm:flex-row items-center justify-center gap-6 w-full max-w-3xl"
                     >
-                        <Link to="/signup" className="group relative w-full sm:w-auto overflow-hidden rounded-2xl">
-                            <div className="absolute inset-0 bg-gradient-to-r from-primary to-secondary group-hover:scale-110 transition-transform duration-500" />
-                            <div className="relative px-12 py-5 text-white text-lg font-black flex items-center justify-center gap-3">
+                        <Link to="/signup" className="group relative w-full sm:flex-1 overflow-hidden rounded-2xl shadow-2xl shadow-emerald-500/20">
+                            <div className="absolute inset-0 bg-emerald-500 transition-transform duration-500 group-hover:scale-105" />
+                            <div className="relative px-12 py-6 text-slate-950 text-xl font-black uppercase tracking-widest flex items-center justify-center gap-3">
                                 Get Started Free
-                                <ArrowRight className="w-5 h-5 group-hover:translate-x-2 transition-transform" />
+                                <ArrowRight className="w-6 h-6 group-hover:translate-x-2 transition-transform" />
                             </div>
                         </Link>
 
-                        <button className="w-full sm:w-auto px-12 py-5 rounded-2xl bg-white/5 border border-white/10 text-white text-lg font-black hover:bg-white/10 transition-all backdrop-blur-md flex items-center justify-center gap-3 group">
-                            <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center group-hover:scale-110 transition-transform">
-                                <Play className="w-4 h-4 text-primary fill-current" />
+                        <button className="w-full sm:flex-1 px-12 py-6 rounded-2xl bg-white/5 border border-white/10 text-white text-xl font-black uppercase tracking-[0.1em] hover:bg-white/10 transition-all backdrop-blur-md flex items-center justify-center gap-3 group">
+                            <div className="w-8 h-8 rounded-full bg-emerald-500/20 flex items-center justify-center group-hover:scale-110 transition-transform">
+                                <Play className="w-4 h-4 text-emerald-400 fill-current" />
                             </div>
-                            Watch System Demo
+                            Watch Demo
                         </button>
                     </motion.div>
                 </div>

@@ -12,6 +12,7 @@ import {
     Users,
     Grid3X3,
     Shapes,
+    FlaskConical,
     Target,
     FileSearch,
     ArrowUpRight,
@@ -41,66 +42,83 @@ const Dashboard = () => {
     const [showBanner, setShowBanner] = useState(true);
 
     const mockDesigns = [
-        { id: 1, name: "Drug Formulation Study", type: "RSM", factors: 3, runs: 20, createdAt: "2 days ago", status: "Completed" },
-        { id: 2, name: "Tablet Coating Optimization", type: "Factorial", factors: 4, runs: 16, createdAt: "5 days ago", status: "In Progress" },
-        { id: 3, name: "Extraction Process v4", type: "Taguchi", factors: 5, runs: 18, createdAt: "1 week ago", status: "Completed" },
-        { id: 4, name: "Stability Testing Alpha", type: "Factorial", factors: 2, runs: 8, createdAt: "2 weeks ago", status: "Draft" }
+        { id: 1, name: "Catalyst Optimization for Polymerization", type: "RSM", factors: 5, runs: 20, createdAt: "2023-10-26" },
+        { id: 2, name: "Drug Formulation Stability Study", type: "Mixture", factors: 3, runs: 15, createdAt: "2023-10-25" },
+        { id: 3, name: "Process Parameter Screening for Yield", type: "Factorial", factors: 7, runs: 32, createdAt: "2023-10-24" },
+        { id: 4, name: "Battery Life Cycle Testing", type: "Factorial", factors: 4, runs: 16, createdAt: "2023-10-23" },
     ];
 
     return (
         <div className="space-y-10 pb-20 max-w-[1400px] mx-auto">
-            <SEO title="Dashboard" />
-
-            {/* 1. Welcome Banner - Redesigned with Premium Gradient */}
             <AnimatePresence>
                 {showBanner && (
                     <motion.div
                         initial={{ opacity: 0, scale: 0.98, y: 10 }}
                         animate={{ opacity: 1, scale: 1, y: 0 }}
                         exit={{ opacity: 0, scale: 0.98 }}
-                        className="relative overflow-hidden rounded-[2.5rem] bg-gradient-to-br from-[#111827] via-slate-800 to-slate-900 p-10 md:p-14 text-white shadow-3xl shadow-slate-200/50 group"
+                        className="relative overflow-hidden rounded-[2.5rem] bg-[#0F172A] p-12 text-white shadow-2xl shadow-indigo-900/20 group min-h-[400px] flex flex-col justify-center"
                     >
-                        {/* Decorative Background Glows */}
-                        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-primary-purple opacity-20 blur-[120px] rounded-full -translate-y-1/2 translate-x-1/2" />
-                        <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-secondary opacity-10 blur-[100px] rounded-full translate-y-1/2 -translate-x-1/2" />
+                        {/* Dynamic Background */}
+                        <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 brightness-100 contrast-150 mix-blend-overlay"></div>
+                        <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-gradient-to-b from-indigo-500/20 to-purple-500/20 blur-[120px] rounded-full -translate-y-1/2 translate-x-1/2 animate-pulse" style={{ animationDuration: '4s' }} />
+                        <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-cyan-500/10 blur-[100px] rounded-full translate-y-1/2 -translate-x-1/2" />
 
-                        <button
-                            onClick={() => setShowBanner(false)}
-                            className="absolute top-8 right-8 p-2.5 bg-white/5 hover:bg-white/10 rounded-xl transition-all border border-white/5 z-20"
-                        >
-                            <X className="w-4 h-4 text-slate-400" />
-                        </button>
-
-                        <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-12">
-                            <div className="max-w-2xl text-center md:text-left">
-                                <div className="flex items-center gap-2 mb-6 justify-center md:justify-start">
-                                    <div className="w-2 h-2 rounded-full bg-secondary animate-pulse" />
-                                    <span className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400">Security Clearance Level 4 Reserved</span>
+                        <div className="relative z-10 grid lg:grid-cols-2 gap-12 items-center">
+                            <div className="space-y-8">
+                                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 backdrop-blur-sm">
+                                    <div className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
+                                    <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-300">System Operational</span>
                                 </div>
-                                <h1 className="text-4xl md:text-6xl font-black mb-6 tracking-tight font-display leading-[1.1]">
-                                    Welcome back, <br />
-                                    <span className="bg-clip-text text-transparent bg-gradient-to-r from-white via-indigo-200 to-white">Researcher Antigravity</span>
+
+                                <h1 className="text-5xl md:text-7xl font-black tracking-tight font-display leading-[1.05]">
+                                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-indigo-100 to-slate-400">Quantum</span> <br />
+                                    Workspace.
                                 </h1>
-                                <p className="text-lg font-medium text-slate-400 mb-10 max-w-lg leading-relaxed">
-                                    Your precision optimization engine is running at <span className="text-white font-bold">100% capacity</span>. Continue where you left off.
+
+                                <p className="text-lg text-slate-400 font-medium max-w-lg leading-relaxed">
+                                    Initiate high-precision combinatorial matrices using our advanced optimization engine.
                                 </p>
-                                <div className="flex flex-wrap gap-4 justify-center md:justify-start">
-                                    <Link to="/create">
-                                        <button className="px-10 py-4 bg-white text-slate-900 font-black rounded-2xl hover:bg-indigo-50 transition-all shadow-xl shadow-white/5 active:scale-95">Resume Optimization</button>
+
+                                <div className="flex flex-wrap gap-4">
+                                    <Link to="/workspace">
+                                        <button className="h-14 px-8 bg-white text-slate-900 font-black rounded-2xl hover:bg-indigo-50 hover:scale-105 transition-all shadow-xl shadow-white/10 active:scale-95 flex items-center gap-3 group">
+                                            <Zap className="w-5 h-5 fill-slate-900 group-hover:rotate-12 transition-transform" />
+                                            Launch Workspace
+                                        </button>
                                     </Link>
-                                    <button className="px-10 py-4 bg-white/5 text-white border border-white/10 font-black rounded-2xl hover:bg-white/10 transition-all backdrop-blur-sm active:scale-95">Lab Analytics</button>
                                 </div>
                             </div>
 
-                            <div className="hidden lg:block relative group-hover:scale-105 transition-transform duration-700">
-                                <div className="w-72 h-72 bg-gradient-to-br from-white/10 to-transparent backdrop-blur-3xl rounded-[3rem] border border-white/10 flex items-center justify-center p-10 shadow-2xl relative overflow-hidden">
-                                    <div className="absolute inset-0 bg-primary-purple/5 animate-pulse" />
-                                    <Zap className="w-32 h-32 text-white/20" />
-                                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 border border-white/5 rounded-full animate-[spin_10s_linear_infinite]" />
-                                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-32 border border-white/10 rounded-full animate-[spin_6s_linear_infinite_reverse]" />
-
-                                    <div className="absolute -top-4 -right-4 w-24 h-24 bg-white/10 border border-white/20 backdrop-blur-2xl rounded-3xl flex items-center justify-center p-6 shadow-2xl">
-                                        <Database className="w-full h-full text-indigo-300" />
+                            {/* Decorative HUD Element */}
+                            <div className="hidden lg:block relative">
+                                <div className="absolute inset-0 bg-gradient-to-r from-indigo-500/10 to-purple-500/10 rounded-3xl blur-xl" />
+                                <div className="relative bg-white/5 border border-white/10 backdrop-blur-md rounded-3xl p-8 transform rotate-2 hover:rotate-0 transition-transform duration-700 hover:scale-[1.02]">
+                                    <div className="flex justify-between items-start mb-8">
+                                        <div className="flex gap-2">
+                                            <div className="w-3 h-3 rounded-full bg-red-400/80" />
+                                            <div className="w-3 h-3 rounded-full bg-yellow-400/80" />
+                                            <div className="w-3 h-3 rounded-full bg-green-400/80" />
+                                        </div>
+                                        <div className="text-[10px] font-mono text-slate-400">CMD_EXEC_01</div>
+                                    </div>
+                                    <div className="space-y-4 font-mono text-xs text-indigo-200">
+                                        <div className="flex justify-between border-b border-white/5 pb-2">
+                                            <span>&gt; INITIALIZING_CORE</span>
+                                            <span className="text-green-400">DONE</span>
+                                        </div>
+                                        <div className="flex justify-between border-b border-white/5 pb-2">
+                                            <span>&gt; LOADING_FACTORS</span>
+                                            <span className="text-green-400">3 ACTIVE</span>
+                                        </div>
+                                        <div className="flex justify-between border-b border-white/5 pb-2">
+                                            <span>&gt; PREDICTING_YIELD</span>
+                                            <span className="text-cyan-400 animate-pulse">98.4%</span>
+                                        </div>
+                                        <div className="h-32 mt-4 bg-gradient-to-b from-indigo-500/20 to-transparent rounded-lg border border-white/5 relative overflow-hidden flex items-end justify-between px-2 pb-2">
+                                            {[40, 70, 50, 90, 60, 80, 55].map((h, i) => (
+                                                <div key={i} className="w-6 bg-indigo-400/50 rounded-t-sm" style={{ height: `${h}%` }} />
+                                            ))}
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -109,52 +127,42 @@ const Dashboard = () => {
                 )}
             </AnimatePresence>
 
-            {/* 2. Quick Stats - Leaner and more Scientific */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {/* Quick Launch Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 {[
-                    { label: 'Active Designs', value: '24', icon: Layout, color: 'text-indigo-500', bg: 'bg-indigo-50/50' },
-                    { label: 'Cloud Synchrony', value: 'Syncing', icon: TrendingUp, color: 'text-secondary', bg: 'bg-indigo-50/50' },
-                    { label: 'Team Capacity', value: '08 / 12', icon: Users, color: 'text-indigo-400', bg: 'bg-indigo-50/50' },
-                    { label: 'Vault Storage', value: '458 GB', icon: Database, color: 'text-slate-900', bg: 'bg-indigo-50/50', isProgress: true }
-                ].map((stat, i) => (
-                    <div key={i} className="bg-white p-6 rounded-[2rem] border border-gray-100 shadow-sm flex items-center gap-5 hover:border-indigo-100 transition-all cursor-pointer group">
-                        <div className={`w-14 h-14 rounded-2xl ${stat.bg} flex items-center justify-center ${stat.color} group-hover:scale-110 transition-transform duration-500`}>
-                            <stat.icon className="w-7 h-7" />
+                    { title: "Factorial Design", desc: "Screening & Interactions", icon: Grid3X3, color: "from-blue-600 to-indigo-600", path: "/create" },
+                    { title: "Response Surface", desc: "Optimization & Curvature", icon: Shapes, color: "from-violet-600 to-purple-600", path: "/create" },
+                    { title: "Smart Mixture", desc: "Formulation Blending", icon: FlaskConical, color: "from-fuchsia-600 to-pink-600", path: "/create" },
+                ].map((item, i) => (
+                    <Link key={i} to={item.path} className="group">
+                        <div className="relative h-full bg-white p-8 rounded-[2.5rem] border border-slate-100 overflow-hidden shadow-sm hover:shadow-2xl hover:shadow-indigo-500/10 transition-all duration-300 transform hover:-translate-y-1">
+                            <div className={`absolute top-0 right-0 w-32 h-32 bg-gradient-to-br ${item.color} opacity-10 rounded-full blur-2xl -translate-y-8 translate-x-8 group-hover:scale-150 transition-transform duration-700`} />
+
+                            <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${item.color} flex items-center justify-center text-white mb-6 shadow-lg group-hover:scale-110 group-hover:rotate-6 transition-transform duration-300`}>
+                                <item.icon className="w-7 h-7" />
+                            </div>
+
+                            <h3 className="text-xl font-black text-slate-900 mb-2">{item.title}</h3>
+                            <p className="text-sm font-medium text-slate-400 group-hover:text-slate-600 transition-colors">{item.desc}</p>
+
+                            <div className="absolute bottom-8 right-8 w-8 h-8 rounded-full bg-slate-50 flex items-center justify-center text-slate-300 group-hover:bg-slate-900 group-hover:text-white transition-all">
+                                <ArrowRight className="w-4 h-4" />
+                            </div>
                         </div>
-                        <div className="flex-1 min-w-0">
-                            <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">{stat.label}</p>
-                            <h3 className="text-xl font-black text-slate-900 tracking-tight leading-none">{stat.value}</h3>
-                            {stat.isProgress && (
-                                <div className="mt-3 w-full h-1 bg-gray-50 rounded-full overflow-hidden">
-                                    <div className="h-full bg-slate-900 w-[45%]" />
-                                </div>
-                            )}
-                        </div>
-                    </div>
+                    </Link>
                 ))}
             </div>
 
-            {/* 3. Recent Workspace Designs */}
-            <section className="space-y-6">
-                <div className="flex items-center justify-between px-2">
-                    <div className="flex items-center gap-4">
-                        <div className="w-1.5 h-6 bg-primary-purple rounded-full" />
-                        <h2 className="text-xl font-black text-slate-900 tracking-tight font-display uppercase">Recent Laboratory Designs</h2>
-                    </div>
-                    <div className="flex items-center gap-3">
-                        <div className="bg-gray-50 p-1 rounded-xl border border-gray-100 flex gap-1">
-                            <button className="px-4 py-1.5 bg-white shadow-sm border border-gray-100 rounded-lg text-[10px] font-black uppercase text-indigo-600">Grid</button>
-                            <button className="px-4 py-1.5 text-[10px] font-black uppercase text-gray-400 hover:text-gray-600">List</button>
-                        </div>
-                        <button className="p-2.5 bg-gray-50 rounded-xl border border-gray-100 text-gray-400 hover:text-indigo-600 transition-all">
-                            <Filter className="w-4 h-4" />
-                        </button>
-                    </div>
+            {/* Recent Workspace Designs (Simplified) */}
+            <section className="pt-4">
+                <div className="flex items-center gap-4 mb-8">
+                    <div className="w-1.5 h-6 bg-slate-900 rounded-full" />
+                    <h2 className="text-xl font-black text-slate-900 tracking-tight font-display uppercase">Active Experiments</h2>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                     {mockDesigns.map((design, i) => (
-                        <Card key={i} hoverable className="p-0 rounded-[2rem] border border-gray-100 overflow-hidden group shadow-sm hover:shadow-xl hover:shadow-indigo-50/50 transition-all duration-500">
+                        <Card key={i} hoverable className="p-0 rounded-[2rem] border border-gray-100 overflow-hidden group shadow-sm hover:shadow-xl hover:shadow-indigo-50/50 transition-all duration-500 bg-white">
                             <div className="p-6 border-b border-gray-50 bg-gray-50/30">
                                 <div className="flex justify-between items-start mb-6">
                                     <div className="w-12 h-12 bg-white rounded-2xl border border-gray-100 flex items-center justify-center text-primary-purple shadow-sm group-hover:scale-110 group-hover:rotate-3 transition-transform">
@@ -167,7 +175,7 @@ const Dashboard = () => {
                                 <h4 className="text-lg font-black text-slate-900 leading-none mb-2 line-clamp-1">{design.name}</h4>
                                 <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">{design.createdAt}</p>
                             </div>
-                            <div className="p-6 bg-white flex items-center justify-between">
+                            <div className="p-6 flex items-center justify-between">
                                 <div className="flex gap-4">
                                     <div className="text-center">
                                         <p className="text-[9px] font-bold text-gray-400 uppercase leading-none mb-1">Factors</p>
@@ -178,47 +186,13 @@ const Dashboard = () => {
                                         <p className="text-sm font-black text-slate-900">{design.runs}</p>
                                     </div>
                                 </div>
-                                <Link to="/create">
-                                    <button className="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center text-gray-400 group-hover:bg-primary-purple group-hover:text-white transition-all shadow-inner">
+                                <Link to={`/design/${design.id}`}>
+                                    <button className="w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center text-slate-400 group-hover:bg-slate-900 group-hover:text-white transition-all shadow-inner">
                                         <ArrowUpRight className="w-5 h-5" />
                                     </button>
                                 </Link>
                             </div>
                         </Card>
-                    ))}
-                </div>
-            </section>
-
-            {/* 4. Quick Strategy Launch */}
-            <section className="space-y-8">
-                <div className="flex items-center gap-4">
-                    <div className="w-1.5 h-6 bg-secondary rounded-full" />
-                    <h2 className="text-xl font-black text-slate-900 tracking-tight font-display uppercase">Precision Strategy Launch</h2>
-                </div>
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                    {[
-                        { title: 'Full Factorial Design', desc: 'Screen large numbers of variables and identify significant primary effects.', icon: Grid3X3, gradient: 'from-indigo-600 to-primary-purple' },
-                        { title: 'Optimization (RSM)', desc: 'Deep optimization for yield, stability, and therapeutic effectiveness.', icon: Shapes, gradient: 'from-secondary to-indigo-500' },
-                        { title: 'Taguchi Method', desc: 'Minimize quality variation by identifying robust parameter intersections.', icon: Target, gradient: 'from-slate-800 to-slate-900' },
-                        { title: 'Clinical Protocols', desc: 'Access pre-validated templates for common laboratory workflows.', icon: Library, gradient: 'from-accent to-secondary' },
-                    ].map((item, i) => (
-                        <Link key={i} to="/create" className="group">
-                            <div className="bg-white p-8 rounded-[2.5rem] border border-gray-100 flex items-center gap-8 hover:border-indigo-100 transition-all h-full shadow-sm hover:shadow-xl hover:shadow-indigo-50/50 duration-500 relative overflow-hidden">
-                                <div className={clsx("w-20 h-20 rounded-3xl flex items-center justify-center text-white shrink-0 group-hover:rotate-12 transition-transform shadow-xl bg-gradient-to-br", item.gradient)}>
-                                    <item.icon className="w-9 h-9" />
-                                </div>
-                                <div>
-                                    <div className="flex items-center gap-2 mb-2">
-                                        <h3 className="text-xl font-black text-slate-900 leading-tight">{item.title}</h3>
-                                        <ArrowRight className="w-4 h-4 text-gray-300 -translate-x-2 opacity-0 group-hover:translate-x-0 group-hover:opacity-100 transition-all" />
-                                    </div>
-                                    <p className="text-gray-500 font-medium text-sm leading-relaxed max-w-sm">{item.desc}</p>
-                                </div>
-                                <div className="absolute top-0 right-0 p-8 opacity-5 -translate-y-4 translate-x-4 rotate-12 group-hover:scale-125 transition-transform duration-700 pointer-events-none">
-                                    <item.icon className="w-40 h-40" />
-                                </div>
-                            </div>
-                        </Link>
                     ))}
                 </div>
             </section>

@@ -32,14 +32,14 @@ const BetaProgram = () => {
                 <motion.div
                     initial={{ opacity: 0, scale: 0.9 }}
                     whileInView={{ opacity: 1, scale: 1 }}
-                    className="inline-flex items-center gap-3 px-5 py-2 rounded-full bg-accent-pink/20 border border-accent-pink/30 text-accent-pink text-[11px] font-black uppercase tracking-[0.4em] mb-12 shadow-sm"
+                    className="inline-flex items-center gap-3 px-5 py-2 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-500 text-[10px] font-black uppercase tracking-[0.4em] mb-12 shadow-sm"
                 >
                     <Trophy className="w-4 h-4" />
                     Founding Member Program
                 </motion.div>
 
-                <h2 className="text-5xl md:text-8xl font-black text-white mb-10 tracking-tight leading-[1.1]">
-                    Be Among the First <br /> <span className="text-accent-pink text-3xl md:text-6xl lg:text-7xl">100 Researchers</span>.
+                <h2 className="text-5xl md:text-8xl font-black text-white mb-10 tracking-tighter leading-[1.05]">
+                    Be among the first <br /> <span className="text-emerald-500">100 researchers.</span>
                 </h2>
 
                 <p className="text-xl md:text-2xl text-text-secondary max-w-3xl mx-auto font-medium opacity-80 mb-24">
@@ -56,7 +56,7 @@ const BetaProgram = () => {
                             transition={{ delay: i * 0.1 }}
                             className="p-10 rounded-[3rem] bg-white/[0.03] border border-white/10 hover:border-accent-pink/30 hover:bg-white/[0.05] transition-all duration-500 text-center group"
                         >
-                            <div className="w-16 h-16 rounded-2xl bg-white/5 flex items-center justify-center text-accent-pink mx-auto mb-8 group-hover:scale-110 transition-transform">
+                            <div className="w-16 h-16 rounded-2xl bg-white/5 flex items-center justify-center text-emerald-500 mx-auto mb-8 group-hover:scale-110 transition-transform">
                                 <benefit.icon className="w-8 h-8" />
                             </div>
                             <h3 className="text-xl font-black text-white mb-4 uppercase tracking-tight">{benefit.title}</h3>
@@ -66,10 +66,10 @@ const BetaProgram = () => {
                 </div>
 
                 <div className="flex flex-col items-center gap-6">
-                    <button className="px-12 py-6 rounded-2xl bg-accent-pink text-white text-xl font-black hover:scale-105 transition-transform shadow-lg shadow-accent-pink/20">
+                    <button className="px-14 py-6 rounded-2xl bg-emerald-500 text-slate-950 text-xl font-black uppercase tracking-widest hover:scale-105 transition-transform shadow-2xl shadow-emerald-500/20">
                         Apply for Beta Access
                     </button>
-                    <p className="text-text-secondary font-black uppercase tracking-[0.3em] text-[10px] animate-pulse">
+                    <p className="text-emerald-500 font-black uppercase tracking-[0.3em] text-[10px] animate-pulse">
                         ⏰ 37 spots remaining
                     </p>
                 </div>
@@ -83,7 +83,7 @@ const BetaProgram = () => {
                             "Run at least 2 experimental designs during beta period"
                         ].map((item, i) => (
                             <li key={i} className="flex items-center gap-4 text-text-secondary font-medium">
-                                <div className="w-2 h-2 rounded-full bg-accent-pink shrink-0" />
+                                <div className="w-2 h-2 rounded-full bg-emerald-500 shrink-0" />
                                 {item}
                             </li>
                         ))}

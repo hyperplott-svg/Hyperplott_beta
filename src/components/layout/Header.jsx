@@ -35,7 +35,7 @@ const Header = ({ toggleSidebar }) => {
                     <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 group-focus-within:text-primary-purple transition-colors" />
                     <input
                         type="text"
-                        placeholder="Search research, designs, or analytics..."
+                        placeholder="Search DoE experiments or factorial matrices..."
                         className="w-full bg-gray-50 border border-gray-100 rounded-[1.25rem] py-2.5 pl-12 pr-12 outline-none focus:bg-white focus:border-indigo-100 focus:ring-4 focus:ring-indigo-50/50 transition-all text-sm font-semibold text-text-primary placeholder:text-text-muted/60"
                     />
                     <div className="absolute right-4 top-1/2 -translate-y-1/2 flex items-center gap-1.5 px-2 py-1 bg-white rounded-lg border border-gray-100 shadow-sm pointer-events-none">
@@ -68,7 +68,7 @@ const Header = ({ toggleSidebar }) => {
                             {user?.photoURL ? (
                                 <img src={user.photoURL} alt="User" className="w-full h-full object-cover" />
                             ) : (
-                                "H"
+                                <User className="w-5 h-5" />
                             )}
                         </div>
                         <div className="hidden lg:block text-left">

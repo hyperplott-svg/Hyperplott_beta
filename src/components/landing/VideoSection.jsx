@@ -72,11 +72,11 @@ const VideoSection = () => {
                         viewport={{ once: true }}
                         transition={{ duration: 0.8 }}
                     >
-                        <h2 className="text-4xl md:text-6xl lg:text-7xl font-black text-white mb-2 tracking-tight drop-shadow-lg">
-                            Meet the new way
+                        <h2 className="text-4xl md:text-6xl font-black text-white mb-2 tracking-tighter drop-shadow-lg">
+                            Meet the modern way
                         </h2>
-                        <h2 className="text-4xl md:text-6xl lg:text-7xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white via-slate-200 to-slate-400 mb-6 tracking-tight drop-shadow-lg">
-                            to design experiments.
+                        <h2 className="text-4xl md:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-primary mb-6 tracking-tighter drop-shadow-lg">
+                            to optimize science.
                         </h2>
                     </motion.div>
 

@@ -81,7 +81,8 @@ const CreateDesign = () => {
         setIsGenerating(true);
         setTimeout(() => {
             setIsGenerating(false);
-            navigate('/design/new-123');
+            const designId = Math.floor(Math.random() * 10000); // Generate semi-random ID
+            navigate(`/design/${designId}`, { state: { designData: data, isNew: true } });
         }, 3000);
     };
 

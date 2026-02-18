@@ -36,11 +36,14 @@ const Validation = () => {
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
-                        className="text-5xl md:text-7xl font-black text-white mb-6 tracking-tight leading-[1.1]"
+                        className="text-4xl md:text-6xl font-black text-white mb-6 tracking-tighter leading-[1.1]"
                     >
                         Proven Methodology, <br />
-                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-secondary to-accent-pink">Modern Interface</span>.
+                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-primary to-accent-pink">Modern Interface.</span>
                     </motion.h2>
+                    <p className="text-lg md:text-xl text-slate-500 max-w-2xl mx-auto font-medium leading-relaxed">
+                        Industry-standard statistical rigor meets contemporary user experience.
+                    </p>
                 </div>
 
                 <div className="grid md:grid-cols-2 gap-8">

@@ -37,13 +37,13 @@ const FAQ = () => {
                     <motion.div
                         initial={{ opacity: 0, scale: 0.9 }}
                         whileInView={{ opacity: 1, scale: 1 }}
-                        className="inline-flex items-center gap-3 px-5 py-2 rounded-full bg-primary-purple/10 border border-primary-purple/20 text-primary-purple text-[10px] font-black uppercase tracking-[0.4em] mb-8"
+                        className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-500 text-[9px] font-black uppercase tracking-[0.4em] mb-8"
                     >
-                        <HelpCircle className="w-4 h-4" />
+                        <HelpCircle className="w-3.5 h-3.5" />
                         Common inquiries
                     </motion.div>
-                    <h2 className="text-5xl md:text-7xl font-black text-white tracking-tight uppercase mb-6 leading-tight">
-                        FAQ.
+                    <h2 className="text-5xl md:text-7xl font-black text-white tracking-tighter uppercase mb-6 leading-tight">
+                        Faq.
                     </h2>
                     <p className="text-text-secondary text-lg opacity-70">
                         Everything you need to know about starting your optimization journey.
@@ -69,10 +69,10 @@ const FAQItem = ({ question, answer }) => {
                 onClick={() => setIsOpen(!isOpen)}
                 className="w-full px-8 py-6 flex items-center justify-between text-left group"
             >
-                <span className="text-lg md:text-xl font-bold text-white pr-8 tracking-tight group-hover:text-primary-purple transition-colors">
+                <span className="text-lg md:text-xl font-bold text-white pr-8 tracking-tight group-hover:text-emerald-500 transition-colors">
                     {question}
                 </span>
-                <div className={`p-2 rounded-full ${isOpen ? 'bg-primary-purple text-white' : 'bg-white/5 text-text-secondary'} transition-all`}>
+                <div className={`p-2 rounded-full ${isOpen ? 'bg-emerald-500 text-slate-950' : 'bg-white/5 text-slate-500'} transition-all`}>
                     {isOpen ? <Minus className="w-4 h-4" /> : <Plus className="w-4 h-4" />}
                 </div>
             </button>

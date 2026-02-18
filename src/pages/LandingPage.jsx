@@ -31,14 +31,10 @@ const LandingPage = () => {
                 <VideoSection />
                 <ProblemStatement />
                 <WhyDifferent />
-                <Features />
                 <Validation />
-                <Workflow />
-                <UseCases />
                 <VisualizationShowcase />
-                <FounderStory />
-                <BetaProgram />
                 <Pricing />
+                <BetaProgram />
                 <FAQ />
                 <CTA />
             </main>

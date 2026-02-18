@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Sparkles, Calendar, Zap, ArrowRight } from 'lucide-react';
+import { Play, Zap, ArrowRight } from 'lucide-react';
 
 const CTA = () => {
     return (
@@ -28,9 +28,9 @@ const CTA = () => {
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
-                    className="text-6xl md:text-8xl font-black text-white mb-10 tracking-tight leading-[1.1]"
+                    className="text-5xl md:text-7xl font-black text-white mb-10 tracking-tighter leading-[1.05]"
                 >
-                    Ready to Design <br /> Better <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-secondary to-accent-pink">Experiments</span>?
+                    Ready to design <br /> better <span className="text-emerald-500">experiments?</span>
                 </motion.h2>
 
                 <motion.p
@@ -49,19 +49,21 @@ const CTA = () => {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ delay: 0.4 }}
-                    className="flex flex-col sm:flex-row items-center justify-center gap-8 mb-16"
+                    className="flex flex-col sm:flex-row items-center justify-center gap-6 mb-16"
                 >
-                    <button className="group relative w-full sm:w-auto px-12 py-6 rounded-2xl bg-white text-bg-primary text-xl font-black overflow-hidden shadow-2xl transition-all hover:-translate-y-1 active:scale-95">
+                    <button className="group relative w-full sm:w-auto px-14 py-6 rounded-2xl bg-emerald-500 text-slate-950 text-xl font-black uppercase tracking-widest overflow-hidden shadow-2xl shadow-emerald-500/20 transition-all hover:-translate-y-1 active:scale-95">
                         <span className="relative z-10 flex items-center gap-3">
                             Start Free Trial
                             <ArrowRight className="w-6 h-6 group-hover:translate-x-2 transition-transform" />
                         </span>
-                        <div className="absolute inset-0 bg-slate-100 opacity-0 group-hover:opacity-100 transition-opacity" />
+                        <div className="absolute inset-0 bg-white opacity-0 group-hover:opacity-20 transition-opacity" />
                     </button>
 
-                    <button className="w-full sm:w-auto px-12 py-6 rounded-2xl bg-white/5 border border-white/10 text-white text-xl font-black hover:bg-white/10 transition-all backdrop-blur-md flex items-center justify-center gap-3 group">
-                        <Calendar className="w-6 h-6 text-primary" />
-                        Watch 2-Min Demo
+                    <button className="w-full sm:w-auto px-12 py-6 rounded-2xl bg-white/5 border border-white/10 text-white text-xl font-black uppercase tracking-widest hover:bg-white/10 transition-all backdrop-blur-md flex items-center justify-center gap-3 group">
+                        <div className="w-8 h-8 rounded-full bg-emerald-500/20 flex items-center justify-center group-hover:scale-110 transition-transform">
+                            <Play className="w-4 h-4 text-emerald-400 fill-current" />
+                        </div>
+                        Watch Demo
                     </button>
                 </motion.div>
 

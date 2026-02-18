@@ -1,1 +1,0 @@
-// Deleted: This component is no longer used in the HyperPlott version of the app.

@@ -37,6 +37,7 @@ export interface DoEAnovaRow {
 
 export interface ResponseAnalysis {
     responseName: string;
+    fittingModelUsed?: string;
     equation: string;
     stats: {
         rSquared: number;

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useLocation } from 'react-router-dom';
 import {
     BarChart as ReBarChart,
     XAxis,
@@ -52,26 +52,46 @@ const DesignViewer = () => {
     const { id } = useParams();
     const [activeTab, setActiveTab] = useState('matrix');
     const [isEditing, setIsEditing] = useState(false);
-    const [designName, setDesignName] = useState("Drug Formulation Study v2.0");
+    const location = useLocation();
+    const { designData, isNew } = location.state || {}; // Get passed state
+
+    const [designName, setDesignName] = useState(designData?.name || "Drug Formulation Study v2.0");
+
+    // Construct valid factors array from state or fallback
+    const factors = designData?.factors?.map((f, i) => ({
+        id: String.fromCharCode(65 + i), // A, B, C...
+        name: f.name,
+        type: f.type,
+        min: f.min,
+        max: f.max,
+        unit: f.unit
+    })) || [
+            { id: 'A', name: 'Temperature', type: 'Continuous', min: 20, max: 80, unit: '°C' },
+            { id: 'B', name: 'Concentration', type: 'Continuous', min: 0.1, max: 0.5, unit: 'mol/L' },
+            { id: 'C', name: 'Stirring Speed', type: 'Continuous', min: 200, max: 800, unit: 'RPM' },
+            { id: 'D', name: 'Pressure', type: 'Continuous', min: 5, max: 15, unit: 'bar' }
+        ];
+
+    // Generate simulated runs based on factors
+    const generateRuns = (factorList) => {
+        const runCount = designData ? Math.pow(2, factorList.length) * (designData.replicates || 1) : 15;
+        return Array.from({ length: runCount }, (_, i) => {
+            const run = { id: i + 1 };
+            factorList.forEach(f => {
+                // Randomly assign min or max level for simulated factorial design
+                run[f.name] = Math.random() > 0.5 ? f.max : f.min;
+            });
+            run['Result 1'] = (Math.random() * 50 + 10).toFixed(2); // Simulated response
+            run['Result 2'] = (Math.random() * 20 + 80).toFixed(2); // Simulated response
+            return run;
+        });
+    };
 
     const designInfo = {
-        type: "RSM",
-        description: "Optimization of tablet disintegration and dissolution rate using starch as a binder.",
-        factors: [
-            { id: 'T', name: 'Temperature', type: 'Continuous', min: 20, max: 80, unit: '°C' },
-            { id: 'C', name: 'Concentration', type: 'Continuous', min: 0.1, max: 0.5, unit: 'mol/L' },
-            { id: 'S', name: 'Stirring Speed', type: 'Continuous', min: 200, max: 800, unit: 'RPM' },
-            { id: 'P', name: 'Pressure', type: 'Continuous', min: 5, max: 15, unit: 'bar' }
-        ],
-        runs: Array.from({ length: 15 }, (_, i) => ({
-            id: i + 1,
-            'Temperature': (Math.random() > 0.5 ? 80 : 20),
-            'Concentration': (Math.random() > 0.5 ? 0.5 : 0.1),
-            'Stirring Speed': (Math.random() > 0.5 ? 800 : 200),
-            'Pressure': (Math.random() * 10 + 5).toFixed(1),
-            'Result 1': (Math.random() * 50 + 10).toFixed(2),
-            'Result 2': (Math.random() * 20 + 80).toFixed(2)
-        }))
+        type: designData?.type || "RSM",
+        description: designData?.description || "Optimization of tablet disintegration and dissolution rate using starch as a binder.",
+        factors: factors,
+        runs: generateRuns(factors)
     };
 
     const tabs = [

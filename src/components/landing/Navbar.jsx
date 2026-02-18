@@ -34,7 +34,7 @@ const Navbar = () => {
                 variants={{ visible: { y: 0 }, hidden: { y: '-100%' } }}
                 animate={hidden ? 'hidden' : 'visible'}
                 transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-                className={`fixed top-0 left-0 right-0 z-50 h-[80px] flex items-center transition-all duration-500 ${scrolled ? 'bg-white/70 backdrop-blur-2xl shadow-premium border-b border-white/40' : 'bg-transparent'
+                className={`fixed top-0 left-0 right-0 z-50 h-[80px] flex items-center transition-all duration-500 ${scrolled ? 'bg-slate-950/40 backdrop-blur-2xl border-b border-white/5 shadow-2xl' : 'bg-transparent'
                     }`}
             >
                 <div className="container mx-auto px-6 md:px-12 flex items-center justify-between">
@@ -46,20 +46,20 @@ const Navbar = () => {
                             </div>
                         </div>
                         <div className="flex flex-col">
-                            <span className="text-xl font-black tracking-tight text-text-primary leading-none">
+                            <span className="text-xl font-black tracking-tighter text-white leading-none">
                                 Hyperplott
                             </span>
-                            <span className="text-[10px] uppercase tracking-[0.2em] font-bold text-primary-purple opacity-70">Scientific AI</span>
+                            <span className="text-[10px] uppercase tracking-[0.2em] font-bold text-emerald-400 opacity-70">Scientific AI</span>
                         </div>
                     </Link>
 
                     {/* Desktop Navigation - Centered Pill */}
-                    <div className="hidden lg:flex items-center gap-1 bg-white/40 backdrop-blur-md px-2 py-1.5 rounded-2xl border border-white/50 shadow-sm">
+                    <div className="hidden lg:flex items-center gap-1 bg-white/5 backdrop-blur-md px-2 py-1.5 rounded-2xl border border-white/10 shadow-inner-glow">
                         {navLinks.map((link) => (
                             <a
                                 key={link.name}
                                 href={link.href}
-                                className="px-6 py-2 text-[14px] font-bold text-text-secondary hover:text-primary-purple transition-all rounded-xl hover:bg-white/60"
+                                className="px-6 py-2 text-[13px] font-black uppercase tracking-[0.2em] text-slate-400 hover:text-white transition-all rounded-xl hover:bg-white/5"
                             >
                                 {link.name}
                             </a>
@@ -68,18 +68,18 @@ const Navbar = () => {
 
                     {/* Action Group */}
                     <div className="hidden md:flex items-center gap-4">
-                        <Link to="/login" className="text-[14px] font-bold text-text-secondary hover:text-primary-purple transition-all px-6 py-2.5 rounded-xl hover:bg-white/60">
+                        <Link to="/login" className="text-[13px] font-black uppercase tracking-[0.2em] text-slate-400 hover:text-white transition-all px-6 py-2.5 rounded-xl hover:bg-white/5 border border-white/0 hover:border-white/5">
                             Sign In
                         </Link>
                         <Link
                             to="/signup"
-                            className="relative group px-7 py-3 rounded-xl bg-text-primary text-white text-[14px] font-bold shadow-xl overflow-hidden"
+                            className="relative group px-8 py-3.5 rounded-xl bg-emerald-500 text-slate-950 text-[13px] font-black uppercase tracking-[0.1em] shadow-lg shadow-emerald-500/20 overflow-hidden"
                         >
                             <span className="relative z-10 flex items-center gap-2">
                                 Get Started
-                                <Sparkles className="w-4 h-4 text-secondary" />
+                                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                             </span>
-                            <div className="absolute inset-0 bg-gradient-to-r from-primary-purple to-secondary opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                            <div className="absolute inset-0 bg-white opacity-0 group-hover:opacity-20 transition-opacity duration-500" />
                         </Link>
                     </div>
 

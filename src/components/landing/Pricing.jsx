@@ -72,9 +72,9 @@ const Pricing = () => {
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
-                        className="text-6xl md:text-8xl font-black text-white mb-10 tracking-tight leading-[1.1]"
+                        className="text-5xl md:text-7xl font-black text-white mb-10 tracking-tighter leading-[1.05]"
                     >
-                        Flexible <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-secondary to-accent-pink">Plans</span>.
+                        Precision <span className="text-emerald-500">Pricing.</span>
                     </motion.h2>
 
                     <p className="text-xl md:text-2xl text-text-secondary max-w-3xl mx-auto font-medium opacity-80 mb-8">
@@ -93,11 +93,11 @@ const Pricing = () => {
                         >
                             <motion.div
                                 animate={{ x: annual ? 32 : 0 }}
-                                className="w-6 h-6 rounded-full bg-primary shadow-glow"
+                                className="w-6 h-6 rounded-full bg-emerald-500 shadow-[0_0_10px_#10b981]"
                             />
                         </button>
-                        <span className={`text-[11px] font-black tracking-[0.2em] transition-colors ${annual ? 'text-white' : 'text-text-tertiary'}`}>ANNUAL</span>
-                        <div className="px-3 py-1 bg-accent-teal/10 border border-accent-teal/20 text-accent-teal text-[9px] font-black tracking-widest rounded-full">
+                        <span className={`text-[11px] font-black tracking-[0.2em] transition-colors ${annual ? 'text-white' : 'text-slate-500'}`}>ANNUAL</span>
+                        <div className="px-3 py-1 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[9px] font-black tracking-widest rounded-full">
                             -20% SAVINGS
                         </div>
                     </div>
@@ -149,7 +149,7 @@ const Pricing = () => {
                             </div>
 
                             <button className={`w-full py-6 rounded-[24px] font-black text-xs uppercase tracking-[0.2em] flex items-center justify-center gap-3 transition-all duration-500 active:scale-95 ${plan.popular
-                                ? 'bg-primary text-white shadow-xl hover:shadow-glow'
+                                ? 'bg-emerald-500 text-slate-950 shadow-xl shadow-emerald-500/20'
                                 : 'bg-white/5 border border-white/10 text-white hover:bg-white/10'
                                 }`}>
                                 {plan.cta} <ArrowRight className="w-5 h-5" />

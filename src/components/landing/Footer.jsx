@@ -16,12 +16,12 @@ const Footer = () => {
                     {/* Brand Column */}
                     <div className="col-span-1 lg:col-span-1">
                         <div className="flex items-center gap-3 mb-10">
-                            <div className="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-white shadow-glow">
-                                <Zap className="w-6 h-6 text-primary fill-primary" />
+                            <div className="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-emerald-500 shadow-xl shadow-emerald-500/10">
+                                <Zap className="w-6 h-6 text-emerald-500 fill-emerald-500" />
                             </div>
                             <div className="flex flex-col">
-                                <span className="text-2xl font-black tracking-tight leading-none">Hyperplott</span>
-                                <span className="text-[9px] uppercase tracking-[0.4em] font-black text-primary-purple mt-1 opacity-70">Scientific AI</span>
+                                <span className="text-2xl font-black tracking-tighter leading-none">Hyperplott</span>
+                                <span className="text-[9px] uppercase tracking-[0.4em] font-black text-emerald-400 mt-1 opacity-70">Scientific AI</span>
                             </div>
                         </div>
                         <p className="text-text-secondary text-base font-medium leading-relaxed mb-10 max-w-xs opacity-70">
@@ -41,7 +41,7 @@ const Footer = () => {
                         <h4 className="text-[11px] font-black uppercase tracking-[0.4em] text-text-tertiary mb-10">Product</h4>
                         <ul className="space-y-5">
                             {['Matrix Generation', '3D Optimization', 'Statistical Engine', 'API Reference', 'Cloud Ops'].map(item => (
-                                <li key={item}><a href="#" className="text-text-secondary hover:text-primary transition-colors text-base font-medium opacity-80">{item}</a></li>
+                                <li key={item}><a href="#" className="text-slate-400 hover:text-emerald-500 transition-colors text-base font-medium">{item}</a></li>
                             ))}
                         </ul>
                     </div>
@@ -50,7 +50,7 @@ const Footer = () => {
                         <h4 className="text-[11px] font-black uppercase tracking-[0.4em] text-text-tertiary mb-10">Company</h4>
                         <ul className="space-y-5">
                             {['Mission Control', 'Careers', 'Research Portal', 'Global Sales', 'Brand Kit'].map(item => (
-                                <li key={item}><a href="#" className="text-text-secondary hover:text-primary transition-colors text-base font-medium opacity-80">{item}</a></li>
+                                <li key={item}><a href="#" className="text-slate-400 hover:text-emerald-500 transition-colors text-base font-medium">{item}</a></li>
                             ))}
                         </ul>
                     </div>
@@ -62,24 +62,24 @@ const Footer = () => {
                             <input
                                 type="email"
                                 placeholder="research@institution.edu"
-                                className="w-full bg-white/5 border border-white/10 rounded-2xl py-4 px-6 text-sm font-medium outline-none focus:border-primary/50 transition-all placeholder:text-text-muted"
+                                className="w-full bg-white/5 border border-white/10 rounded-2xl py-4 px-6 text-sm font-medium outline-none focus:border-emerald-500/50 transition-all placeholder:text-slate-700"
                             />
-                            <button className="absolute right-2 top-2 p-2 rounded-xl bg-primary text-white shadow-glow hover:scale-105 active:scale-95 transition-all">
+                            <button className="absolute right-2 top-2 p-2 rounded-xl bg-emerald-500 text-slate-950 shadow-xl shadow-emerald-500/20 hover:scale-105 active:scale-95 transition-all">
                                 <Mail className="w-5 h-5" />
                             </button>
                         </div>
                         <div className="mt-12 space-y-4">
-                            <div className="flex items-center gap-3 text-text-tertiary text-[10px] uppercase tracking-widest font-black opacity-60">
-                                <Shield className="w-4 h-4 text-accent-teal" /> 🔒 256-bit SSL Encryption
+                            <div className="flex items-center gap-3 text-slate-500 text-[10px] uppercase tracking-widest font-black">
+                                <Shield className="w-4 h-4 text-emerald-500" /> 🔒 256-bit SSL Encryption
                             </div>
-                            <div className="flex items-center gap-3 text-text-tertiary text-[10px] uppercase tracking-widest font-black opacity-60">
-                                <Shield className="w-4 h-4 text-accent-teal" /> ✓ GDPR Compliant
+                            <div className="flex items-center gap-3 text-slate-500 text-[10px] uppercase tracking-widest font-black">
+                                <Shield className="w-4 h-4 text-emerald-500" /> ✓ GDPR Compliant
                             </div>
-                            <div className="flex items-center gap-3 text-text-tertiary text-[10px] uppercase tracking-widest font-black opacity-60">
-                                <Shield className="w-4 h-4 text-accent-teal" /> 💰 30-Day Money-Back Guarantee
+                            <div className="flex items-center gap-3 text-slate-500 text-[10px] uppercase tracking-widest font-black">
+                                <Shield className="w-4 h-4 text-emerald-500" /> 💰 Money-Back Guarantee
                             </div>
-                            <div className="flex items-center gap-3 text-text-tertiary text-[10px] uppercase tracking-widest font-black opacity-60">
-                                <Shield className="w-4 h-4 text-accent-teal" /> 🌍 Accessible Worldwide
+                            <div className="flex items-center gap-3 text-slate-500 text-[10px] uppercase tracking-widest font-black">
+                                <Shield className="w-4 h-4 text-emerald-500" /> 🌍 Accessible Worldwide
                             </div>
                         </div>
                     </div>
