@@ -248,8 +248,11 @@ const DesignOfExperimentView: React.FC<{ setActiveView: (view: ViewType) => void
         setIsSuggesting(true);
         setError(null);
         try {
+            const apiKey = (import.meta as any).env.VITE_GEMINI_API_KEY;
+            if (!apiKey) throw new Error("API Key (VITE_GEMINI_API_KEY) is missing. Please configure it in your environment variables.");
+
             const result = await callWithRetry(async () => {
-                const ai = new GoogleGenAI((import.meta as any).env.VITE_GEMINI_API_KEY as string);
+                const ai = new GoogleGenAI(apiKey as string);
                 const response = await ai.models.generateContent({
                     model: "gemini-3-flash-preview",
                     contents: [{ role: 'user', parts: [{ text: `Scientific Study Objective: "${objective}"` }] }],
@@ -310,11 +313,14 @@ const DesignOfExperimentView: React.FC<{ setActiveView: (view: ViewType) => void
         setLoadingState('loading');
         setError(null);
         try {
+            const apiKey = (import.meta as any).env.VITE_GEMINI_API_KEY;
+            if (!apiKey) throw new Error("API Key (VITE_GEMINI_API_KEY) is missing. Please configure it in your environment variables.");
+
             const numFactors = factors.length;
             const methodology = designType;
 
             const coded = await callWithRetry(async () => {
-                const ai = new GoogleGenAI((import.meta as any).env.VITE_GEMINI_API_KEY as string);
+                const ai = new GoogleGenAI(apiKey as string);
                 const response = await ai.models.generateContent({
                     model: "gemini-3-flash-preview",
                     contents: [{
@@ -371,7 +377,10 @@ const DesignOfExperimentView: React.FC<{ setActiveView: (view: ViewType) => void
         setLoadingState('loading');
         setError(null);
         try {
-            const ai = new GoogleGenAI((import.meta as any).env.VITE_GEMINI_API_KEY as string);
+            const apiKey = (import.meta as any).env.VITE_GEMINI_API_KEY;
+            if (!apiKey) throw new Error("API Key (VITE_GEMINI_API_KEY) is missing. Please configure it in your environment variables.");
+
+            const ai = new GoogleGenAI(apiKey as string);
             const response = await ai.models.generateContent({
                 model: "gemini-3-flash-preview",
                 contents: [{
