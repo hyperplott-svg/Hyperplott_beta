@@ -252,7 +252,7 @@ const DesignOfExperimentView: React.FC<{ setActiveView: (view: ViewType) => void
             if (!apiKey) throw new Error("API Key (VITE_GEMINI_API_KEY) is missing. Please configure it in your environment variables.");
 
             const result = await callWithRetry(async () => {
-                const ai = new GoogleGenAI(apiKey as string);
+                const ai = new GoogleGenAI({ apiKey: apiKey as string });
                 const response = await ai.models.generateContent({
                     model: "gemini-3-flash-preview",
                     contents: [{ role: 'user', parts: [{ text: `Scientific Study Objective: "${objective}"` }] }],
@@ -320,7 +320,7 @@ const DesignOfExperimentView: React.FC<{ setActiveView: (view: ViewType) => void
             const methodology = designType;
 
             const coded = await callWithRetry(async () => {
-                const ai = new GoogleGenAI(apiKey as string);
+                const ai = new GoogleGenAI({ apiKey: apiKey as string });
                 const response = await ai.models.generateContent({
                     model: "gemini-3-flash-preview",
                     contents: [{
@@ -380,7 +380,7 @@ const DesignOfExperimentView: React.FC<{ setActiveView: (view: ViewType) => void
             const apiKey = (import.meta as any).env.VITE_GEMINI_API_KEY;
             if (!apiKey) throw new Error("API Key (VITE_GEMINI_API_KEY) is missing. Please configure it in your environment variables.");
 
-            const ai = new GoogleGenAI(apiKey as string);
+            const ai = new GoogleGenAI({ apiKey: apiKey as string });
             const response = await ai.models.generateContent({
                 model: "gemini-3-flash-preview",
                 contents: [{
@@ -558,7 +558,7 @@ const DesignOfExperimentView: React.FC<{ setActiveView: (view: ViewType) => void
         try {
             const sections: any[] = [];
 
-            const headerChildren: docx.FileChild[] = [
+            const headerChildren: any[] = [
                 new docx.Paragraph({ children: [new docx.TextRun({ text: experimentName, bold: true, size: 48, color: "10B981" })], alignment: docx.AlignmentType.CENTER }),
                 new docx.Paragraph({ text: `Objective: ${objective}`, spacing: { before: 400, after: 400 } }),
                 new docx.Paragraph({ text: "Execution Matrix", heading: docx.HeadingLevel.HEADING_1 }),
@@ -572,7 +572,7 @@ const DesignOfExperimentView: React.FC<{ setActiveView: (view: ViewType) => void
             sections.push({ children: headerChildren });
 
             for (const [resName, resData] of Object.entries(analysis.analyses || {})) {
-                const responseChildren: docx.FileChild[] = [
+                const responseChildren: any[] = [
                     new docx.Paragraph({ children: [new docx.TextRun({ text: `Analysis: ${resName}`, bold: true, size: 36, color: "10B981" })], pageBreakBefore: true }),
                     new docx.Paragraph({ children: [new docx.TextRun({ text: `Model: ${(resData as any).fittingModelUsed}`, bold: true })] }),
                     new docx.Paragraph({ text: `Equation: ${(resData as any).equation}`, spacing: { after: 200 } }),
