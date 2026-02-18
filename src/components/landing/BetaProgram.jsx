@@ -54,7 +54,7 @@ const BetaProgram = () => {
                             initial={{ opacity: 0, y: 20 }}
                             whileInView={{ opacity: 1, y: 0 }}
                             transition={{ delay: i * 0.1 }}
-                            className="p-10 rounded-[3rem] bg-white/[0.03] border border-white/10 hover:border-accent-pink/30 hover:bg-white/[0.05] transition-all duration-500 text-center group"
+                            className="p-10 rounded-[3rem] bg-white/[0.03] border border-white/10 hover:border-emerald-500/30 hover:bg-white/[0.05] transition-all duration-500 text-center group"
                         >
                             <div className="w-16 h-16 rounded-2xl bg-white/5 flex items-center justify-center text-emerald-500 mx-auto mb-8 group-hover:scale-110 transition-transform">
                                 <benefit.icon className="w-8 h-8" />

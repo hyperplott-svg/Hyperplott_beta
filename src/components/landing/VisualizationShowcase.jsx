@@ -18,25 +18,25 @@ const VisualizationShowcase = () => {
             title: "Response Surface",
             label: "3D HIGH-FIDELITY",
             description: "Explore multi-factor interactions in immersive 3D space. Identify optimal process windows with absolute mathematical precision.",
-            gradient: "from-blue-500 to-indigo-600"
+            gradient: "from-emerald-500 to-emerald-700"
         },
         {
             title: "Contour Mapping",
             label: "2D OVERLAY",
             description: "Detailed slices of your experimental domain. Visualize constraints and multi-response trade-offs in real-time.",
-            gradient: "from-purple-500 to-pink-500"
+            gradient: "from-teal-400 to-emerald-600"
         },
         {
             title: "Sensitivity Engine",
             label: "PERTURBATION",
             description: "Identify high-impact factors at a glance. Our sensitivity engine clarifies which variables truly drive your success.",
-            gradient: "from-cyan-500 to-teal-500"
+            gradient: "from-cyan-400 to-teal-600"
         },
         {
             title: "Model Validation",
             label: "DIAGNOSTICS",
             description: "Rigorous actual-vs-predicted analysis and residual plotting ensures your results are publication-ready and robust.",
-            gradient: "from-orange-500 to-red-600"
+            gradient: "from-emerald-300 to-teal-500"
         }
     ];
 
@@ -64,7 +64,7 @@ const VisualizationShowcase = () => {
                         className="text-4xl md:text-6xl font-black text-white mb-6 tracking-tighter leading-[1.1]"
                     >
                         Publication-Ready <br />
-                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-primary to-accent-pink">Visualizations.</span>
+                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-teal-500 to-emerald-600">Visualizations.</span>
                     </motion.h2>
 
                     <motion.p
@@ -81,7 +81,7 @@ const VisualizationShowcase = () => {
                     {/* Main Viewer - The "Lab" */}
                     <div className="relative rounded-[3rem] bg-slate-950 border border-white/10 p-4 md:p-8 shadow-2xl h-[500px] md:h-[750px] overflow-hidden group">
                         {/* Background Atmosphere */}
-                        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(99,102,241,0.05)_0%,transparent_100%)]" />
+                        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(16,185,129,0.05)_0%,transparent_100%)]" />
                         <div className="absolute inset-0 opacity-[0.03] pointer-events-none"
                             style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3column%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")` }} />
 
@@ -126,8 +126,8 @@ const VisualizationShowcase = () => {
                                                 <Suspense fallback={null}>
                                                     <Environment preset="night" />
                                                     <ambientLight intensity={0.3} />
-                                                    <pointLight position={[10, 10, 10]} intensity={2} color="#6366F1" />
-                                                    <pointLight position={[-10, -10, -10]} intensity={1} color="#C084FC" />
+                                                    <pointLight position={[10, 10, 10]} intensity={2} color="#10b981" />
+                                                    <pointLight position={[-10, -10, -10]} intensity={1} color="#34d399" />
 
                                                     <group scale={1.2}>
                                                         {activeTab === 0 && <ResponseSurface position={[0, -2.5, 0]} />}
@@ -146,8 +146,8 @@ const VisualizationShowcase = () => {
                                     {/* Engine Status Label */}
                                     <div className="absolute bottom-10 right-10 px-4 py-2 bg-black/60 backdrop-blur-xl border border-white/10 rounded-full flex items-center gap-3">
                                         <span className="flex h-2 w-2 relative">
-                                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent-teal opacity-75"></span>
-                                            <span className="relative inline-flex rounded-full h-2 w-2 bg-accent-teal"></span>
+                                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-500 opacity-75"></span>
+                                            <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
                                         </span>
                                         <span className="text-[10px] font-black text-white uppercase tracking-widest">Compute Node Active</span>
                                     </div>
@@ -171,8 +171,8 @@ const VisualizationShowcase = () => {
                                 <div className="mb-6 p-3 rounded-xl bg-white/5 border border-white/10 w-fit group-hover:scale-110 transition-transform duration-500">
                                     <Database className={`w-5 h-5 ${activeTab === i ? 'text-primary' : 'text-text-tertiary'}`} />
                                 </div>
-                                <h4 className="text-xl font-black text-white mb-2 tracking-tight">{plot.title}</h4>
-                                <span className={`text-[9px] font-black uppercase tracking-widest ${activeTab === i ? 'text-primary-purple' : 'text-text-tertiary'}`}>
+                                <h4 className="text-xl font-black text-white mb-2 tracking-tight uppercase">{plot.title}</h4>
+                                <span className={`text-[9px] font-black uppercase tracking-[0.2em] ${activeTab === i ? 'text-emerald-400' : 'text-text-tertiary'}`}>
                                     {plot.label}
                                 </span>
                             </button>

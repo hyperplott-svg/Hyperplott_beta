@@ -1,4 +1,3 @@
-import React, { useState } from 'react';
 import {
     Search,
     Bell,
@@ -7,7 +6,8 @@ import {
     Settings as SettingsIcon,
     ChevronDown,
     Command,
-    HelpCircle
+    HelpCircle,
+    Home
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
@@ -30,6 +30,18 @@ const Header = ({ toggleSidebar }) => {
 
     return (
         <header className="h-20 bg-white border-b border-gray-100 px-8 flex items-center justify-between sticky top-0 z-[40]">
+            <div className="flex items-center gap-4">
+                <Link
+                    to="/"
+                    className="flex items-center gap-2 p-2.5 rounded-xl bg-slate-50 border border-slate-100 text-slate-400 hover:text-emerald-500 hover:bg-emerald-50 transition-all group"
+                    title="Back to Landing Page"
+                >
+                    <Home className="w-5 h-5 group-hover:scale-110 transition-transform" />
+                    <span className="text-[10px] font-black uppercase tracking-widest hidden lg:block">Home</span>
+                </Link>
+                <div className="h-8 w-px bg-gray-100 mx-2" />
+            </div>
+
             <div className="flex-1 max-w-xl mx-auto">
                 <div className="relative group hidden md:block">
                     <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 group-focus-within:text-primary-purple transition-colors" />

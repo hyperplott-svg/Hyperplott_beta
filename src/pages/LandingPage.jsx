@@ -19,7 +19,7 @@ import SEO from '../components/common/SEO';
 
 const LandingPage = () => {
     return (
-        <div className="bg-bg-primary min-h-screen text-text-primary font-sans selection:bg-primary-purple/20 selection:text-primary-purple overflow-x-hidden">
+        <div className="bg-bg-primary min-h-screen text-text-primary font-sans selection:bg-emerald-500/20 selection:text-emerald-500 overflow-x-hidden">
             <SEO
                 title="Design Better Experiments in Minutes, Not Weeks"
                 description="Hyperplott is an AI-powered Design of Experiments (DoE) platform that helps researchers, scientists, and students optimize their experimental designs with statistical precision."

@@ -249,7 +249,7 @@ const DesignOfExperimentView: React.FC<{ setActiveView: (view: ViewType) => void
         setError(null);
         try {
             const result = await callWithRetry(async () => {
-                const ai = new GoogleGenAI({ apiKey: (import.meta as any).env.VITE_GEMINI_API_KEY as string });
+                const ai = new GoogleGenAI((import.meta as any).env.VITE_GEMINI_API_KEY as string);
                 const response = await ai.models.generateContent({
                     model: "gemini-3-flash-preview",
                     contents: [{ role: 'user', parts: [{ text: `Scientific Study Objective: "${objective}"` }] }],
@@ -314,7 +314,7 @@ const DesignOfExperimentView: React.FC<{ setActiveView: (view: ViewType) => void
             const methodology = designType;
 
             const coded = await callWithRetry(async () => {
-                const ai = new GoogleGenAI({ apiKey: (import.meta as any).env.VITE_GEMINI_API_KEY as string });
+                const ai = new GoogleGenAI((import.meta as any).env.VITE_GEMINI_API_KEY as string);
                 const response = await ai.models.generateContent({
                     model: "gemini-3-flash-preview",
                     contents: [{
@@ -371,7 +371,7 @@ const DesignOfExperimentView: React.FC<{ setActiveView: (view: ViewType) => void
         setLoadingState('loading');
         setError(null);
         try {
-            const ai = new GoogleGenAI({ apiKey: (import.meta as any).env.VITE_GEMINI_API_KEY as string });
+            const ai = new GoogleGenAI((import.meta as any).env.VITE_GEMINI_API_KEY as string);
             const response = await ai.models.generateContent({
                 model: "gemini-3-flash-preview",
                 contents: [{
@@ -549,7 +549,7 @@ const DesignOfExperimentView: React.FC<{ setActiveView: (view: ViewType) => void
         try {
             const sections: any[] = [];
 
-            const headerChildren: (docx.Paragraph | docx.Table)[] = [
+            const headerChildren: docx.FileChild[] = [
                 new docx.Paragraph({ children: [new docx.TextRun({ text: experimentName, bold: true, size: 48, color: "10B981" })], alignment: docx.AlignmentType.CENTER }),
                 new docx.Paragraph({ text: `Objective: ${objective}`, spacing: { before: 400, after: 400 } }),
                 new docx.Paragraph({ text: "Execution Matrix", heading: docx.HeadingLevel.HEADING_1 }),
@@ -563,7 +563,7 @@ const DesignOfExperimentView: React.FC<{ setActiveView: (view: ViewType) => void
             sections.push({ children: headerChildren });
 
             for (const [resName, resData] of Object.entries(analysis.analyses || {})) {
-                const responseChildren: (docx.Paragraph | docx.Table)[] = [
+                const responseChildren: docx.FileChild[] = [
                     new docx.Paragraph({ children: [new docx.TextRun({ text: `Analysis: ${resName}`, bold: true, size: 36, color: "10B981" })], pageBreakBefore: true }),
                     new docx.Paragraph({ children: [new docx.TextRun({ text: `Model: ${(resData as any).fittingModelUsed}`, bold: true })] }),
                     new docx.Paragraph({ text: `Equation: ${(resData as any).equation}`, spacing: { after: 200 } }),
@@ -632,8 +632,8 @@ const DesignOfExperimentView: React.FC<{ setActiveView: (view: ViewType) => void
                             key={tab}
                             onClick={() => setActiveTab(tab)}
                             className={`px-4 sm:px-10 py-2 sm:py-3 text-[8px] sm:text-[10px] font-black uppercase tracking-[0.2em] rounded-full transition-all whitespace-nowrap flex-1 lg:flex-none relative group ${activeTab === tab
-                                    ? 'bg-gradient-to-br from-emerald-400 to-emerald-600 text-black shadow-lg shadow-emerald-500/20 translate-y-[-1px]'
-                                    : 'text-slate-400 hover:text-white hover:bg-white/5'
+                                ? 'bg-gradient-to-br from-emerald-400 to-emerald-600 text-black shadow-lg shadow-emerald-500/20 translate-y-[-1px]'
+                                : 'text-slate-400 hover:text-white hover:bg-white/5'
                                 }`}
                         >
                             {tab}

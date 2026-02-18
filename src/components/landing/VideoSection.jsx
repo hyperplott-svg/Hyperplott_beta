@@ -25,7 +25,7 @@ const VideoSection = () => {
                     Using a generated gradient/animation to simulate "video" content for now.
                 */}
                 <div className="w-full h-full bg-slate-900 relative">
-                    <div className="absolute inset-0 bg-gradient-to-tr from-primary/30 to-secondary/30 animate-gradient-mesh opacity-60 mix-blend-screen" />
+                    <div className="absolute inset-0 bg-gradient-to-tr from-emerald-500/30 to-teal-500/30 animate-gradient-mesh opacity-60 mix-blend-screen" />
 
                     {/* Animated Grid Lines */}
                     <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.05)_1px,transparent_1px)] bg-[size:100px_100px] [mask-image:radial-gradient(ellipse_at_center,black_40%,transparent_100%)] perspective-1000 transform-style-3d rotate-x-60" />
@@ -34,7 +34,7 @@ const VideoSection = () => {
                     {[...Array(20)].map((_, i) => (
                         <motion.div
                             key={i}
-                            className="absolute w-2 h-2 rounded-full bg-accent shadow-[0_0_10px_var(--color-accent)]"
+                            className="absolute w-2 h-2 rounded-full bg-emerald-400 shadow-[0_0_10px_#34d399]"
                             initial={{
                                 x: Math.random() * 100 + "%",
                                 y: Math.random() * 100 + "%",
@@ -75,7 +75,7 @@ const VideoSection = () => {
                         <h2 className="text-4xl md:text-6xl font-black text-white mb-2 tracking-tighter drop-shadow-lg">
                             Meet the modern way
                         </h2>
-                        <h2 className="text-4xl md:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-primary mb-6 tracking-tighter drop-shadow-lg">
+                        <h2 className="text-4xl md:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-teal-500 mb-6 tracking-tighter drop-shadow-lg">
                             to optimize science.
                         </h2>
                     </motion.div>

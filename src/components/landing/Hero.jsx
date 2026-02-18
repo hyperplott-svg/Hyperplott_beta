@@ -46,7 +46,7 @@ const Hero = () => {
             {/* Ambient Background Glows */}
             <div className="absolute inset-0 z-0 pointer-events-none">
                 <div className="absolute top-[-10%] left-[-10%] w-[60%] h-[60%] rounded-full bg-emerald-500/10 blur-[120px] animate-pulse-subtle" />
-                <div className="absolute bottom-[-10%] right-[-10%] w-[60%] h-[60%] rounded-full bg-primary/10 blur-[120px]" />
+                <div className="absolute bottom-[-10%] right-[-10%] w-[60%] h-[60%] rounded-full bg-emerald-500/10 blur-[120px]" />
                 <div className="absolute top-[20%] right-[10%] w-[30%] h-[30%] rounded-full bg-emerald-500/5 blur-[100px]" />
             </div>
 
@@ -106,8 +106,7 @@ const Hero = () => {
                             transition={{ duration: 0.8, ease: "easeOut" }}
                             className="text-5xl md:text-7xl lg:text-8xl font-black tracking-tighter leading-[0.95] text-white"
                         >
-                            Design better <br />
-                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-emerald-600">experiments.</span> <br />
+                            Design <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-emerald-600">Optimal</span> Experiments<br />
                             <span className="text-2xl md:text-4xl lg:text-5xl font-extrabold tracking-tight text-white/40 mt-6 block">Precision optimization in minutes.</span>
                         </motion.h1>
                     </div>
@@ -172,17 +171,17 @@ const Hero = () => {
             {/* Micro-Data Status Bar */}
             <div className="absolute bottom-10 left-10 hidden xl:flex flex-col gap-4 opacity-40">
                 <div className="flex items-center gap-4">
-                    <div className="w-2 h-2 rounded-full bg-accent-teal animate-ping" />
+                    <div className="w-2 h-2 rounded-full bg-teal-400 animate-ping" />
                     <span className="text-[10px] uppercase tracking-widest font-mono">Kernel Dynamic</span>
                 </div>
-                <div className="h-[1px] w-40 bg-gradient-to-r from-primary to-transparent" />
+                <div className="h-[1px] w-40 bg-gradient-to-r from-emerald-500 to-transparent" />
                 <div className="flex gap-1">
                     {[1, 2, 3, 4, 5, 6].map(i => (
                         <motion.div
                             key={i}
                             animate={{ height: [2, 12, 4] }}
                             transition={{ duration: 1.5, repeat: Infinity, delay: i * 0.2 }}
-                            className="w-[2px] bg-primary"
+                            className="w-[2px] bg-emerald-500"
                         />
                     ))}
                 </div>

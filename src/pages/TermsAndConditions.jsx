@@ -1,4 +1,6 @@
 import React, { useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import { Home } from 'lucide-react';
 import Navbar from '../components/landing/Navbar';
 import Footer from '../components/landing/Footer';
 import SEO from '../components/common/SEO';
@@ -15,6 +17,17 @@ const TermsAndConditions = () => {
                 description="Our terms and conditions outline the agreement between you and Hyperplott regarding the use of our platform."
             />
             <Navbar />
+
+            {/* Direct Home Navigation */}
+            <div className="fixed top-24 left-8 z-40 hidden xl:block">
+                <Link
+                    to="/"
+                    className="flex items-center gap-3 px-5 py-3 rounded-2xl bg-white/5 border border-white/10 text-slate-400 hover:text-emerald-500 hover:bg-emerald-500/10 hover:border-emerald-500/20 backdrop-blur-md transition-all group"
+                >
+                    <Home className="w-5 h-5 group-hover:-translate-x-1 transition-transform rotate-180" />
+                    <span className="text-xs font-black uppercase tracking-widest">Back to Home</span>
+                </Link>
+            </div>
 
             <main className="max-w-4xl mx-auto px-6 py-24 sm:py-32">
                 <div className="space-y-12">

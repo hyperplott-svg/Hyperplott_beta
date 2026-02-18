@@ -5,24 +5,19 @@ import { ShieldAlert, DollarSign, BrainCircuit, HelpCircle, Layers } from 'lucid
 const ProblemStatement = () => {
     const problems = [
         {
-            title: "Prohibitive Costs",
+            title: "Too Expensive",
             icon: DollarSign,
-            description: "Industrial software like Minitab and JMP can cost over ₹50,000 per year, making high-level DoE inaccessible to many."
+            description: "Traditional software costs ₹50,000+/year per license, putting it out of reach for many researchers."
         },
         {
             title: "Steep Learning Curve",
             icon: BrainCircuit,
-            description: "Traditional statistical tools take weeks to master. Researchers shouldn't need a PhD in statistics just to design an experiment."
+            description: "Complex interfaces require weeks of training and deep statistical expertise to use effectively."
         },
         {
-            title: "Static Narratives",
+            title: "Static Visualizations",
             icon: Layers,
-            description: "Old-school software provides static, non-interactive charts. You're left guessing about complex multi-dimensional factor interactions."
-        },
-        {
-            title: "Zero Intelligence",
-            icon: HelpCircle,
-            description: "Most tools are just calculators. They offer no AI guidance on factor selection, level optimization, or strategic next steps."
+            description: "2D plots and static outputs fail to reveal complex multi-dimensional interactions in your data."
         }
     ];
 
@@ -44,7 +39,7 @@ const ProblemStatement = () => {
                         className="inline-flex items-center gap-3 px-5 py-2 rounded-full bg-red-500/10 border border-red-500/20 text-red-500 text-[10px] font-black uppercase tracking-[0.4em] mb-12 shadow-sm"
                     >
                         <ShieldAlert className="w-4 h-4" />
-                        Analyzing the R&D Bottlenecks
+                        The Challenge
                     </motion.div>
 
                     <motion.h2
@@ -53,7 +48,7 @@ const ProblemStatement = () => {
                         viewport={{ once: true }}
                         className="text-4xl md:text-7xl font-black text-white mb-10 tracking-tighter leading-[1.05]"
                     >
-                        Traditional DoE is <br /> <span className="text-red-500">Statistically Broken.</span>
+                        Why Traditional DoE <br /> <span className="text-red-500">Software Falls Short</span>
                     </motion.h2>
 
                     <motion.p
@@ -62,12 +57,12 @@ const ProblemStatement = () => {
                         viewport={{ once: true }}
                         className="text-lg md:text-xl text-slate-500 max-w-3xl mx-auto font-medium leading-relaxed"
                     >
-                        Legacy tools built in the 90s are slowing down modern discovery.
-                        Researchers are trading speed for complexity they often don't need.
+                        Existing DoE tools are expensive, complicated, and outdated.
+                        It's time for a modern alternative.
                     </motion.p>
                 </div>
 
-                <div className="grid md:grid-cols-2 gap-4 sm:gap-6">
+                <div className="grid md:grid-cols-3 gap-6">
                     {problems.map((problem, i) => {
                         const Icon = problem.icon;
                         return (
@@ -77,17 +72,17 @@ const ProblemStatement = () => {
                                 whileInView={{ opacity: 1, y: 0 }}
                                 viewport={{ once: true }}
                                 transition={{ delay: i * 0.1 }}
-                                className="group relative p-8 sm:p-10 rounded-[2.5rem] bg-white/[0.01] border border-white/5 hover:border-red-500/20 hover:bg-red-500/[0.02] transition-all duration-500"
+                                className="group relative p-8 rounded-[2.5rem] bg-white/[0.01] border border-white/5 hover:border-red-500/20 hover:bg-red-500/[0.02] transition-all duration-500"
                             >
-                                <div className="flex items-start gap-6">
-                                    <div className="w-12 h-12 rounded-xl bg-red-500/10 flex items-center justify-center text-red-500 shrink-0 group-hover:scale-110 transition-transform">
-                                        <Icon className="w-6 h-6" />
+                                <div className="flex flex-col items-center text-center gap-6">
+                                    <div className="w-14 h-14 rounded-2xl bg-red-500/10 flex items-center justify-center text-red-500 shrink-0 group-hover:scale-110 transition-transform">
+                                        <Icon className="w-7 h-7" />
                                     </div>
                                     <div>
-                                        <h3 className="text-xl font-black text-white mb-2 leading-tight uppercase tracking-tight group-hover:text-red-500 transition-colors">
+                                        <h3 className="text-xl font-black text-white mb-3 leading-tight uppercase tracking-tight group-hover:text-red-500 transition-colors">
                                             {problem.title}
                                         </h3>
-                                        <p className="text-slate-500 leading-relaxed font-medium text-sm sm:text-base">
+                                        <p className="text-slate-500 leading-relaxed font-medium text-sm">
                                             {problem.description}
                                         </p>
                                     </div>

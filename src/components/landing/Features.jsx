@@ -11,42 +11,42 @@ const Features = () => {
     const features = [
         {
             type: 'cube',
-            color: "#6366F1",
+            color: "#10b981",
             icon: Boxes,
             title: "Factorial Designs",
             description: "Examine multiple factors simultaneously. AI-powered selection of full and fractional designs for rapid screening."
         },
         {
             type: 'surface',
-            color: "#C084FC",
+            color: "#34d399",
             icon: Activity,
             title: "Response Surface",
             description: "Optimize your process with CCD and Box-Behnken designs to find the mathematically perfect setup."
         },
         {
             type: 'array',
-            color: "#2DD4BF",
+            color: "#059669",
             icon: Zap,
             title: "Taguchi Methods",
             description: "Achieve robust quality with orthogonal arrays. Optimize processes to be insensitive to environmental noise."
         },
         {
             type: 'mixture',
-            color: "#F472B6",
+            color: "#10b981",
             icon: FlaskConical,
             title: "Mixture Designs",
             description: "Perfect your formulation. Handle component dependencies efficiently with Simplex-Lattice designs."
         },
         {
             type: 'chart',
-            color: "#38BDF8",
+            color: "#34d399",
             icon: Database,
             title: "Statistical Engine",
             description: "Instant ANOVA, regression analysis, and goodness-of-fit diagnostics. No formal statistics training required."
         },
         {
             type: 'export',
-            color: "#FCD34D",
+            color: "#059669",
             icon: Globe,
             title: "Publication Ready",
             description: "Generate professional lab notebooks and high-resolution plots ready for publications and regulatory submissions."
@@ -56,8 +56,8 @@ const Features = () => {
     return (
         <section id="features" className="py-40 bg-bg-primary relative overflow-hidden">
             {/* Focal Point Glows */}
-            <div className="absolute top-[20%] left-[10%] w-[30%] h-[30%] bg-primary/10 blur-[150px] pointer-events-none" />
-            <div className="absolute bottom-[20%] right-[10%] w-[30%] h-[30%] bg-secondary/10 blur-[150px] pointer-events-none" />
+            <div className="absolute top-[20%] left-[10%] w-[30%] h-[30%] bg-emerald-500/10 blur-[150px] pointer-events-none" />
+            <div className="absolute bottom-[20%] right-[10%] w-[30%] h-[30%] bg-emerald-500/10 blur-[150px] pointer-events-none" />
 
             <div className="container mx-auto px-6 max-w-7xl relative z-10">
                 {/* Header */}
@@ -66,9 +66,9 @@ const Features = () => {
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
-                        className="inline-flex items-center gap-3 px-5 py-2 rounded-full bg-white/5 border border-white/10 text-primary-purple text-[11px] font-black uppercase tracking-[0.4em] mb-12 shadow-inner-glow"
+                        className="inline-flex items-center gap-3 px-5 py-2 rounded-full bg-white/5 border border-white/10 text-emerald-500 text-[11px] font-black uppercase tracking-[0.4em] mb-12 shadow-inner-glow"
                     >
-                        <div className="w-1.5 h-1.5 rounded-full bg-accent-teal animate-pulse" />
+                        <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
                         Core Intelligence Modules
                     </motion.div>
 
@@ -79,7 +79,7 @@ const Features = () => {
                         transition={{ duration: 0.8 }}
                         className="text-6xl md:text-8xl font-black text-white mb-10 tracking-tight leading-[1.1]"
                     >
-                        Precision <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-secondary to-accent-pink">Modules</span>.
+                        Comprehensive <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-emerald-600 to-teal-500">DoE Tools</span>.
                     </motion.h2>
 
                     <motion.p
@@ -89,8 +89,8 @@ const Features = () => {
                         transition={{ duration: 0.8, delay: 0.2 }}
                         className="text-xl md:text-2xl text-text-secondary max-w-3xl mx-auto font-medium opacity-80"
                     >
-                        The most comprehensive suite of experimental design tools ever built.
-                        Engineered for speed, validated for clinical precision.
+                        Comprehensive suite of experimental design tools.
+                        Engineered for speed, validated for precision.
                     </motion.p>
                 </div>
 

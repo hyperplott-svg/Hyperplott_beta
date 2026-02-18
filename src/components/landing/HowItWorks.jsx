@@ -7,19 +7,19 @@ const HowItWorks = () => {
             number: "01",
             title: "Define Factors",
             description: "Enter your factors, levels, and constraints. Our AI suggests optimal factor ranges based on your research goals.",
-            gradient: "from-primary to-indigo-500"
+            gradient: "from-emerald-500 to-teal-500"
         },
         {
             number: "02",
             title: "Select Strategy",
             description: "Choose your DoE methodology. Hyperplott recommends the best design type based on your objectives and resources.",
-            gradient: "from-indigo-500 to-secondary"
+            gradient: "from-teal-500 to-emerald-600"
         },
         {
             number: "03",
             title: "Export & Lab",
             description: "Get your design matrix instantly. Export to Excel, run experiments, and analyze results with our statistical engine.",
-            gradient: "from-secondary to-accent-pink"
+            gradient: "from-emerald-600 to-teal-400"
         }
     ];
 
@@ -27,8 +27,8 @@ const HowItWorks = () => {
         <section id="how-it-works" className="py-40 bg-bg-primary relative overflow-hidden">
             {/* Atmosphere */}
             <div className="absolute top-0 left-0 w-full h-full opacity-30 pointer-events-none">
-                <div className="absolute top-1/2 left-0 w-64 h-64 bg-primary/20 rounded-full blur-[100px]" />
-                <div className="absolute bottom-1/2 right-0 w-64 h-64 bg-secondary/10 rounded-full blur-[100px]" />
+                <div className="absolute top-1/2 left-0 w-64 h-64 bg-emerald-500/20 rounded-full blur-[100px]" />
+                <div className="absolute bottom-1/2 right-0 w-64 h-64 bg-teal-500/10 rounded-full blur-[100px]" />
             </div>
 
             <div className="container mx-auto px-6 max-w-7xl relative z-10">
@@ -41,14 +41,14 @@ const HowItWorks = () => {
                         transition={{ duration: 0.8 }}
                         className="text-6xl md:text-8xl font-black text-white mb-10 tracking-tight leading-[1.1]"
                     >
-                        Three Steps to <br /> <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-secondary to-accent-pink">Optimization</span>.
+                        Three Steps to <br /> <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-teal-500 to-emerald-600">Optimization</span>.
                     </motion.h2>
                 </div>
 
                 {/* Steps */}
                 <div className="grid md:grid-cols-3 gap-16 md:gap-24 relative">
                     {/* Connecting Line (Desktop) */}
-                    <div className="hidden md:block absolute top-[80px] left-[10%] right-[10%] h-[1px] bg-gradient-to-r from-primary via-secondary to-accent-pink opacity-20 -z-0" />
+                    <div className="hidden md:block absolute top-[80px] left-[10%] right-[10%] h-[1px] bg-gradient-to-r from-emerald-500 via-teal-500 to-emerald-600 opacity-20 -z-0" />
 
                     {steps.map((step, index) => (
                         <StepCard key={index} step={step} index={index} />
@@ -71,12 +71,12 @@ const StepCard = ({ step, index }) => {
             transition={{ duration: 0.8, delay: index * 0.2 }}
             className="flex flex-col items-center text-center group relative z-10"
         >
-            <div className={`w-40 h-40 rounded-[3rem] bg-gradient-to-br ${step.gradient} flex items-center justify-center text-white text-5xl font-black shadow-glow mb-12 group-hover:scale-110 group-hover:rotate-12 transition-all duration-700 relative`}>
+            <div className={`w-40 h-40 rounded-[3rem] bg-gradient-to-br ${step.gradient} flex items-center justify-center text-white text-5xl font-black shadow-emerald-500/20 shadow-2xl mb-12 group-hover:scale-110 group-hover:rotate-12 transition-all duration-700 relative`}>
                 <div className="absolute inset-0 bg-white opacity-0 group-hover:opacity-20 transition-opacity rounded-[3rem]" />
                 {step.number}
             </div>
 
-            <h3 className="text-3xl font-black text-white mb-6 uppercase tracking-tight group-hover:text-primary transition-colors">
+            <h3 className="text-3xl font-black text-white mb-6 uppercase tracking-tight group-hover:text-emerald-500 transition-colors">
                 {step.title}
             </h3>
 

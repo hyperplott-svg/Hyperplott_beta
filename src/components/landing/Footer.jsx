@@ -9,7 +9,7 @@ const Footer = () => {
             <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
 
             {/* Background Atmosphere */}
-            <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-primary/5 blur-[150px] pointer-events-none" />
+            <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-emerald-500/5 blur-[150px] pointer-events-none" />
 
             <div className="container mx-auto px-6 max-w-7xl relative z-10">
                 <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-20 mb-32">
@@ -40,7 +40,7 @@ const Footer = () => {
                     <div>
                         <h4 className="text-[11px] font-black uppercase tracking-[0.4em] text-text-tertiary mb-10">Product</h4>
                         <ul className="space-y-5">
-                            {['Matrix Generation', '3D Optimization', 'Statistical Engine', 'API Reference', 'Cloud Ops'].map(item => (
+                            {['Matrix Generation', '3D Optimization', 'Statistical Engine'].map(item => (
                                 <li key={item}><a href="#" className="text-slate-400 hover:text-emerald-500 transition-colors text-base font-medium">{item}</a></li>
                             ))}
                         </ul>
@@ -49,7 +49,7 @@ const Footer = () => {
                     <div>
                         <h4 className="text-[11px] font-black uppercase tracking-[0.4em] text-text-tertiary mb-10">Company</h4>
                         <ul className="space-y-5">
-                            {['Mission Control', 'Careers', 'Research Portal', 'Global Sales', 'Brand Kit'].map(item => (
+                            {['Mission Control', 'Research Portal'].map(item => (
                                 <li key={item}><a href="#" className="text-slate-400 hover:text-emerald-500 transition-colors text-base font-medium">{item}</a></li>
                             ))}
                         </ul>

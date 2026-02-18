@@ -40,7 +40,7 @@ const Navbar = () => {
                 <div className="container mx-auto px-6 md:px-12 flex items-center justify-between">
                     {/* Logo Area */}
                     <Link to="/" className="flex items-center gap-3 group relative">
-                        <div className="relative w-11 h-11 rounded-2xl bg-gradient-to-br from-primary-purple to-secondary p-[1px] shadow-glow">
+                        <div className="relative w-11 h-11 rounded-2xl bg-gradient-to-br from-emerald-400 to-teal-500 p-[1px] shadow-glow">
                             <div className="w-full h-full bg-white rounded-[15px] flex items-center justify-center overflow-hidden">
                                 <img src="/logo-icon.png" alt="Hyperplott" className="w-6 h-6 object-contain group-hover:scale-110 transition-transform duration-500" />
                             </div>
@@ -101,20 +101,20 @@ const Navbar = () => {
                         animate={{ opacity: 1, scale: 1 }}
                         exit={{ opacity: 0, scale: 1.1 }}
                         transition={{ duration: 0.4, ease: "circOut" }}
-                        className="fixed inset-0 z-[60] bg-white/95 backdrop-blur-2xl flex flex-col p-8 overflow-hidden"
+                        className="fixed inset-0 z-[60] bg-bg-primary/98 backdrop-blur-2xl flex flex-col p-8 overflow-hidden"
                     >
                         {/* Abstract Background for Mobile Menu */}
-                        <div className="absolute top-0 right-0 w-[80%] h-[50%] bg-primary-purple/5 blur-[120px] rounded-full" />
-                        <div className="absolute bottom-0 left-0 w-[80%] h-[50%] bg-secondary/5 blur-[120px] rounded-full" />
+                        <div className="absolute top-0 right-0 w-[80%] h-[50%] bg-emerald-500/5 blur-[120px] rounded-full" />
+                        <div className="absolute bottom-0 left-0 w-[80%] h-[50%] bg-teal-500/5 blur-[120px] rounded-full" />
 
                         <div className="flex justify-between items-center mb-16 relative z-10">
                             <div className="flex items-center gap-3">
-                                <div className="w-10 h-10 rounded-xl bg-primary-purple flex items-center justify-center text-white">
+                                <div className="w-10 h-10 rounded-xl bg-emerald-500 flex items-center justify-center text-white">
                                     <Layers className="w-5 h-5" />
                                 </div>
                                 <span className="text-2xl font-black text-text-primary">Hyperplott</span>
                             </div>
-                            <button className="w-12 h-12 rounded-full bg-slate-100 flex items-center justify-center text-text-primary" onClick={() => setMobileMenuOpen(false)}>
+                            <button className="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-white/20 transition-colors" onClick={() => setMobileMenuOpen(false)}>
                                 <X className="w-6 h-6" />
                             </button>
                         </div>
@@ -127,7 +127,7 @@ const Navbar = () => {
                                     initial={{ opacity: 0, x: -20 }}
                                     animate={{ opacity: 1, x: 0 }}
                                     transition={{ delay: 0.1 + i * 0.1 }}
-                                    className="text-5xl font-black text-text-primary tracking-tight hover:text-primary-purple transition-colors"
+                                    className="text-5xl font-black text-text-primary tracking-tight hover:text-emerald-500 transition-colors"
                                     onClick={() => setMobileMenuOpen(false)}
                                 >
                                     {link.name}
@@ -136,8 +136,8 @@ const Navbar = () => {
                         </div>
 
                         <div className="mt-auto flex flex-col gap-4 relative z-10">
-                            <Link to="/login" className="w-full py-5 text-center text-text-primary font-black text-xl border-2 border-slate-100 rounded-3xl">Sign In</Link>
-                            <Link to="/signup" className="w-full py-6 text-center bg-text-primary text-white rounded-3xl font-black text-xl shadow-2xl">
+                            <Link to="/login" className="w-full py-5 text-center text-white font-black text-xl border-2 border-white/10 rounded-3xl hover:bg-white/5 transition-colors">Sign In</Link>
+                            <Link to="/signup" className="w-full py-6 text-center bg-emerald-500 text-slate-950 rounded-3xl font-black text-xl shadow-2xl shadow-emerald-500/20 active:scale-95 transition-transform">
                                 Start Free Trial
                             </Link>
                         </div>

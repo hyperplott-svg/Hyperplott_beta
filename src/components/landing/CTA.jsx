@@ -7,22 +7,14 @@ const CTA = () => {
         <section className="py-40 relative overflow-hidden flex items-center justify-center bg-bg-primary">
             {/* Background Texture & Glows */}
             <div className="absolute inset-0 z-0">
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] bg-[radial-gradient(circle_at_center,rgba(99,102,241,0.1)_0%,transparent_70%)]" />
-                <div className="absolute bottom-[-20%] left-[-10%] w-[60%] h-[60%] bg-primary/20 blur-[120px] rounded-full" />
-                <div className="absolute top-[-20%] right-[-10%] w-[60%] h-[60%] bg-secondary/10 blur-[120px] rounded-full" />
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] bg-[radial-gradient(circle_at_center,rgba(16,185,129,0.1)_0%,transparent_70%)]" />
+                <div className="absolute bottom-[-20%] left-[-10%] w-[60%] h-[60%] bg-emerald-500/20 blur-[120px] rounded-full" />
+                <div className="absolute top-[-20%] right-[-10%] w-[60%] h-[60%] bg-teal-500/10 blur-[120px] rounded-full" />
             </div>
 
             <div className="container mx-auto px-6 max-w-5xl relative z-10 text-center">
                 {/* Visual Anchor */}
-                <motion.div
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    whileInView={{ opacity: 1, scale: 1 }}
-                    viewport={{ once: true }}
-                    className="inline-flex items-center gap-3 px-6 py-2.5 rounded-full bg-white/5 border border-white/10 text-white text-[11px] font-black uppercase tracking-[0.4em] mb-12 shadow-inner-glow backdrop-blur-md"
-                >
-                    <Zap className="w-4 h-4 text-accent-teal fill-accent-teal" />
-                    Enter the Era of Statistical Intelligence
-                </motion.div>
+
 
                 <motion.h2
                     initial={{ opacity: 0, y: 20 }}
@@ -30,7 +22,7 @@ const CTA = () => {
                     viewport={{ once: true }}
                     className="text-5xl md:text-7xl font-black text-white mb-10 tracking-tighter leading-[1.05]"
                 >
-                    Ready to design <br /> better <span className="text-emerald-500">experiments?</span>
+                    Ready to Design <br /> Better <span className="text-emerald-500">Experiments?</span>
                 </motion.h2>
 
                 <motion.p

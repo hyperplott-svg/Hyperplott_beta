@@ -25,38 +25,43 @@ const Workflow = () => {
     ];
 
     return (
-        <section className="py-32 bg-gradient-to-b from-bg-secondary to-white relative overflow-hidden">
+        <section className="py-32 bg-bg-primary relative overflow-hidden">
+            {/* Ambient Background Glows */}
+            <div className="absolute inset-0 z-0 pointer-events-none">
+                <div className="absolute top-[20%] left-[-10%] w-[50%] h-[50%] rounded-full bg-emerald-500/5 blur-[120px]" />
+                <div className="absolute bottom-[20%] right-[-10%] w-[50%] h-[50%] rounded-full bg-emerald-500/5 blur-[120px]" />
+            </div>
             <div className="container mx-auto px-6 max-w-7xl relative z-10">
                 <div className="text-center mb-32">
                     <motion.div
                         initial={{ opacity: 0, scale: 0.9 }}
                         whileInView={{ opacity: 1, scale: 1 }}
-                        className="inline-block px-4 py-1 bg-indigo-50 text-primary-purple text-[10px] font-black uppercase tracking-[0.3em] rounded-full mb-8 border border-indigo-100"
+                        className="inline-block px-5 py-2 bg-emerald-500/10 text-emerald-500 text-[10px] font-black uppercase tracking-[0.4em] rounded-full mb-10 border border-emerald-500/20 backdrop-blur-md"
                     >
-                        Protocol Implementation
+                        Scientific Implementation Loop
                     </motion.div>
                     <motion.h2
                         initial={{ opacity: 0, scale: 0.9 }}
                         whileInView={{ opacity: 1, scale: 1 }}
                         viewport={{ once: true }}
-                        className="text-4xl md:text-5xl lg:text-7xl font-black text-slate-900 font-display tracking-tight uppercase leading-[1.1]"
+                        className="text-4xl md:text-5xl lg:text-7xl font-black text-white font-display tracking-tight uppercase leading-[1.1]"
                     >
-                        Streamlined <br /> <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-purple to-secondary">Discovery Grid</span>.
+                        Streamlined <br /> <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-emerald-600">Discovery Grid</span>.
                     </motion.h2>
                     <motion.p
                         initial={{ opacity: 0 }}
                         whileInView={{ opacity: 1 }}
                         viewport={{ once: true }}
-                        className="text-xl text-slate-500 mt-8 font-semibold max-w-2xl mx-auto leading-relaxed"
+                        className="text-xl text-slate-400 mt-8 font-medium max-w-2xl mx-auto leading-relaxed"
                     >
                         From design architecture to publication-ready statistical insights.
-                        A high-fidelity pipeline for the modern researcher.
+                        A research-grade pipeline for the modern laboratory.
                     </motion.p>
                 </div>
 
                 <div className="relative flex flex-col lg:flex-row items-center justify-between gap-12 lg:gap-8">
                     {/* Connecting Line (Desktop) */}
-                    <div className="absolute top-1/2 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-blue-100 to-transparent hidden lg:block -translate-y-1/2 z-0" />
+                    <div className="absolute top-1/2 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-emerald-500/20 to-transparent hidden lg:block -translate-y-1/2 z-0" />
 
                     {steps.map((step, i) => (
                         <motion.div
@@ -65,18 +70,18 @@ const Workflow = () => {
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
                             transition={{ delay: i * 0.2 }}
-                            className="relative z-10 flex flex-col items-center text-center bg-white border-2 border-gray-100 rounded-[2rem] p-12 shadow-xl hover:shadow-2xl transition-all duration-500 w-full max-w-[360px]"
+                            className="relative z-10 flex flex-col items-center text-center bg-white/5 border border-white/10 rounded-[3rem] p-12 shadow-2xl hover:bg-white/[0.08] hover:border-emerald-500/30 transition-all duration-500 w-full max-w-[360px] group"
                         >
                             {/* Number Badge */}
-                            <div className="absolute -top-10 left-1/2 -translate-x-1/2 w-20 h-20 rounded-full bg-gradient-to-br from-[#6366F1] to-[#8B5CF6] flex items-center justify-center text-white text-3xl font-bold shadow-lg shadow-indigo-200">
+                            <div className="absolute -top-10 left-1/2 -translate-x-1/2 w-20 h-20 rounded-[2rem] bg-emerald-500 flex items-center justify-center text-slate-950 text-3xl font-black shadow-xl shadow-emerald-500/20 group-hover:scale-110 transition-transform">
                                 {step.number}
                             </div>
 
-                            <div className="text-primary-purple mb-6 mt-4">
+                            <div className="text-emerald-500 mb-6 mt-4 group-hover:scale-110 transition-transform">
                                 {step.icon}
                             </div>
-                            <h3 className="text-2xl font-bold text-text-primary mb-4 font-display">{step.title}</h3>
-                            <p className="text-text-secondary leading-relaxed font-medium">
+                            <h3 className="text-2xl font-black text-white mb-4 tracking-tight uppercase underline decoration-emerald-500/20">{step.title}</h3>
+                            <p className="text-slate-400 leading-relaxed font-medium">
                                 {step.description}
                             </p>
                         </motion.div>

@@ -24,7 +24,7 @@ const Founders = () => {
 
     return (
         <section className="py-40 bg-bg-primary overflow-hidden relative" id="about">
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[800px] bg-primary/5 rounded-full blur-[120px] pointer-events-none" />
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[800px] bg-emerald-500/5 rounded-full blur-[120px] pointer-events-none" />
 
             <div className="container mx-auto px-6 max-w-7xl relative z-10">
                 <div className="flex flex-col lg:flex-row items-center gap-20">
@@ -39,13 +39,13 @@ const Founders = () => {
                                 Our Scientific Roots
                             </div>
                             <h2 className="text-5xl md:text-7xl font-black text-white leading-[1.1] tracking-tight uppercase mb-10">
-                                Built by <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary">Scientists</span>, <br /> For Scientists.
+                                Built by <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-emerald-600">Scientists</span>, <br /> For Scientists.
                             </h2>
                             <p className="text-xl text-text-secondary opacity-80 leading-relaxed mb-10 font-medium italic">
                                 "We spent years struggling with expensive, complicated DoE software in the lab. After running 500+ experiments manually, we built Hyperplott - the tool we wish we had during our research."
                             </p>
                             <div className="flex items-center gap-6">
-                                <div className="h-[1px] w-20 bg-primary/30" />
+                                <div className="h-[1px] w-20 bg-emerald-500/30" />
                                 <span className="text-sm font-black uppercase tracking-widest text-text-muted">The Founding Story</span>
                             </div>
                         </motion.div>
@@ -78,16 +78,16 @@ const Founders = () => {
                                                 href={founder.linkedin}
                                                 target="_blank"
                                                 rel="noreferrer"
-                                                className="p-3 rounded-xl bg-primary hover:bg-white hover:text-primary transition-all duration-300"
+                                                className="p-3 rounded-xl bg-emerald-500 hover:bg-white hover:text-emerald-500 text-slate-950 transition-all duration-300"
                                             >
-                                                <Linkedin className="w-5 h-5" />
+                                                <Linkedin className="w-5 h-5 shadow-sm" />
                                             </a>
                                         </div>
                                     </div>
                                 </div>
 
                                 <h3 className="text-2xl font-black text-white mb-1 uppercase tracking-tight">{founder.name}</h3>
-                                <p className="text-primary-purple text-xs font-black uppercase tracking-widest mb-4">{founder.role}</p>
+                                <p className="text-emerald-500 text-xs font-black uppercase tracking-[0.2em] mb-4">{founder.role}</p>
                                 <p className="text-sm text-text-secondary opacity-70 leading-relaxed line-clamp-3">
                                     {founder.bio}
                                 </p>

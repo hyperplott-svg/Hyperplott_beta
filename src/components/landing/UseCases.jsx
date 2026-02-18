@@ -7,9 +7,9 @@ const UseCases = () => {
         {
             name: "Pharmaceutical Research",
             icon: Beaker,
-            color: "text-purple-400",
-            bg: "bg-purple-500/10",
-            border: "border-purple-500/20",
+            color: "text-emerald-400",
+            bg: "bg-emerald-500/10",
+            border: "border-emerald-500/20",
             tasks: [
                 "Drug formulation optimization",
                 "Stability studies",
@@ -33,9 +33,9 @@ const UseCases = () => {
         {
             name: "Chemical Engineering",
             icon: Factory,
-            color: "text-orange-400",
-            bg: "bg-orange-500/10",
-            border: "border-orange-500/20",
+            color: "text-teal-400",
+            bg: "bg-teal-500/10",
+            border: "border-teal-500/20",
             tasks: [
                 "Process optimization",
                 "Yield improvement",
@@ -46,9 +46,9 @@ const UseCases = () => {
         {
             name: "Academic Research",
             icon: GraduationCap,
-            color: "text-blue-400",
-            bg: "bg-blue-500/10",
-            border: "border-blue-500/20",
+            color: "text-cyan-400",
+            bg: "bg-cyan-500/10",
+            border: "border-cyan-500/20",
             tasks: [
                 "Thesis projects",
                 "Research papers",
@@ -62,8 +62,8 @@ const UseCases = () => {
         <section className="py-32 bg-bg-primary relative">
             <div className="container mx-auto px-6 max-w-7xl">
                 <div className="text-center mb-20">
-                    <h2 className="text-4xl md:text-6xl font-black text-white mb-6 uppercase tracking-tight leading-[1.1]">
-                        Who Uses <span className="text-primary-purple underline decoration-primary-purple/30">Hyperplott</span>?
+                    <h2 className="text-4xl md:text-6xl font-black text-white mb-6 uppercase tracking-tighter leading-[1.1]">
+                        Who Uses <span className="text-emerald-500 underline decoration-emerald-500/30">Hyperplott</span>?
                     </h2>
                     <p className="text-text-secondary text-lg max-w-2xl mx-auto opacity-70">
                         Tailored for the most demanding scientific disciplines and research environments.
