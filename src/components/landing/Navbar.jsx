@@ -34,32 +34,35 @@ const Navbar = () => {
                 variants={{ visible: { y: 0 }, hidden: { y: '-100%' } }}
                 animate={hidden ? 'hidden' : 'visible'}
                 transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-                className={`fixed top-0 left-0 right-0 z-50 h-[80px] flex items-center transition-all duration-500 ${scrolled ? 'bg-slate-950/40 backdrop-blur-2xl border-b border-white/5 shadow-2xl' : 'bg-transparent'
+                className={`fixed top-0 left-0 right-0 z-50 h-[80px] flex items-center transition-all duration-500 ${scrolled ? 'bg-white/80 backdrop-blur-2xl border-b border-slate-200 shadow-lg' : 'bg-transparent'
                     }`}
             >
                 <div className="container mx-auto px-6 md:px-12 flex items-center justify-between">
                     {/* Logo Area */}
                     <Link to="/" className="flex items-center gap-3 group relative">
-                        <div className="relative w-11 h-11 rounded-2xl bg-gradient-to-br from-emerald-400 to-teal-500 p-[1px] shadow-glow">
+                        <div className="relative w-11 h-11 rounded-2xl bg-gradient-to-br from-primary-purple to-primary p-[1px] shadow-lg">
                             <div className="w-full h-full bg-white rounded-[15px] flex items-center justify-center overflow-hidden">
                                 <img src="/logo-icon.png" alt="Hyperplott" className="w-6 h-6 object-contain group-hover:scale-110 transition-transform duration-500" />
                             </div>
                         </div>
                         <div className="flex flex-col">
-                            <span className="text-xl font-black tracking-tighter text-white leading-none">
-                                Hyperplott
-                            </span>
-                            <span className="text-[10px] uppercase tracking-[0.2em] font-bold text-emerald-400 opacity-70">Scientific AI</span>
+                            <div className="flex items-center gap-2">
+                                <span className="text-xl font-black tracking-tighter text-slate-900 leading-none">
+                                    Hyperplott
+                                </span>
+                                <span className="px-1.5 py-0.5 rounded bg-primary-purple/10 text-primary-purple text-[8px] font-black uppercase tracking-widest">Beta</span>
+                            </div>
+                            <span className="text-[10px] uppercase tracking-[0.2em] font-bold text-slate-500">Scientific AI</span>
                         </div>
                     </Link>
 
                     {/* Desktop Navigation - Centered Pill */}
-                    <div className="hidden lg:flex items-center gap-1 bg-white/5 backdrop-blur-md px-2 py-1.5 rounded-2xl border border-white/10 shadow-inner-glow">
+                    <div className="hidden lg:flex items-center gap-1 bg-slate-100/50 backdrop-blur-md px-2 py-1.5 rounded-2xl border border-slate-200 shadow-sm">
                         {navLinks.map((link) => (
                             <a
                                 key={link.name}
                                 href={link.href}
-                                className="px-6 py-2 text-[13px] font-black uppercase tracking-[0.2em] text-slate-400 hover:text-white transition-all rounded-xl hover:bg-white/5"
+                                className="px-6 py-2 text-[12px] font-black uppercase tracking-[0.15em] text-slate-500 hover:text-primary-purple transition-all rounded-xl hover:bg-white"
                             >
                                 {link.name}
                             </a>
@@ -68,18 +71,18 @@ const Navbar = () => {
 
                     {/* Action Group */}
                     <div className="hidden md:flex items-center gap-4">
-                        <Link to="/login" className="text-[13px] font-black uppercase tracking-[0.2em] text-slate-400 hover:text-white transition-all px-6 py-2.5 rounded-xl hover:bg-white/5 border border-white/0 hover:border-white/5">
+                        <Link to="/login" className="text-[12px] font-black uppercase tracking-[0.15em] text-slate-500 hover:text-slate-900 transition-all px-6 py-2.5 rounded-xl hover:bg-slate-100">
                             Sign In
                         </Link>
                         <Link
                             to="/signup"
-                            className="relative group px-8 py-3.5 rounded-xl bg-emerald-500 text-slate-950 text-[13px] font-black uppercase tracking-[0.1em] shadow-lg shadow-emerald-500/20 overflow-hidden"
+                            className="relative group px-8 py-3.5 rounded-xl bg-gradient-to-r from-primary-purple to-primary text-white text-[12px] font-black uppercase tracking-[0.1em] shadow-lg shadow-primary-purple/20 overflow-hidden"
                         >
                             <span className="relative z-10 flex items-center gap-2">
-                                Get Started
+                                Start Free Trial
                                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                             </span>
-                            <div className="absolute inset-0 bg-white opacity-0 group-hover:opacity-20 transition-opacity duration-500" />
+                            <div className="absolute inset-0 bg-white opacity-0 group-hover:opacity-10 transition-opacity duration-500" />
                         </Link>
                     </div>
 

@@ -11,54 +11,51 @@ const Features = () => {
     const features = [
         {
             type: 'cube',
-            color: "#10b981",
+            color: "#7c3aed",
             icon: Boxes,
             title: "Factorial Designs",
             description: "Examine multiple factors simultaneously. AI-powered selection of full and fractional designs for rapid screening."
         },
         {
             type: 'surface',
-            color: "#34d399",
+            color: "#06b6d4",
             icon: Activity,
             title: "Response Surface",
             description: "Optimize your process with CCD and Box-Behnken designs to find the mathematically perfect setup."
         },
         {
             type: 'array',
-            color: "#059669",
+            color: "#1e3a8a",
             icon: Zap,
             title: "Taguchi Methods",
-            description: "Achieve robust quality with orthogonal arrays. Optimize processes to be insensitive to environmental noise."
+            description: "Achieve robust quality with orthogonal arrays. Optimize processes to be insensitive to noise."
         },
         {
             type: 'mixture',
-            color: "#10b981",
+            color: "#7c3aed",
             icon: FlaskConical,
             title: "Mixture Designs",
             description: "Perfect your formulation. Handle component dependencies efficiently with Simplex-Lattice designs."
         },
         {
             type: 'chart',
-            color: "#34d399",
+            color: "#06b6d4",
             icon: Database,
             title: "Statistical Engine",
-            description: "Instant ANOVA, regression analysis, and goodness-of-fit diagnostics. No formal statistics training required."
+            description: "Instant ANOVA and regression analysis. No formal statistics training required.",
+            badge: "Coming Soon"
         },
         {
             type: 'export',
-            color: "#059669",
+            color: "#1e3a8a",
             icon: Globe,
             title: "Publication Ready",
-            description: "Generate professional lab notebooks and high-resolution plots ready for publications and regulatory submissions."
+            description: "Generate professional lab notebooks and high-resolution plots for regulatory submissions."
         },
     ];
 
     return (
-        <section id="features" className="py-40 bg-bg-primary relative overflow-hidden">
-            {/* Focal Point Glows */}
-            <div className="absolute top-[20%] left-[10%] w-[30%] h-[30%] bg-emerald-500/10 blur-[150px] pointer-events-none" />
-            <div className="absolute bottom-[20%] right-[10%] w-[30%] h-[30%] bg-emerald-500/10 blur-[150px] pointer-events-none" />
-
+        <section id="features" className="py-40 bg-white relative overflow-hidden">
             <div className="container mx-auto px-6 max-w-7xl relative z-10">
                 {/* Header */}
                 <div className="max-w-4xl mx-auto text-center mb-32">
@@ -66,10 +63,9 @@ const Features = () => {
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
-                        className="inline-flex items-center gap-3 px-5 py-2 rounded-full bg-white/5 border border-white/10 text-emerald-500 text-[11px] font-black uppercase tracking-[0.4em] mb-12 shadow-inner-glow"
+                        className="section-badge"
                     >
-                        <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                        Core Intelligence Modules
+                        Intelligence Modules
                     </motion.div>
 
                     <motion.h2
@@ -77,9 +73,9 @@ const Features = () => {
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
                         transition={{ duration: 0.8 }}
-                        className="text-6xl md:text-8xl font-black text-white mb-10 tracking-tight leading-[1.1]"
+                        className="text-5xl md:text-7xl font-black text-slate-900 mb-8 tracking-tight"
                     >
-                        Comprehensive <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-emerald-600 to-teal-500">DoE Tools</span>.
+                        Ready to Design <br /><span className="text-gradient">Better Experiments?</span>
                     </motion.h2>
 
                     <motion.p
@@ -87,15 +83,15 @@ const Features = () => {
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
                         transition={{ duration: 0.8, delay: 0.2 }}
-                        className="text-xl md:text-2xl text-text-secondary max-w-3xl mx-auto font-medium opacity-80"
+                        className="text-xl md:text-2xl text-slate-500 max-w-3xl mx-auto font-medium"
                     >
-                        Comprehensive suite of experimental design tools.
-                        Engineered for speed, validated for precision.
+                        Comprehensive suite of experimental design tools. 
+                        Engineered for researchers, validated for precision.
                     </motion.p>
                 </div>
 
                 {/* Cards Grid */}
-                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-12">
+                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10">
                     {features.map((feature, index) => (
                         <FeatureCard key={index} feature={feature} index={index} />
                     ))}
@@ -107,7 +103,7 @@ const Features = () => {
 
 const FeatureCard = ({ feature, index }) => {
     const ref = useRef(null);
-    const isInView = useInView(ref, { once: false, margin: "-50px" });
+    const isInView = useInView(ref, { once: true, margin: "-50px" });
     const Icon = feature.icon;
 
     return (
@@ -115,19 +111,18 @@ const FeatureCard = ({ feature, index }) => {
             ref={ref}
             initial={{ opacity: 0, y: 40 }}
             animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
-            transition={{ duration: 0.8, delay: index * 0.1, ease: [0.16, 1, 0.3, 1] }}
-            className="group relative flex flex-col items-start p-1 bg-white/5 rounded-[40px] border border-white/10 hover:border-white/20 hover:bg-white/[0.08] transition-all duration-700 shadow-premium overflow-hidden cursor-pointer h-full"
+            transition={{ duration: 0.8, delay: index * 0.1 }}
+            className="card-premium h-full group flex flex-col"
         >
             <Link to="/signup" className="flex flex-col h-full w-full">
                 {/* Visual Header */}
-                <div className="relative w-full h-64 rounded-[36px] bg-slate-950 border border-white/5 overflow-hidden mb-8">
-                    <div className="absolute inset-0 bg-gradient-to-b from-primary/5 to-transparent pointer-events-none" />
+                <div className="relative w-full h-56 bg-slate-50 border-b border-slate-100 overflow-hidden">
                     {isInView && (
                         <ThreeErrorBoundary>
                             <Canvas dpr={[1, 2]}>
                                 <Suspense fallback={null}>
                                     <PerspectiveCamera makeDefault position={[0, 0, 4]} />
-                                    <Environment preset="night" />
+                                    <Environment preset="city" />
                                     <ambientLight intensity={0.5} />
                                     <pointLight position={[10, 10, 10]} intensity={1.5} color={feature.color} />
                                     <Float speed={3} rotationIntensity={1.5} floatIntensity={1.2}>
@@ -137,30 +132,27 @@ const FeatureCard = ({ feature, index }) => {
                             </Canvas>
                         </ThreeErrorBoundary>
                     )}
-
-                    {/* Micro-label on Card Visual */}
-                    <div className="absolute top-6 left-6 flex items-center gap-2 px-3 py-1 rounded-full bg-black/40 backdrop-blur-md border border-white/10">
-                        <Icon className="w-3 h-3 text-white" />
-                        <span className="text-[10px] font-bold text-white uppercase tracking-widest">{feature.type}</span>
-                    </div>
+                    
+                    {feature.badge && (
+                        <div className="absolute top-4 right-4 px-2 py-1 rounded bg-slate-900 text-white text-[8px] font-black uppercase tracking-widest">
+                            {feature.badge}
+                        </div>
+                    )}
                 </div>
 
-                <div className="px-8 pb-10 flex flex-col h-full">
-                    <h3 className="text-3xl font-black text-white mb-4 tracking-tight group-hover:text-primary transition-colors uppercase">
+                <div className="p-8 flex flex-col flex-grow">
+                    <h3 className="text-2xl font-black text-slate-900 mb-3 tracking-tight group-hover:text-primary-purple transition-colors uppercase">
                         {feature.title}
                     </h3>
-                    <p className="text-text-secondary leading-relaxed text-lg font-medium opacity-80 mb-8 flex-grow">
+                    <p className="text-slate-500 leading-relaxed font-medium mb-6 flex-grow">
                         {feature.description}
                     </p>
 
-                    <div className="flex items-center gap-2 text-white font-black text-xs uppercase tracking-[0.2em] group-hover:gap-4 transition-all duration-500">
-                        Explore Intelligence <ChevronRight className="w-4 h-4 text-primary" />
+                    <div className="flex items-center gap-2 text-primary-purple font-black text-xs uppercase tracking-[0.2em] group-hover:gap-4 transition-all duration-500">
+                        Learn More <ChevronRight className="w-4 h-4" />
                     </div>
                 </div>
             </Link>
-
-            {/* Glowing Aura on Hover */}
-            <div className="absolute -bottom-20 -right-20 w-40 h-40 bg-primary/20 blur-[60px] opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
         </motion.div>
     );
 };

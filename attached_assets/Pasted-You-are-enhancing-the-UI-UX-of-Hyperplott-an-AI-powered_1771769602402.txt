@@ -1,0 +1,281 @@
+You are enhancing the UI/UX of Hyperplott, an AI-powered Design of Experiments (DoE) platform. 
+
+IMPORTANT: Do NOT change any existing functionality, backend logic, or API integrations. Only enhance the visual design, user experience, and frontend presentation.
+
+=== BRAND IDENTITY ===
+
+Product Name: Hyperplott
+Tagline: "AI-Powered Design of Experiments"
+Target Users: Researchers, scientists, PhD students, pharmaceutical/biotech professionals
+
+Color Palette:
+- Primary: Deep Blue (#1e3a8a)
+- Secondary: Vibrant Purple (#7c3aed)
+- Accent: Teal/Cyan (#06b6d4)
+- Success: Green (#10b981)
+- Background: White (#ffffff) and Light Gray (#f8fafc)
+- Dark: Slate (#1e293b)
+- Gradients: Use purple-to-blue gradients for CTAs and highlights
+
+Typography:
+- Headings: Inter or Poppins (bold, modern)
+- Body: Inter or System UI (clean, readable)
+- Code/Technical: JetBrains Mono or Fira Code
+
+Design Style:
+- Modern, clean, professional
+- Scientific but approachable
+- Subtle animations and micro-interactions
+- Glass-morphism effects for cards
+- 3D visualization emphasis
+- Publication-quality aesthetic
+
+=== CONTENT CHANGES (REMOVE FAKE CLAIMS) ===
+
+REMOVE these sections entirely:
+1. "TRUSTED BY LEADING RESEARCH INSTITUTIONS" with partner logos
+2. Dr. Priya Sharma testimonial section
+3. Any mention of "thousands of users" or "50+ countries"
+4. "Join thousands of elite researchers" text
+
+REPLACE WITH:
+1. Beta launch banner at top: "🚀 Now in Beta — First 100 users get 50% off forever"
+2. Trust indicators: "✓ Validated Algorithms | 🔬 Built by PhD Researchers | 🎓 Industry-Standard Methods | 🔒 Enterprise Security"
+3. Founder story section (use placeholder images and text like "[Your Name], PhD Researcher")
+4. Founding Member Program section with benefits
+5. FAQ section before final CTA
+
+TONE CHANGES:
+- Change "Legacy DOE Methods are Crippling Innovation" → "Why Traditional DoE Software Falls Short"
+- Change "Enter the Era of Statistical Intelligence" → "Ready to Design Better Experiments?"
+- Change "Join thousands of elite researchers..." → "Join researchers who are tired of expensive, complicated DoE software"
+- Make language more humble, honest, and researcher-to-researcher
+
+=== UI/UX ENHANCEMENTS ===
+
+1. HERO SECTION:
+   - Add animated gradient background (subtle purple-blue)
+   - Floating particle effect or grid pattern
+   - Larger, bolder headline with gradient text effect
+   - Two prominent CTAs: "Start Free Trial" (primary) and "Watch Demo" (secondary)
+   - Add trust badges below CTAs: "✓ No credit card required | ✓ 14-day free trial | ✓ Cancel anytime"
+   - Add subtle scroll indicator animation
+
+2. NAVIGATION:
+   - Sticky header with blur effect on scroll
+   - Smooth transitions
+   - Add "Beta" badge next to logo
+   - Highlight "Start Free Trial" button in nav
+
+3. SECTIONS LAYOUT:
+   - Consistent spacing (80px padding top/bottom for sections)
+   - Alternating background colors (white, light gray)
+   - Section badges/tags above each heading (small pill-shaped labels)
+   - Smooth scroll animations (fade-in, slide-up on scroll)
+
+4. PROBLEM SECTION:
+   - 3-column grid with icon cards
+   - Hover effects: lift up slightly, add shadow
+   - Icons with gradient backgrounds
+   - Clean, minimal design
+
+5. FEATURES SECTION:
+   - 6-card grid (3x2 on desktop, 2x3 on tablet, 1 column on mobile)
+   - Glass-morphism cards with subtle backdrop blur
+   - Hover: scale up slightly, glow effect
+   - Add "Coming Soon" badges where applicable
+   - Icons with animated gradient backgrounds
+
+6. HOW IT WORKS:
+   - Horizontal timeline with connecting lines
+   - Numbered steps with circular badges
+   - Animated progress line on scroll
+   - Icons for each step
+
+7. VISUALIZATIONS SHOWCASE:
+   - Large preview area with tabs/pills to switch between visualization types
+   - Add mockup/screenshot placeholders if actual visualizations aren't ready
+   - "Interactive Demo" button
+   - Subtle 3D tilt effect on hover
+
+8. FOUNDER STORY SECTION (NEW):
+   - Two-column layout: founder cards on left, story text on right
+   - Circular founder images with gradient borders
+   - Stats counter: "200+ Experiments | 100+ Students Taught | 5+ Years DoE"
+   - Blockquote styling for founder quote
+
+9. BETA PROGRAM SECTION (NEW):
+   - Centered layout with gradient background
+   - 4 benefit cards in grid
+   - Large CTA button
+   - Countdown/spots remaining indicator
+   - Requirements checklist
+
+10. PRICING SECTION:
+    - 3-column pricing cards
+    - "Recommended" badge on Professional plan
+    - Toggle for Monthly/Annual (show "Save 20%" badge)
+    - Hover effect: lift card, add glow
+    - Feature list with checkmarks
+    - Different button styles per tier
+
+11. FAQ SECTION (NEW):
+    - 2-column grid (3x2 layout)
+    - Accordion-style or simple card layout
+    - Icons for each question
+    - Subtle hover effects
+
+12. FINAL CTA:
+    - Full-width section with gradient background
+    - Large heading and subheading
+    - Two CTAs side-by-side
+    - Trust signals below
+    - Subtle animation (pulse on CTA button)
+
+13. FOOTER:
+    - Trust badges: "🔒 256-bit SSL | ✓ GDPR Compliant | 💰 30-Day Money-Back"
+    - Links organized in columns
+    - Social media icons
+    - Copyright: "© 2026 Hyperplott. Built with ❤️ by researchers, for researchers."
+
+=== ANIMATIONS & INTERACTIONS ===
+
+Add these subtle animations:
+- Fade-in on scroll for all sections
+- Hover effects on all cards (lift + shadow)
+- Button hover: slight scale + glow
+- Smooth page transitions
+- Loading states for CTAs
+- Particle/grid background animation in hero
+- Number counter animation for stats
+- Gradient animation on primary CTAs
+
+=== RESPONSIVE DESIGN ===
+
+Ensure perfect responsiveness:
+- Mobile: Single column, larger touch targets, hamburger menu
+- Tablet: 2-column grids, adjusted spacing
+- Desktop: Full multi-column layouts
+- Test all breakpoints: 320px, 768px, 1024px, 1440px
+
+=== ACCESSIBILITY ===
+
+- Proper heading hierarchy (h1, h2, h3)
+- Alt text for all images
+- ARIA labels for interactive elements
+- Keyboard navigation support
+- Sufficient color contrast (WCAG AA)
+- Focus states on all interactive elements
+
+=== PERFORMANCE ===
+
+- Optimize images (use WebP, lazy loading)
+- Minimize CSS/JS
+- Use CSS animations over JS where possible
+- Defer non-critical resources
+- Add loading skeletons for dynamic content
+
+=== SPECIFIC COMPONENTS TO ADD ===
+
+1. Beta Banner (sticky top):
+   - Purple gradient background
+   - White text
+   - Pulse animation on emoji
+   - Full width
+
+2. Section Badge Component:
+   - Small pill shape
+   - Gradient background
+   - Uppercase text
+   - Appears above section headings
+
+3. Feature Card Component:
+   - Glass-morphism effect
+   - Icon at top
+   - Heading + description
+   - Hover: lift + glow
+   - Optional "Coming Soon" badge
+
+4. Pricing Card Component:
+   - White background with border
+   - "Recommended" badge for featured plan
+   - Price with large number, small "/mo"
+   - Feature list with checkmarks
+   - CTA button at bottom
+   - Hover: lift + shadow
+
+5. Founder Card Component:
+   - Circular image with gradient border
+   - Name, title, bio
+   - Stats below
+   - Clean, minimal design
+
+6. FAQ Item Component:
+   - Question as heading
+   - Answer as paragraph
+   - Optional icon
+   - Subtle border/shadow
+
+=== FILES TO MODIFY ===
+
+Focus on these files (don't change backend logic):
+- index.html or main landing page
+- styles.css or main stylesheet
+- Any component files for UI elements
+- Add new image assets if needed (use placeholders)
+
+DO NOT MODIFY:
+- Backend API routes
+- Database schemas
+- Authentication logic
+- Core DoE calculation functions
+- Any Python/Node.js backend files
+
+=== FINAL CHECKLIST ===
+
+Before completing, ensure:
+✓ All fake claims removed (testimonials, user counts, partner logos)
+✓ Beta messaging added throughout
+✓ Founder story section added
+✓ Beta program section added
+✓ FAQ section added
+✓ Color palette consistently applied
+✓ All sections have smooth animations
+✓ Responsive on all devices
+✓ Accessibility standards met
+✓ No functionality broken
+✓ All CTAs point to correct actions
+✓ Loading states added where needed
+
+=== ADDITIONAL NOTES ===
+
+- Use modern CSS (Flexbox, Grid, CSS Variables)
+- Prefer Tailwind CSS if already in project, otherwise vanilla CSS
+- Add comments in code for clarity
+- Use semantic HTML5 elements
+- Ensure fast load times
+- Test on Chrome, Firefox, Safari
+
+=== INSPIRATION REFERENCES ===
+
+Design inspiration (modern SaaS landing pages):
+- Linear.app (clean, minimal, animated)
+- Vercel.com (gradient effects, smooth)
+- Stripe.com (professional, trustworthy)
+- Framer.com (interactive, engaging)
+
+Scientific/technical aesthetic:
+- Maintain credibility and professionalism
+- Avoid overly playful designs
+- Use data visualization aesthetics
+- Publication-quality feel
+
+=== OUTPUT ===
+
+After implementation:
+1. Provide a summary of all changes made
+2. List any new files created
+3. Note any potential issues or recommendations
+4. Suggest next steps for further enhancement
+
+BEGIN ENHANCEMENT NOW. Focus on creating a beautiful, honest, professional landing page that converts researchers into beta users.

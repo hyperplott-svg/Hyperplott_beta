@@ -31,28 +31,40 @@ const FAQ = () => {
     ];
 
     return (
-        <section className="py-40 bg-bg-primary relative overflow-hidden" id="faq">
-            <div className="container mx-auto px-6 max-w-4xl">
+        <section className="py-40 bg-bg-secondary relative overflow-hidden" id="faq">
+            <div className="container mx-auto px-6 max-w-5xl">
                 <div className="text-center mb-24">
                     <motion.div
-                        initial={{ opacity: 0, scale: 0.9 }}
-                        whileInView={{ opacity: 1, scale: 1 }}
-                        className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-500 text-[9px] font-black uppercase tracking-[0.4em] mb-8"
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        className="section-badge"
                     >
-                        <HelpCircle className="w-3.5 h-3.5" />
-                        Common inquiries
+                        FAQ
                     </motion.div>
-                    <h2 className="text-5xl md:text-7xl font-black text-white tracking-tighter uppercase mb-6 leading-tight">
-                        Faq.
+                    <h2 className="text-4xl md:text-6xl font-black text-slate-900 tracking-tighter mb-6">
+                        Questions? <span className="text-gradient">Answers.</span>
                     </h2>
-                    <p className="text-text-secondary text-lg opacity-70">
+                    <p className="text-slate-500 text-lg font-medium">
                         Everything you need to know about starting your optimization journey.
                     </p>
                 </div>
 
-                <div className="space-y-4">
+                <div className="grid md:grid-cols-2 gap-6">
                     {questions.map((faq, i) => (
-                        <FAQItem key={i} question={faq.q} answer={faq.a} />
+                        <motion.div 
+                            key={i}
+                            initial={{ opacity: 0, y: 10 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            transition={{ delay: i * 0.05 }}
+                            className="card-premium p-8"
+                        >
+                            <h3 className="text-xl font-black text-slate-900 mb-4 tracking-tight uppercase">
+                                {faq.q}
+                            </h3>
+                            <p className="text-slate-500 leading-relaxed font-medium">
+                                {faq.a}
+                            </p>
+                        </motion.div>
                     ))}
                 </div>
             </div>
