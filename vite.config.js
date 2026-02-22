@@ -20,6 +20,11 @@ export default defineConfig(({ mode }) => {
     },
     define: {
       'process.env.API_KEY': JSON.stringify(env.VITE_GEMINI_API_KEY)
-    }
+    },
+    server: {
+      host: '0.0.0.0',
+      port: 5000,
+      allowedHosts: true,
+    },
   };
 })
