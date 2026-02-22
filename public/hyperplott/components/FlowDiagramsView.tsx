@@ -6,7 +6,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import type { LoadingState, ViewType } from '../types';
 import CopyButton from './CopyButton';
 // Fix: Import missing icons from constants.tsx
-import { ArrowLeftIcon, ExpandIcon, ShrinkIcon } from '../constants'; 
+import { ArrowLeftIcon, ExpandIcon, ShrinkIcon } from '../constants';
 
 
 interface FlowDiagramsViewProps {
@@ -21,35 +21,56 @@ const FlowDiagramsView: React.FC<FlowDiagramsViewProps> = ({ setActiveView }) =>
   const [isFullScreen, setIsFullScreen] = useState(false);
   const diagramContainerRef = useRef<HTMLDivElement>(null);
 
-    const resetState = useCallback(() => {
-        setConcept('');
-        setDiagramSyntax('');
-        setLoadingState('idle');
-        setError('');
-        setIsFullScreen(false);
-    }, []);
+  const resetState = useCallback(() => {
+    setConcept('');
+    setDiagramSyntax('');
+    setLoadingState('idle');
+    setError('');
+    setIsFullScreen(false);
+  }, []);
 
-    useEffect(() => {
-        if (isFullScreen) {
-            document.body.style.overflow = 'hidden';
-        } else {
-            document.body.style.overflow = '';
+  useEffect(() => {
+    if (isFullScreen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    // Re-render mermaid diagram when toggling fullscreen to fit new container size
+    if (diagramContainerRef.current && diagramSyntax) {
+      // A brief delay helps ensure the container has resized before mermaid runs
+      setTimeout(() => {
+        try {
+          mermaid.run({ nodes: [diagramContainerRef.current!] });
+        } catch (e) {
+          console.error("Mermaid resize error:", e);
         }
-        // Re-render mermaid diagram when toggling fullscreen to fit new container size
-        if (diagramContainerRef.current && diagramSyntax) {
-            // A brief delay helps ensure the container has resized before mermaid runs
-            setTimeout(() => {
-                try {
-                    mermaid.run({ nodes: [diagramContainerRef.current!] });
-                } catch (e) {
-                    console.error("Mermaid resize error:", e);
-                }
-            }, 50); 
+      }, 50);
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isFullScreen, diagramSyntax]);
+
+  const callWithRetry = async (fn: () => Promise<any>, maxRetries = 3) => {
+    let attempt = 0;
+    while (attempt < maxRetries) {
+      try {
+        return await fn();
+      } catch (err: any) {
+        attempt++;
+        const errText = err.message || '';
+        const isRetryable = errText.includes('429') || err.status === 429 || errText.includes('RESOURCE_EXHAUSTED') ||
+          errText.includes('503') || err.status === 503 || errText.includes('UNAVAILABLE');
+
+        if (isRetryable && attempt < maxRetries) {
+          const delay = Math.pow(2.5, attempt) * 1000 + Math.random() * 1000;
+          await new Promise(resolve => setTimeout(resolve, delay));
+          continue;
         }
-        return () => {
-            document.body.style.overflow = '';
-        };
-    }, [isFullScreen, diagramSyntax]);
+        throw err;
+      }
+    }
+  };
 
 
   const generateDiagram = useCallback(async () => {
@@ -69,23 +90,29 @@ Concept: "${concept}"`;
       const ai = new GoogleGenAI({ apiKey: process.env.API_KEY as string });
 
       const schema = {
-          type: Type.OBJECT,
-          properties: {
-              graphCode: { type: Type.STRING, description: "The raw Mermaid.js syntax for the flowchart." }
-          },
-          required: ["graphCode"]
+        type: Type.OBJECT,
+        properties: {
+          graphCode: { type: Type.STRING, description: "The raw Mermaid.js syntax for the flowchart." }
+        },
+        required: ["graphCode"]
       };
-      
-      const response = await ai.models.generateContent({
-        model: "gemini-3-flash-preview",
-        contents: prompt,
-        config: { 
+
+      const response = await callWithRetry(async () => {
+        return await ai.models.generateContent({
+          model: "gemini-3-flash-preview",
+          contents: prompt,
+          config: {
             responseMimeType: "application/json",
             responseSchema: schema
-        },
+          },
+        });
       });
-      
-      const result = JSON.parse(response.text.trim());
+
+      const text = response.text();
+      if (!text) {
+        throw new Error("No response text received from AI.");
+      }
+      const result = JSON.parse(text.trim());
       const syntax = result.graphCode;
 
       if (syntax && syntax.trim().startsWith('graph')) {
@@ -109,21 +136,21 @@ Concept: "${concept}"`;
       const container = diagramContainerRef.current;
       container.removeAttribute('data-processed');
       container.innerHTML = diagramSyntax;
-      
+
       setError('');
-      
+
       try {
         mermaid.run({
           nodes: [container],
         });
-        
+
         const svg = container.querySelector('svg');
         if (svg) {
-            svg.removeAttribute('width');
-            svg.removeAttribute('height');
-            svg.classList.add('w-full', 'h-auto', 'max-h-full');
+          svg.removeAttribute('width');
+          svg.removeAttribute('height');
+          svg.classList.add('w-full', 'h-auto', 'max-h-full');
         } else {
-             throw new Error("Mermaid could not generate an SVG from the provided syntax.");
+          throw new Error("Mermaid could not generate an SVG from the provided syntax.");
         }
 
       } catch (e) {
@@ -141,61 +168,61 @@ Concept: "${concept}"`;
     <div className="h-full flex flex-col gap-6 bg-white rounded-2xl border border-gray-200 shadow-sm p-6 relative z-0">
       <AnimatePresence>
         {!isFullScreen && (
-            <motion.div
-                initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: 'auto' }}
-                exit={{ opacity: 0, height: 0 }}
-                transition={{ duration: 0.3 }}
-                className="overflow-hidden"
-            >
-                <div className="flex flex-col gap-6">
-                    <div className="flex items-center gap-4">
-                        {/* Fix: Changed 'Workspace' to valid ViewType 'Design of Experiment' */}
-                        <button onClick={() => setActiveView('Design of Experiment')} className="p-2 rounded-full hover:bg-gray-100 text-gray-600 hover:text-gray-900 transition-colors" aria-label="Go back to workspace">
-                            <ArrowLeftIcon className="w-6 h-6"/>
-                        </button>
-                        <h2 className="text-3xl font-bold text-gray-900">Flowchart Visualizer</h2>
-                    </div>
-                    <div className="flex flex-col md:flex-row gap-4">
-                        <input 
-                        type="text"
-                        value={concept}
-                        onChange={(e) => setConcept(e.target.value)}
-                        onKeyDown={(e) => { if (e.key === 'Enter') generateDiagram() }}
-                        placeholder="e.g., Mechanism of action of aspirin"
-                        className="flex-1 bg-gray-100 p-3 rounded-lg border border-gray-300 focus:outline-none focus:border-green-500 focus:ring-1 focus:ring-green-500"
-                        />
-                        <button onClick={generateDiagram} disabled={loadingState === 'loading' || !concept} className="px-6 py-3 bg-gray-200 hover:bg-gray-300 rounded-lg font-semibold transition-transform duration-200 hover:scale-105 disabled:opacity-50 disabled:scale-100 text-gray-800">
-                        {loadingState === 'loading' ? 'Generating...' : 'Visualize'}
-                        </button>
-                    </div>
-                </div>
-            </motion.div>
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.3 }}
+            className="overflow-hidden"
+          >
+            <div className="flex flex-col gap-6">
+              <div className="flex items-center gap-4">
+                {/* Fix: Changed 'Workspace' to valid ViewType 'Design of Experiment' */}
+                <button onClick={() => setActiveView('Design of Experiment')} className="p-2 rounded-full hover:bg-gray-100 text-gray-600 hover:text-gray-900 transition-colors" aria-label="Go back to workspace">
+                  <ArrowLeftIcon className="w-6 h-6" />
+                </button>
+                <h2 className="text-3xl font-bold text-gray-900">Flowchart Visualizer</h2>
+              </div>
+              <div className="flex flex-col md:flex-row gap-4">
+                <input
+                  type="text"
+                  value={concept}
+                  onChange={(e) => setConcept(e.target.value)}
+                  onKeyDown={(e) => { if (e.key === 'Enter') generateDiagram() }}
+                  placeholder="e.g., Mechanism of action of aspirin"
+                  className="flex-1 bg-gray-100 p-3 rounded-lg border border-gray-300 focus:outline-none focus:border-green-500 focus:ring-1 focus:ring-green-500"
+                />
+                <button onClick={generateDiagram} disabled={loadingState === 'loading' || !concept} className="px-6 py-3 bg-gray-200 hover:bg-gray-300 rounded-lg font-semibold transition-transform duration-200 hover:scale-105 disabled:opacity-50 disabled:scale-100 text-gray-800">
+                  {loadingState === 'loading' ? 'Generating...' : 'Visualize'}
+                </button>
+              </div>
+            </div>
+          </motion.div>
         )}
       </AnimatePresence>
 
       <div className={isFullScreen ? "fixed inset-0 z-50 bg-white/80 backdrop-blur-md p-4 md:p-8 flex flex-col" : "flex-1 flex flex-col min-h-0"}>
-          <motion.div layout className="bg-white rounded-lg border border-gray-200 flex flex-col h-full shadow-md">
-            <div className="w-full flex justify-between items-center p-3 text-left border-b border-gray-200 flex-shrink-0">
-                <h3 className="font-semibold text-xl text-gray-800">Diagram</h3>
-                <div className="flex items-center gap-2">
-                    {hasResults && <CopyButton textToCopy={diagramSyntax} />}
-                    {hasResults && (
-                        <button onClick={() => setIsFullScreen(!isFullScreen)} className="p-2 rounded-full hover:bg-gray-100 text-gray-600 hover:text-gray-900 transition-colors" title={isFullScreen ? "Exit full screen" : "View in full screen"}>
-                            {isFullScreen ? <ShrinkIcon className="w-5 h-5"/> : <ExpandIcon className="w-5 h-5"/>}
-                        </button>
-                    )}
-                </div>
+        <motion.div layout className="bg-white rounded-lg border border-gray-200 flex flex-col h-full shadow-md">
+          <div className="w-full flex justify-between items-center p-3 text-left border-b border-gray-200 flex-shrink-0">
+            <h3 className="font-semibold text-xl text-gray-800">Diagram</h3>
+            <div className="flex items-center gap-2">
+              {hasResults && <CopyButton textToCopy={diagramSyntax} />}
+              {hasResults && (
+                <button onClick={() => setIsFullScreen(!isFullScreen)} className="p-2 rounded-full hover:bg-gray-100 text-gray-600 hover:text-gray-900 transition-colors" title={isFullScreen ? "Exit full screen" : "View in full screen"}>
+                  {isFullScreen ? <ShrinkIcon className="w-5 h-5" /> : <ExpandIcon className="w-5 h-5" />}
+                </button>
+              )}
             </div>
+          </div>
 
-            <div className="flex-1 p-2 overflow-auto flex items-center justify-center min-h-[200px] bg-white rounded-b-lg">
-                {loadingState === 'idle' && <p className="text-gray-500 text-center">Enter a concept above to generate a diagram.</p>}
-                {loadingState === 'loading' && <div className="w-10 h-10 border-4 border-dashed rounded-full animate-spin border-green-500"></div>}
-                {loadingState === 'error' && <p className="text-red-500 text-center">{error}</p>}
-                
-                <div ref={diagramContainerRef} className={`w-full h-full flex items-center justify-center ${hasResults ? '' : 'hidden'}`}></div>
-            </div>
-          </motion.div>
+          <div className="flex-1 p-2 overflow-auto flex items-center justify-center min-h-[200px] bg-white rounded-b-lg">
+            {loadingState === 'idle' && <p className="text-gray-500 text-center">Enter a concept above to generate a diagram.</p>}
+            {loadingState === 'loading' && <div className="w-10 h-10 border-4 border-dashed rounded-full animate-spin border-green-500"></div>}
+            {loadingState === 'error' && <p className="text-red-500 text-center">{error}</p>}
+
+            <div ref={diagramContainerRef} className={`w-full h-full flex items-center justify-center ${hasResults ? '' : 'hidden'}`}></div>
+          </div>
+        </motion.div>
       </div>
     </div>
   );

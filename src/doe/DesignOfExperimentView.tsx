@@ -206,13 +206,34 @@ const DesignOfExperimentView: React.FC<{ setActiveView: (view: ViewType) => void
         return [...new Set(indices)];
     }, [runMatrix]);
 
-    const safeJSONParse = (text: string) => {
+    const safeJSONParse = (text: any) => {
         try {
-            const cleanText = text.replace(/```json/g, '').replace(/```/g, '').trim();
-            return JSON.parse(cleanText);
+            if (typeof text !== 'string') {
+                console.error("Non-string response received:", text);
+                return text;
+            }
+            let cleanText = text.replace(/```json/g, '').replace(/```/g, '').trim();
+            try {
+                return JSON.parse(cleanText);
+            } catch (inner) {
+                const firstBrace = cleanText.indexOf('{');
+                const lastBrace = cleanText.lastIndexOf('}');
+                const firstBracket = cleanText.indexOf('[');
+                const lastBracket = cleanText.lastIndexOf(']');
+                let start = -1, end = -1;
+                if (firstBrace !== -1 && (firstBracket === -1 || firstBrace < firstBracket)) {
+                    start = firstBrace; end = lastBrace;
+                } else if (firstBracket !== -1) {
+                    start = firstBracket; end = lastBracket;
+                }
+                if (start !== -1 && end !== -1 && end > start) {
+                    return JSON.parse(cleanText.substring(start, end + 1));
+                }
+                throw inner;
+            }
         } catch (e) {
             console.error("JSON Parse Error on text:", text);
-            throw new Error("Malformed JSON response from AI.");
+            throw new Error("Malformed JSON response from AI. Please try again.");
         }
     };
 
@@ -224,9 +245,10 @@ const DesignOfExperimentView: React.FC<{ setActiveView: (view: ViewType) => void
             } catch (err: any) {
                 attempt++;
                 const errText = err.message || '';
-                const isRateLimit = errText.includes('429') || err.status === 429 || errText.includes('RESOURCE_EXHAUSTED');
+                const isRetryable = errText.includes('429') || err.status === 429 || errText.includes('RESOURCE_EXHAUSTED') ||
+                    errText.includes('503') || err.status === 503 || errText.includes('UNAVAILABLE');
 
-                if (isRateLimit && attempt < maxRetries) {
+                if (isRetryable && attempt < maxRetries) {
                     const delay = Math.pow(2.5, attempt) * 1000 + Math.random() * 1000;
                     await new Promise(resolve => setTimeout(resolve, delay));
                     continue;
@@ -258,7 +280,7 @@ const DesignOfExperimentView: React.FC<{ setActiveView: (view: ViewType) => void
                     contents: [{ role: 'user', parts: [{ text: `Scientific Study Objective: "${objective}"` }] }],
                     config: {
                         temperature: 0,
-                        maxOutputTokens: 1024,
+                        maxOutputTokens: 2048,
                         systemInstruction: "Concise DoE Expert. Suggest exactly 3-4 numerical factors and 1-2 responses. Output JSON only.",
                         responseMimeType: "application/json",
                         responseSchema: {
@@ -293,7 +315,7 @@ const DesignOfExperimentView: React.FC<{ setActiveView: (view: ViewType) => void
                         }
                     }
                 });
-                return safeJSONParse((response as any).text || "{}");
+                return safeJSONParse(response.text());
             });
 
             setFactors(result.factors.map((f: any) => ({
@@ -331,8 +353,8 @@ const DesignOfExperimentView: React.FC<{ setActiveView: (view: ViewType) => void
                     }],
                     config: {
                         temperature: 0,
-                        maxOutputTokens: 2048,
-                        systemInstruction: "Fast DoE Engine. Generate accurate coded matrices. Avoid preamble. Output JSON ONLY.",
+                        maxOutputTokens: 4096,
+                        systemInstruction: "Fast DoE Engine. Generate accurate coded matrices. Keep numeric values at 4 decimal places. Output JSON ONLY.",
                         responseMimeType: "application/json",
                         responseSchema: {
                             type: Type.ARRAY,
@@ -350,7 +372,7 @@ const DesignOfExperimentView: React.FC<{ setActiveView: (view: ViewType) => void
                         }
                     }
                 });
-                return safeJSONParse((response as any).text || "{}");
+                return safeJSONParse(response.text());
             });
 
             const actual = coded.map((row: any) => {
@@ -380,56 +402,58 @@ const DesignOfExperimentView: React.FC<{ setActiveView: (view: ViewType) => void
             const apiKey = (import.meta as any).env.VITE_GEMINI_API_KEY;
             if (!apiKey) throw new Error("API Key (VITE_GEMINI_API_KEY) is missing. Please configure it in your environment variables.");
 
-            const ai = new GoogleGenAI({ apiKey: apiKey as string });
-            const response = await ai.models.generateContent({
-                model: "gemini-3-flash-preview",
-                contents: [{
-                    role: 'user', parts: [{
-                        text: `Perform high-precision statistical regression for "${experimentName}".
-                Data: ${JSON.stringify(runMatrix)}
-                Target Responses: ${responses.map(r => r.name).join(', ')}
-
-                Perform Stepwise Regression. Fit a Quadratic Model if curvature exists, otherwise Linear.
-                Provide explicit "fittingModelUsed" (e.g. "Response Surface Quadratic Model").` }]
-                }],
-                config: {
-                    temperature: 0,
-                    maxOutputTokens: 2048,
-                    systemInstruction: "Senior Statistician. Provide ANOVA and 8x8 plot grid. Be extremely concise. Output JSON ONLY.",
-                    responseMimeType: "application/json",
-                    responseSchema: {
-                        type: Type.OBJECT,
-                        properties: {
-                            overallInterpretation: { type: Type.STRING },
-                            optimizedParams: { type: Type.OBJECT, properties: factors.reduce((acc, f) => ({ ...acc, [f.name]: { type: Type.NUMBER } }), {}), required: factors.map(f => f.name) },
-                            analyses: {
-                                type: Type.OBJECT,
-                                properties: responses.reduce((acc, r) => ({
-                                    ...acc,
-                                    [r.name]: {
-                                        type: Type.OBJECT,
-                                        properties: {
-                                            responseName: { type: Type.STRING },
-                                            fittingModelUsed: { type: Type.STRING },
-                                            equation: { type: Type.STRING },
-                                            stats: { type: Type.OBJECT, properties: { rSquared: { type: Type.NUMBER }, adjRSquared: { type: Type.NUMBER }, pValue: { type: Type.NUMBER }, fValue: { type: Type.NUMBER }, adeqPrecision: { type: Type.NUMBER } }, required: ["rSquared", "pValue"] },
-                                            anovaTable: { type: Type.ARRAY, items: { type: Type.OBJECT, properties: { source: { type: Type.STRING }, df: { type: Type.NUMBER }, sumOfSquares: { type: Type.NUMBER }, meanSquare: { type: Type.NUMBER }, fValue: { type: Type.NUMBER }, pValue: { type: Type.NUMBER } }, required: ["source", "pValue", "df"] } },
-                                            interpretation: { type: Type.STRING },
-                                            plotData: { type: Type.OBJECT, properties: { x: { type: Type.OBJECT, properties: { name: { type: Type.STRING }, values: { type: Type.ARRAY, items: { type: Type.NUMBER } } } }, y: { type: Type.OBJECT, properties: { name: { type: Type.STRING }, values: { type: Type.ARRAY, items: { type: Type.NUMBER } } } }, z: { type: Type.OBJECT, properties: { values: { type: Type.ARRAY, items: { type: Type.ARRAY, items: { type: Type.NUMBER } } } } } } },
-                                            perturbationData: { type: Type.OBJECT, properties: { factors: { type: Type.ARRAY, items: { type: Type.OBJECT, properties: { name: { type: Type.STRING }, codedX: { type: Type.ARRAY, items: { type: Type.NUMBER } }, predictedY: { type: Type.ARRAY, items: { type: Type.NUMBER } } } } } } }
+            const result = await callWithRetry(async () => {
+                const ai = new GoogleGenAI({ apiKey: apiKey as string });
+                const response = await ai.models.generateContent({
+                    model: "gemini-3-flash-preview",
+                    contents: [{
+                        role: 'user', parts: [{
+                            text: `Perform high-precision statistical regression for "${experimentName}".
+                    Data: ${JSON.stringify(runMatrix)}
+                    Target Responses: ${responses.map(r => r.name).join(', ')}
+    
+                    Perform Stepwise Regression. Fit a Quadratic Model if curvature exists, otherwise Linear.
+                    Provide explicit "fittingModelUsed" (e.g. "Response Surface Quadratic Model").` }]
+                    }],
+                    config: {
+                        temperature: 0,
+                        maxOutputTokens: 4096,
+                        systemInstruction: "Senior Statistician. Provide ANOVA and 6x6 plot grid. Keep numeric values at 4 decimal places. Output JSON ONLY.",
+                        responseMimeType: "application/json",
+                        responseSchema: {
+                            type: Type.OBJECT,
+                            properties: {
+                                overallInterpretation: { type: Type.STRING },
+                                optimizedParams: { type: Type.OBJECT, properties: factors.reduce((acc, f) => ({ ...acc, [f.name]: { type: Type.NUMBER } }), {}), required: factors.map(f => f.name) },
+                                analyses: {
+                                    type: Type.OBJECT,
+                                    properties: responses.reduce((acc, r) => ({
+                                        ...acc,
+                                        [r.name]: {
+                                            type: Type.OBJECT,
+                                            properties: {
+                                                responseName: { type: Type.STRING },
+                                                fittingModelUsed: { type: Type.STRING },
+                                                equation: { type: Type.STRING },
+                                                stats: { type: Type.OBJECT, properties: { rSquared: { type: Type.NUMBER }, adjRSquared: { type: Type.NUMBER }, pValue: { type: Type.NUMBER }, fValue: { type: Type.NUMBER }, adeqPrecision: { type: Type.NUMBER } }, required: ["rSquared", "pValue"] },
+                                                anovaTable: { type: Type.ARRAY, items: { type: Type.OBJECT, properties: { source: { type: Type.STRING }, df: { type: Type.NUMBER }, sumOfSquares: { type: Type.NUMBER }, meanSquare: { type: Type.NUMBER }, fValue: { type: Type.NUMBER }, pValue: { type: Type.NUMBER } }, required: ["source", "pValue", "df"] } },
+                                                interpretation: { type: Type.STRING },
+                                                plotData: { type: Type.OBJECT, properties: { x: { type: Type.OBJECT, properties: { name: { type: Type.STRING }, values: { type: Type.ARRAY, items: { type: Type.NUMBER } } } }, y: { type: Type.OBJECT, properties: { name: { type: Type.STRING }, values: { type: Type.ARRAY, items: { type: Type.NUMBER } } } }, z: { type: Type.OBJECT, properties: { values: { type: Type.ARRAY, items: { type: Type.ARRAY, items: { type: Type.NUMBER } } } } } } },
+                                                perturbationData: { type: Type.OBJECT, properties: { factors: { type: Type.ARRAY, items: { type: Type.OBJECT, properties: { name: { type: Type.STRING }, codedX: { type: Type.ARRAY, items: { type: Type.NUMBER } }, predictedY: { type: Type.ARRAY, items: { type: Type.NUMBER } } } } } } }
+                                            }
                                         }
-                                    }
-                                }), {})
-                            },
-                            predVsActualData: { type: Type.OBJECT, properties: { actual: { type: Type.ARRAY, items: { type: Type.NUMBER } }, predicted: { type: Type.ARRAY, items: { type: Type.NUMBER } } }, required: ["actual", "predicted"] }
+                                    }), {})
+                                },
+                                predVsActualData: { type: Type.OBJECT, properties: { actual: { type: Type.ARRAY, items: { type: Type.NUMBER } }, predicted: { type: Type.ARRAY, items: { type: Type.NUMBER } } }, required: ["actual", "predicted"] }
+                            }
                         }
                     }
-                }
+                });
+                return safeJSONParse(response.text());
             });
 
-            const analysisResult = safeJSONParse((response as any).text);
-            setAnalysis(analysisResult);
-            setSelectedAnalysisKey(Object.keys(analysisResult.analyses || {})[0] || '');
+            setAnalysis(result);
+            setSelectedAnalysisKey(Object.keys(result.analyses || {})[0] || '');
             setActiveTab('Insight');
             setLoadingState('success');
         } catch (e) { handleError(e, "Analysis Engine"); }

@@ -5,8 +5,8 @@ import { jsPDF } from "jspdf";
 import * as docx from "docx";
 import type { ViewType, LoadingState, DoEFactor, DoEResponse, DoERun, DoEAnalysisResult, DoEDesignType, ResponseAnalysis } from '../types';
 import Logo from './Logo';
-import { 
-    SparklesIcon, PlusIcon, InfoIcon, 
+import {
+    SparklesIcon, PlusIcon, InfoIcon,
     ZapIcon, TargetIcon, LoaderIcon, ChartBarIcon,
     DownloadIcon, XIcon, ChevronDownIcon, FileSignatureIcon,
     KeyIcon, TrashIcon, CopyIcon, CheckIcon
@@ -17,9 +17,9 @@ declare var Plotly: any;
 type DoETab = 'Dimension' | 'Execution' | 'Insight' | 'Synthesis';
 type PlotType = '3D Surface' | '2D Contour' | 'Perturbation' | 'Model Diagnostic';
 
-const PlotViewer: React.FC<{ 
-    analysis: ResponseAnalysis, 
-    activePlot: PlotType, 
+const PlotViewer: React.FC<{
+    analysis: ResponseAnalysis,
+    activePlot: PlotType,
     onDownloadPlot?: (format: string) => void,
     predVsActualData?: { actual: number[], predicted: number[] },
     experimentName: string
@@ -33,14 +33,14 @@ const PlotViewer: React.FC<{
         autosize: true,
         hovermode: 'closest'
     });
-    
+
     const handleDownload = () => {
         if (!plotRef.current || typeof Plotly === 'undefined') return;
         Plotly.downloadImage(plotRef.current, {
             format: 'png',
             width: 1600,
             height: 1200,
-            scale: 3, 
+            scale: 3,
             filename: `HyperPlott_${experimentName.replace(/\s+/g, '_')}_${analysis.responseName}_${activePlot.replace(/\s+/g, '_')}`
         });
     };
@@ -94,13 +94,13 @@ const PlotViewer: React.FC<{
                     line: { shape: 'spline', width: 3 },
                     type: 'scatter'
                 }));
-                layout.xaxis = { 
+                layout.xaxis = {
                     title: { text: 'Deviation from Reference Point (Coded Units)', font: { weight: 'bold', size: 14, color: '#0f172a' } },
                     range: [-1.1, 1.1],
                     gridcolor: '#f1f5f9',
                     zerolinecolor: '#cbd5e1'
                 };
-                layout.yaxis = { 
+                layout.yaxis = {
                     title: { text: analysis.responseName, font: { weight: 'bold', size: 14, color: '#0f172a' } },
                     gridcolor: '#f1f5f9',
                     zerolinecolor: '#cbd5e1'
@@ -110,19 +110,19 @@ const PlotViewer: React.FC<{
                 const minVal = Math.min(...predVsActualData.actual, ...predVsActualData.predicted) * 0.95;
                 const maxVal = Math.max(...predVsActualData.actual, ...predVsActualData.predicted) * 1.05;
                 data = [
-                    { 
-                        x: predVsActualData.actual, 
-                        y: predVsActualData.predicted, 
-                        mode: 'markers', 
-                        name: 'Data Points', 
-                        marker: { color: '#10B981', size: 12, line: { color: 'white', width: 2 } } 
+                    {
+                        x: predVsActualData.actual,
+                        y: predVsActualData.predicted,
+                        mode: 'markers',
+                        name: 'Data Points',
+                        marker: { color: '#10B981', size: 12, line: { color: 'white', width: 2 } }
                     },
-                    { 
-                        x: [minVal, maxVal], 
-                        y: [minVal, maxVal], 
-                        mode: 'lines', 
-                        name: 'Perfect Fit', 
-                        line: { dash: 'dash', color: '#cbd5e1', width: 2 } 
+                    {
+                        x: [minVal, maxVal],
+                        y: [minVal, maxVal],
+                        mode: 'lines',
+                        name: 'Perfect Fit',
+                        line: { dash: 'dash', color: '#cbd5e1', width: 2 }
                     }
                 ];
                 layout.xaxis = { title: { text: 'Actual Response Values', font: { weight: 'bold', size: 14, color: '#0f172a' } }, range: [minVal, maxVal], gridcolor: '#f1f5f9' };
@@ -138,8 +138,8 @@ const PlotViewer: React.FC<{
         <div className="w-full h-full min-h-[450px] relative rounded-3xl overflow-hidden bg-white shadow-inner border border-slate-100">
             <div ref={plotRef} className="w-full h-full" />
             <div className="absolute top-6 right-6 flex flex-col gap-3">
-                <button 
-                    onClick={handleDownload} 
+                <button
+                    onClick={handleDownload}
                     className="p-3.5 bg-white/95 backdrop-blur shadow-xl rounded-2xl border border-slate-100 text-slate-500 hover:text-emerald-600 transition-all z-20 group active:scale-90"
                     title="Export High-Res PNG"
                 >
@@ -181,10 +181,10 @@ const DesignOfExperimentView: React.FC<{ setActiveView: (view: ViewType) => void
     const copyAnovaToClipboard = useCallback(() => {
         if (!currentAnalysis) return;
         const headers = "Source\tDF\tSum of Squares\tMean Square\tF-Value\tp-Value\n";
-        const rows = currentAnalysis.anovaTable.map((r: any) => 
+        const rows = currentAnalysis.anovaTable.map((r: any) =>
             `${r.source}\t${r.df}\t${r.sumOfSquares.toFixed(4)}\t${r.meanSquare.toFixed(4)}\t${r.fValue ? r.fValue.toFixed(4) : '-'}\t${r.pValue !== null ? r.pValue.toFixed(4) : '-'}`
         ).join('\n');
-        
+
         navigator.clipboard.writeText(headers + rows);
         setCopiedAnova(true);
         setTimeout(() => setCopiedAnova(false), 2000);
@@ -204,13 +204,34 @@ const DesignOfExperimentView: React.FC<{ setActiveView: (view: ViewType) => void
         return [...new Set(indices)];
     }, [runMatrix]);
 
-    const safeJSONParse = (text: string) => {
+    const safeJSONParse = (text: any) => {
         try {
-            const cleanText = text.replace(/```json/g, '').replace(/```/g, '').trim();
-            return JSON.parse(cleanText);
+            if (typeof text !== 'string') {
+                console.error("Non-string response received:", text);
+                return text;
+            }
+            let cleanText = text.replace(/```json/g, '').replace(/```/g, '').trim();
+            try {
+                return JSON.parse(cleanText);
+            } catch (inner) {
+                const firstBrace = cleanText.indexOf('{');
+                const lastBrace = cleanText.lastIndexOf('}');
+                const firstBracket = cleanText.indexOf('[');
+                const lastBracket = cleanText.lastIndexOf(']');
+                let start = -1, end = -1;
+                if (firstBrace !== -1 && (firstBracket === -1 || firstBrace < firstBracket)) {
+                    start = firstBrace; end = lastBrace;
+                } else if (firstBracket !== -1) {
+                    start = firstBracket; end = lastBracket;
+                }
+                if (start !== -1 && end !== -1 && end > start) {
+                    return JSON.parse(cleanText.substring(start, end + 1));
+                }
+                throw inner;
+            }
         } catch (e) {
             console.error("JSON Parse Error on text:", text);
-            throw new Error("Malformed JSON response from AI.");
+            throw new Error("Malformed JSON response from AI. Please try again.");
         }
     };
 
@@ -222,9 +243,10 @@ const DesignOfExperimentView: React.FC<{ setActiveView: (view: ViewType) => void
             } catch (err: any) {
                 attempt++;
                 const errText = err.message || '';
-                const isRateLimit = errText.includes('429') || err.status === 429 || errText.includes('RESOURCE_EXHAUSTED');
-                
-                if (isRateLimit && attempt < maxRetries) {
+                const isRetryable = errText.includes('429') || err.status === 429 || errText.includes('RESOURCE_EXHAUSTED') ||
+                    errText.includes('503') || err.status === 503 || errText.includes('UNAVAILABLE');
+
+                if (isRetryable && attempt < maxRetries) {
                     const delay = Math.pow(2.5, attempt) * 1000 + Math.random() * 1000;
                     await new Promise(resolve => setTimeout(resolve, delay));
                     continue;
@@ -251,8 +273,9 @@ const DesignOfExperimentView: React.FC<{ setActiveView: (view: ViewType) => void
                 const response = await ai.models.generateContent({
                     model: "gemini-3-flash-preview",
                     contents: `Scientific Study Objective: "${objective}"`,
-                    config: { 
+                    config: {
                         systemInstruction: "Suggest exactly 3-4 numerical factors and 1-2 responses for a high-precision DOE study. Output JSON only.",
+                        maxOutputTokens: 2048,
                         responseMimeType: "application/json",
                         responseSchema: {
                             type: Type.OBJECT,
@@ -286,12 +309,12 @@ const DesignOfExperimentView: React.FC<{ setActiveView: (view: ViewType) => void
                         }
                     }
                 });
-                return safeJSONParse(response.text);
+                return safeJSONParse(response.text());
             });
-            
-            setFactors(result.factors.map((f: any) => ({ 
-                ...f, 
-                id: Math.random().toString(), 
+
+            setFactors(result.factors.map((f: any) => ({
+                ...f,
+                id: Math.random().toString(),
                 type: 'Numerical',
                 low: Number(f.low),
                 high: Number(f.high)
@@ -308,7 +331,7 @@ const DesignOfExperimentView: React.FC<{ setActiveView: (view: ViewType) => void
         try {
             const numFactors = factors.length;
             const methodology = designType;
-            
+
             const coded = await callWithRetry(async () => {
                 const ai = new GoogleGenAI({ apiKey: process.env.API_KEY as string });
                 const response = await ai.models.generateContent({
@@ -316,8 +339,9 @@ const DesignOfExperimentView: React.FC<{ setActiveView: (view: ViewType) => void
                     contents: `Generate an accurate, industrially standard ${methodology} matrix for ${numFactors} factors: ${factors.map(f => f.name).join(', ')}. 
                     Factor High: +1, Low: -1, Axial: alpha (sqrt(k) for CCD).
                     Ensure standard run efficiency. Add 3-5 center points (0,0,...) for error estimation.`,
-                    config: { 
-                        systemInstruction: "You are a specialized statistical DOE engine (SAS JMP/Stat-Ease style). Generate accurate coded matrices. Output JSON ONLY.",
+                    config: {
+                        systemInstruction: "You are a specialized statistical DOE engine (SAS JMP/Stat-Ease style). Generate accurate coded matrices. Keep numeric values at 4 decimal places. Output JSON ONLY.",
+                        maxOutputTokens: 4096,
                         responseMimeType: "application/json",
                         responseSchema: {
                             type: Type.ARRAY,
@@ -335,9 +359,9 @@ const DesignOfExperimentView: React.FC<{ setActiveView: (view: ViewType) => void
                         }
                     }
                 });
-                return safeJSONParse(response.text);
+                return safeJSONParse(response.text());
             });
-            
+
             const actual = coded.map((row: any) => {
                 const mapped: Record<string, number> = {};
                 factors.forEach(f => {
@@ -370,8 +394,8 @@ const DesignOfExperimentView: React.FC<{ setActiveView: (view: ViewType) => void
 
                 Perform Stepwise Regression. Fit a Quadratic Model if curvature exists, otherwise Linear.
                 Provide explicit "fittingModelUsed" (e.g. "Response Surface Quadratic Model").`,
-                config: { 
-                    systemInstruction: "Senior Industrial Statistician. Provide precise ANOVA, R-Squared, and plot data. Output JSON ONLY.",
+                config: {
+                    systemInstruction: "Senior Statistician. Provide ANOVA and 6x6 plot grid. Keep numeric values at 4 decimal places. Output JSON ONLY.",
                     responseMimeType: "application/json",
                     responseSchema: {
                         type: Type.OBJECT,
@@ -402,8 +426,8 @@ const DesignOfExperimentView: React.FC<{ setActiveView: (view: ViewType) => void
                     }
                 }
             });
-            
-            const result = safeJSONParse(response.text);
+
+            const result = safeJSONParse(response.text());
             setAnalysis(result);
             setSelectedAnalysisKey(Object.keys(result.analyses || {})[0] || '');
             setActiveTab('Insight');
@@ -413,32 +437,32 @@ const DesignOfExperimentView: React.FC<{ setActiveView: (view: ViewType) => void
 
     const generateAllPlotImages = async (resAnalysis: ResponseAnalysis, predData: any): Promise<Record<PlotType, string>> => {
         const tempDiv = document.createElement('div');
-        tempDiv.style.width = '1200px'; 
-        tempDiv.style.height = '900px'; 
-        tempDiv.style.position = 'fixed'; 
+        tempDiv.style.width = '1200px';
+        tempDiv.style.height = '900px';
+        tempDiv.style.position = 'fixed';
         tempDiv.style.top = '0';
-        tempDiv.style.left = '-2000px'; 
+        tempDiv.style.left = '-2000px';
         tempDiv.style.backgroundColor = '#ffffff';
         document.body.appendChild(tempDiv);
-        
+
         const images: any = {};
         const plotTypes: PlotType[] = ['3D Surface', '2D Contour', 'Perturbation', 'Model Diagnostic'];
-        
+
         for (const type of plotTypes) {
             let data: any[] = [];
-            let layout: any = { 
-                margin: { l: 80, r: 80, b: 80, t: 100 }, 
-                font: { family: 'Plus Jakarta Sans', size: 16, color: '#000000' }, 
-                title: { text: `${resAnalysis.responseName} - ${type}`, font: { size: 24, weight: 'bold' } }, 
-                paper_bgcolor: '#ffffff', 
-                plot_bgcolor: '#ffffff' 
+            let layout: any = {
+                margin: { l: 80, r: 80, b: 80, t: 100 },
+                font: { family: 'Plus Jakarta Sans', size: 16, color: '#000000' },
+                title: { text: `${resAnalysis.responseName} - ${type}`, font: { size: 24, weight: 'bold' } },
+                paper_bgcolor: '#ffffff',
+                plot_bgcolor: '#ffffff'
             };
-            
+
             if (type === '3D Surface') {
                 data = [{ x: resAnalysis.plotData.x.values, y: resAnalysis.plotData.y.values, z: resAnalysis.plotData.z.values, type: 'surface', colorscale: 'Viridis', showscale: true }];
-                layout.scene = { 
-                    xaxis: { title: resAnalysis.plotData.x.name, font: { weight: 'bold' }, backgroundcolor: '#ffffff', showbackground: true }, 
-                    yaxis: { title: resAnalysis.plotData.y.name, font: { weight: 'bold' }, backgroundcolor: '#ffffff', showbackground: true }, 
+                layout.scene = {
+                    xaxis: { title: resAnalysis.plotData.x.name, font: { weight: 'bold' }, backgroundcolor: '#ffffff', showbackground: true },
+                    yaxis: { title: resAnalysis.plotData.y.name, font: { weight: 'bold' }, backgroundcolor: '#ffffff', showbackground: true },
                     zaxis: { title: 'Response', font: { weight: 'bold' }, backgroundcolor: '#ffffff', showbackground: true },
                     camera: { eye: { x: 1.6, y: 1.6, z: 1.1 } }
                 };
@@ -458,7 +482,7 @@ const DesignOfExperimentView: React.FC<{ setActiveView: (view: ViewType) => void
                 layout.xaxis = { title: 'Actual Values', font: { weight: 'bold' } };
                 layout.yaxis = { title: 'Predicted Values', font: { weight: 'bold' } };
             }
-            
+
             await Plotly.newPlot(tempDiv, data, layout);
             if (type === '3D Surface') await new Promise(r => setTimeout(r, 100));
             images[type] = await Plotly.toImage(tempDiv, { format: 'png', width: 1200, height: 900, scale: 3 });
@@ -482,11 +506,11 @@ const DesignOfExperimentView: React.FC<{ setActiveView: (view: ViewType) => void
             const headers = ["Run", ...factors.map(f => f.name), ...responses.map(r => r.name)];
             const colWidth = 170 / headers.length;
             headers.forEach((h, i) => doc.text(h, 20 + i * colWidth, y, { maxWidth: colWidth - 2 })); y += 6;
-            
+
             runMatrix.forEach((run, i) => {
-                doc.text(`${i+1}`, 20, y);
-                factors.forEach((f, fi) => doc.text(`${run.factors[f.name]}`, 20 + (fi+1) * colWidth, y));
-                responses.forEach((r, ri) => doc.text(`${run.responses[r.name] || '-'}`, 20 + (factors.length+ri+1) * colWidth, y));
+                doc.text(`${i + 1}`, 20, y);
+                factors.forEach((f, fi) => doc.text(`${run.factors[f.name]}`, 20 + (fi + 1) * colWidth, y));
+                responses.forEach((r, ri) => doc.text(`${run.responses[r.name] || '-'}`, 20 + (factors.length + ri + 1) * colWidth, y));
                 y += 4;
                 if (y > 275) { doc.addPage(); y = 20; }
             });
@@ -502,11 +526,11 @@ const DesignOfExperimentView: React.FC<{ setActiveView: (view: ViewType) => void
                 const plotPairs = [['3D Surface', '2D Contour'], ['Perturbation', 'Model Diagnostic']];
                 for (const pair of plotPairs) {
                     if (y > 220) { doc.addPage(); y = 20; }
-                    if (images[pair[0]]) doc.addImage(images[pair[0]], 'PNG', 20, y, 80, 60);
-                    if (images[pair[1]]) doc.addImage(images[pair[1]], 'PNG', 110, y, 80, 60);
+                    if (images[pair[0] as PlotType]) doc.addImage(images[pair[0] as PlotType], 'PNG', 20, y, 80, 60);
+                    if (images[pair[1] as PlotType]) doc.addImage(images[pair[1] as PlotType], 'PNG', 110, y, 80, 60);
                     y += 70;
                 }
-                
+
                 if (y > 220) { doc.addPage(); y = 20; }
                 doc.setFontSize(14).setTextColor(30).setFont("helvetica", "bold").text("ANOVA Data", 20, y); y += 8;
                 doc.setFontSize(7);
@@ -533,16 +557,16 @@ const DesignOfExperimentView: React.FC<{ setActiveView: (view: ViewType) => void
         setLoadingState('loading');
         try {
             const sections: any[] = [];
-            
-            const headerChildren = [
+
+            const headerChildren: (docx.Paragraph | docx.Table)[] = [
                 new docx.Paragraph({ children: [new docx.TextRun({ text: experimentName, bold: true, size: 48, color: "10B981" })], alignment: docx.AlignmentType.CENTER }),
                 new docx.Paragraph({ text: `Objective: ${objective}`, spacing: { before: 400, after: 400 } }),
                 new docx.Paragraph({ text: "Execution Matrix", heading: docx.HeadingLevel.HEADING_1 }),
             ];
 
             const executionRows = [
-                new docx.TableRow({ children: ["Run", ...factors.map(f => f.name), ...responses.map(r => r.name)].map(h => new docx.TableCell({ children: [new docx.Paragraph({ text: h, bold: true })] })) }),
-                ...runMatrix.map((run, i) => new docx.TableRow({ children: [`${i+1}`, ...factors.map(f => `${run.factors[f.name]}`), ...responses.map(r => `${run.responses[r.name] || 'N/A'}`)].map(v => new docx.TableCell({ children: [new docx.Paragraph({ text: v })] })) }))
+                new docx.TableRow({ children: ["Run", ...factors.map(f => f.name), ...responses.map(r => r.name)].map(h => new docx.TableCell({ children: [new docx.Paragraph({ children: [new docx.TextRun({ text: h, bold: true })] })] })) }),
+                ...runMatrix.map((run, i) => new docx.TableRow({ children: [`${i + 1}`, ...factors.map(f => `${run.factors[f.name]}`), ...responses.map(r => `${run.responses[r.name] || 'N/A'}`)].map(v => new docx.TableCell({ children: [new docx.Paragraph({ text: v })] })) }))
             ];
             headerChildren.push(new docx.Table({ rows: executionRows, width: { size: 100, type: docx.WidthType.PERCENTAGE } }));
             sections.push({ children: headerChildren });
@@ -550,25 +574,25 @@ const DesignOfExperimentView: React.FC<{ setActiveView: (view: ViewType) => void
             for (const [resName, resData] of Object.entries(analysis.analyses || {})) {
                 const responseChildren: any[] = [
                     new docx.Paragraph({ children: [new docx.TextRun({ text: `Analysis: ${resName}`, bold: true, size: 36, color: "10B981" })], pageBreakBefore: true }),
-                    new docx.Paragraph({ text: `Model: ${(resData as any).fittingModelUsed}`, bold: true }),
+                    new docx.Paragraph({ children: [new docx.TextRun({ text: `Model: ${(resData as any).fittingModelUsed}`, bold: true })] }),
                     new docx.Paragraph({ text: `Equation: ${(resData as any).equation}`, spacing: { after: 200 } }),
                 ];
-                
+
                 const images = await generateAllPlotImages(resData as any, analysis.predVsActualData);
                 for (const [type, img] of Object.entries(images)) {
-                    responseChildren.push(new docx.Paragraph({ text: `${type}:`, bold: true, spacing: { before: 300 } }));
+                    responseChildren.push(new docx.Paragraph({ children: [new docx.TextRun({ text: `${type}:`, bold: true })], spacing: { before: 300 } }));
                     responseChildren.push(new docx.Paragraph({ children: [new docx.ImageRun({ data: img.split(',')[1], transformation: { width: 500, height: 375 } })], alignment: docx.AlignmentType.CENTER }));
                 }
 
                 responseChildren.push(new docx.Paragraph({ text: "ANOVA Summary", heading: docx.HeadingLevel.HEADING_2, spacing: { before: 400 } }));
                 const anovaRows = [
-                    new docx.TableRow({ children: ["Source", "DF", "SS", "MS", "F", "p"].map(h => new docx.TableCell({ children: [new docx.Paragraph({ text: h, bold: true })] })) }),
+                    new docx.TableRow({ children: ["Source", "DF", "SS", "MS", "F", "p"].map(h => new docx.TableCell({ children: [new docx.Paragraph({ children: [new docx.TextRun({ text: h, bold: true })] })] })) }),
                     ...(resData as any).anovaTable.map((row: any) => new docx.TableRow({ children: [row.source, `${row.df}`, `${row.sumOfSquares.toFixed(3)}`, `${row.meanSquare.toFixed(3)}`, `${row.fValue?.toFixed(3) || '-'}`, `${row.pValue?.toFixed(4) || '-'}`].map(v => new docx.TableCell({ children: [new docx.Paragraph({ text: v })] })) }))
                 ];
                 responseChildren.push(new docx.Table({ rows: anovaRows, width: { size: 100, type: docx.WidthType.PERCENTAGE } }));
                 sections.push({ children: responseChildren });
             }
-            
+
             const doc = new docx.Document({ sections });
             const blob = await docx.Packer.toBlob(doc);
             const url = window.URL.createObjectURL(blob);
@@ -605,10 +629,10 @@ const DesignOfExperimentView: React.FC<{ setActiveView: (view: ViewType) => void
                                     <div className="bg-white p-10 rounded-[3rem] border border-slate-100 shadow-xl">
                                         <div className="mb-8">
                                             <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 block">Experiment Title</label>
-                                            <input 
-                                                value={experimentName} 
-                                                onChange={e => setExperimentName(e.target.value)} 
-                                                className="w-full bg-slate-50 px-8 py-5 rounded-2xl border-none focus:ring-2 focus:ring-emerald-500/20 text-slate-800 text-xl font-black" 
+                                            <input
+                                                value={experimentName}
+                                                onChange={e => setExperimentName(e.target.value)}
+                                                className="w-full bg-slate-50 px-8 py-5 rounded-2xl border-none focus:ring-2 focus:ring-emerald-500/20 text-slate-800 text-xl font-black"
                                             />
                                         </div>
                                         <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-6 block">Experimental Objective</label>
@@ -628,7 +652,7 @@ const DesignOfExperimentView: React.FC<{ setActiveView: (view: ViewType) => void
                                 </section>
                                 <section className="space-y-8">
                                     <div className="bg-white p-10 rounded-[3rem] border border-slate-100 shadow-xl">
-                                        <div className="flex justify-between items-center mb-8"><p className="text-[10px] font-black text-slate-900 uppercase tracking-widest">Input Parameters (X)</p><button onClick={() => setFactors([...factors, { id: Math.random().toString(), name: 'New Factor', unit: 'u', low: 0, high: 100, type: 'Numerical' }])} className="p-2.5 bg-emerald-50 text-emerald-600 rounded-xl hover:bg-emerald-100 transition-colors"><PlusIcon className="w-5 h-5"/></button></div>
+                                        <div className="flex justify-between items-center mb-8"><p className="text-[10px] font-black text-slate-900 uppercase tracking-widest">Input Parameters (X)</p><button onClick={() => setFactors([...factors, { id: Math.random().toString(), name: 'New Factor', unit: 'u', low: 0, high: 100, type: 'Numerical' }])} className="p-2.5 bg-emerald-50 text-emerald-600 rounded-xl hover:bg-emerald-100 transition-colors"><PlusIcon className="w-5 h-5" /></button></div>
                                         <div className="space-y-4">
                                             {factors.map((f, i) => (
                                                 <div key={f.id} className="bg-slate-50 p-4 rounded-3xl flex items-center gap-4 group">
@@ -639,14 +663,14 @@ const DesignOfExperimentView: React.FC<{ setActiveView: (view: ViewType) => void
                                                     <div className="flex gap-2 items-center">
                                                         <input type="number" value={f.low} onChange={e => { const nf = [...factors]; nf[i].low = +e.target.value; setFactors(nf); }} className="bg-white w-14 text-[10px] p-2 rounded-xl border border-slate-200 text-center font-black outline-none shadow-sm" />
                                                         <input type="number" value={f.high} onChange={e => { const nf = [...factors]; nf[i].high = +e.target.value; setFactors(nf); }} className="bg-white w-14 text-[10px] p-2 rounded-xl border border-slate-200 text-center font-black outline-none shadow-sm" />
-                                                        <button onClick={() => setFactors(factors.filter(it => it.id !== f.id))} className="p-2 text-slate-300 hover:text-red-500 opacity-0 group-hover:opacity-100"><TrashIcon className="w-4 h-4"/></button>
+                                                        <button onClick={() => setFactors(factors.filter(it => it.id !== f.id))} className="p-2 text-slate-300 hover:text-red-500 opacity-0 group-hover:opacity-100"><TrashIcon className="w-4 h-4" /></button>
                                                     </div>
                                                 </div>
                                             ))}
                                         </div>
                                     </div>
                                     <div className="bg-slate-900 p-10 rounded-[3rem] shadow-2xl">
-                                        <div className="flex justify-between items-center mb-8"><p className="text-[10px] font-black text-emerald-400 uppercase tracking-widest">Response Metrics (Y)</p><button onClick={() => setResponses([...responses, { id: Math.random().toString(), name: 'New Response', unit: '%', goal: 'Maximize' }])} className="p-2.5 bg-white/10 text-emerald-400 rounded-xl hover:bg-white/20 transition-colors"><PlusIcon className="w-5 h-5"/></button></div>
+                                        <div className="flex justify-between items-center mb-8"><p className="text-[10px] font-black text-emerald-400 uppercase tracking-widest">Response Metrics (Y)</p><button onClick={() => setResponses([...responses, { id: Math.random().toString(), name: 'New Response', unit: '%', goal: 'Maximize' }])} className="p-2.5 bg-white/10 text-emerald-400 rounded-xl hover:bg-white/20 transition-colors"><PlusIcon className="w-5 h-5" /></button></div>
                                         <div className="space-y-4">
                                             {responses.map((r, i) => (
                                                 <div key={r.id} className="bg-white/5 p-4 rounded-3xl flex items-center gap-4 group">
@@ -660,7 +684,7 @@ const DesignOfExperimentView: React.FC<{ setActiveView: (view: ViewType) => void
                                                             <option value="Minimize">Minimize</option>
                                                             <option value="Target">Target</option>
                                                         </select>
-                                                        <button onClick={() => setResponses(responses.filter(it => it.id !== r.id))} className="p-2 text-white/20 hover:text-red-400 opacity-0 group-hover:opacity-100"><TrashIcon className="w-4 h-4"/></button>
+                                                        <button onClick={() => setResponses(responses.filter(it => it.id !== r.id))} className="p-2 text-white/20 hover:text-red-400 opacity-0 group-hover:opacity-100"><TrashIcon className="w-4 h-4" /></button>
                                                     </div>
                                                 </div>
                                             ))}
@@ -683,7 +707,7 @@ const DesignOfExperimentView: React.FC<{ setActiveView: (view: ViewType) => void
                                     </div>
                                 </div>
                                 <div className="flex gap-4">
-                                    <button onClick={() => setRunMatrix(runMatrix.map(run => ({ ...run, responses: Object.fromEntries(responses.map(r => [r.name, Number((Math.random()*100).toFixed(2))])) })))} className="px-8 py-4 bg-slate-50 border border-slate-200 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-slate-100">Simulate Data</button>
+                                    <button onClick={() => setRunMatrix(runMatrix.map(run => ({ ...run, responses: Object.fromEntries(responses.map(r => [r.name, Number((Math.random() * 100).toFixed(2))])) })))} className="px-8 py-4 bg-slate-50 border border-slate-200 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-slate-100">Simulate Data</button>
                                     <button onClick={performAnalysis} className="px-12 py-4 bg-emerald-600 text-white rounded-2xl text-[10px] font-black uppercase tracking-widest shadow-xl hover:bg-emerald-700 transition-all">Analyze System</button>
                                 </div>
                             </div>
@@ -696,7 +720,7 @@ const DesignOfExperimentView: React.FC<{ setActiveView: (view: ViewType) => void
                                         <tbody>
                                             {runMatrix.map((run, i) => (
                                                 <tr key={i} className={`border-b border-slate-50 transition-colors ${duplicateRunsIndices.includes(i) ? 'bg-emerald-50/40' : 'hover:bg-slate-50/30'}`}>
-                                                    <td className="px-10 py-5 font-black text-slate-300 uppercase">RUN_{i+1}</td>
+                                                    <td className="px-10 py-5 font-black text-slate-300 uppercase">RUN_{i + 1}</td>
                                                     {factors.map(f => <td key={f.id} className="px-10 py-5 font-mono font-bold text-slate-600">{run.factors[f.name] ?? '-'}</td>)}
                                                     {responses.map(r => (
                                                         <td key={r.id} className="px-10 py-4 border-l border-slate-200/50">
@@ -721,8 +745,8 @@ const DesignOfExperimentView: React.FC<{ setActiveView: (view: ViewType) => void
                                             <div className="flex items-center justify-between mb-8">
                                                 <div className="flex flex-col gap-2">
                                                     <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest px-1">Active Metric Analysis</label>
-                                                    <select 
-                                                        value={selectedAnalysisKey} 
+                                                    <select
+                                                        value={selectedAnalysisKey}
                                                         onChange={(e) => setSelectedAnalysisKey(e.target.value)}
                                                         className="bg-slate-900 text-white rounded-2xl px-6 py-3.5 text-[11px] font-black uppercase shadow-xl hover:bg-black"
                                                     >
@@ -769,8 +793,8 @@ const DesignOfExperimentView: React.FC<{ setActiveView: (view: ViewType) => void
                                                             <tr key={idx} className={`hover:bg-slate-50/80 transition-colors group ${['model', 'total'].includes(row.source.toLowerCase()) ? 'bg-slate-50/40 font-black' : ''}`}>
                                                                 <td className={`px-8 py-5 font-black text-slate-900 group-hover:text-emerald-600 transition-colors`}>{row.source}</td>
                                                                 <td className="px-4 py-5 text-center font-bold text-slate-600">{row.df}</td>
-                                                                <td className="px-4 py-5 text-right font-mono text-slate-500">{row.sumOfSquares?.toLocaleString(undefined, {minimumFractionDigits: 3})}</td>
-                                                                <td className="px-4 py-5 text-right font-mono text-slate-500">{row.meanSquare?.toLocaleString(undefined, {minimumFractionDigits: 3})}</td>
+                                                                <td className="px-4 py-5 text-right font-mono text-slate-500">{row.sumOfSquares?.toLocaleString(undefined, { minimumFractionDigits: 3 })}</td>
+                                                                <td className="px-4 py-5 text-right font-mono text-slate-500">{row.meanSquare?.toLocaleString(undefined, { minimumFractionDigits: 3 })}</td>
                                                                 <td className="px-4 py-5 text-right font-mono text-emerald-600 font-black">{row.fValue ? row.fValue.toFixed(3) : '-'}</td>
                                                                 <td className={`px-8 py-5 text-right font-black ${row.pValue < 0.05 ? 'text-emerald-500' : 'text-slate-400'}`}>
                                                                     {row.pValue === undefined || row.pValue === null ? '-' : row.pValue < 0.0001 ? '< 0.0001' : row.pValue.toFixed(4)}
@@ -847,7 +871,7 @@ const DesignOfExperimentView: React.FC<{ setActiveView: (view: ViewType) => void
                         <motion.div initial={{ opacity: 0, scale: 0.98 }} animate={{ opacity: 1, scale: 1 }} className="max-w-5xl mx-auto py-16 space-y-20 pb-32">
                             <div className="text-center space-y-8"><div className="w-24 h-24 bg-emerald-500 rounded-[3rem] flex items-center justify-center text-white mx-auto shadow-2xl mb-10"><TargetIcon className="w-12 h-12" /></div><h3 className="text-6xl font-black uppercase tracking-tighter text-slate-900">Optimal Solution</h3></div>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-10">{Object.entries(analysis.optimizedParams || {}).map(([key, val], idx) => (
-                                <div key={key} className="bg-white p-14 rounded-[4.5rem] border border-slate-100 shadow-2xl hover:border-emerald-500 transition-all"><p className="text-[11px] font-black text-slate-300 uppercase mb-4">Set Point {idx+1}</p><h4 className="text-3xl font-black uppercase mb-10 text-slate-900 tracking-tight">{key}</h4><div className="flex items-end justify-between"><p className="text-8xl font-black tracking-tighter text-slate-900">{(val as number).toFixed(3)}</p><p className="text-sm font-black text-slate-400 mb-4 uppercase">{factors.find(f => f.name === key)?.unit || 'units'}</p></div></div>
+                                <div key={key} className="bg-white p-14 rounded-[4.5rem] border border-slate-100 shadow-2xl hover:border-emerald-500 transition-all"><p className="text-[11px] font-black text-slate-300 uppercase mb-4">Set Point {idx + 1}</p><h4 className="text-3xl font-black uppercase mb-10 text-slate-900 tracking-tight">{key}</h4><div className="flex items-end justify-between"><p className="text-8xl font-black tracking-tighter text-slate-900">{(val as number).toFixed(3)}</p><p className="text-sm font-black text-slate-400 mb-4 uppercase">{factors.find(f => f.name === key)?.unit || 'units'}</p></div></div>
                             ))}</div>
                             <div className="flex justify-center relative">
                                 <button onClick={() => setShowExportMenu(!showExportMenu)} className="px-20 py-8 bg-slate-900 text-white rounded-[2.5rem] text-[11px] font-black uppercase tracking-[0.5em] flex items-center gap-6 shadow-2xl hover:bg-black transition-all"><DownloadIcon className="w-7 h-7 text-emerald-400" /> Export Professional Dossier <ChevronDownIcon className={`w-5 h-5 transition-transform ${showExportMenu ? 'rotate-180' : ''}`} /></button>
@@ -871,18 +895,18 @@ const DesignOfExperimentView: React.FC<{ setActiveView: (view: ViewType) => void
             </main>
 
             <AnimatePresence>{loadingState === 'loading' && (
-                <motion.div initial={{opacity:0}} animate={{opacity:1}} exit={{opacity:0}} className="absolute inset-0 z-[60] bg-white/70 backdrop-blur-3xl flex flex-col items-center justify-center gap-12">
+                <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 z-[60] bg-white/70 backdrop-blur-3xl flex flex-col items-center justify-center gap-12">
                     <div className="w-28 h-28 border-[10px] border-slate-100 border-t-emerald-500 rounded-full animate-spin shadow-3xl shadow-emerald-500/10" />
                     <div className="text-center space-y-4"><p className="text-lg font-black text-slate-900 uppercase tracking-[1em] animate-pulse">Running Precision Matrix</p><p className="text-[11px] font-black text-slate-400 uppercase tracking-[0.5em]">Synthesizing Statistical Insights...</p></div>
                 </motion.div>
             )}</AnimatePresence>
-            
+
             {error && (
-                <motion.div initial={{y: 60, opacity: 0}} animate={{y: 0, opacity: 1}} className="fixed bottom-12 left-1/2 -translate-x-1/2 z-[70] bg-red-600 text-white px-10 py-6 rounded-[3rem] shadow-3xl flex flex-col items-center gap-5 border border-red-500 max-w-lg text-center">
+                <motion.div initial={{ y: 60, opacity: 0 }} animate={{ y: 0, opacity: 1 }} className="fixed bottom-12 left-1/2 -translate-x-1/2 z-[70] bg-red-600 text-white px-10 py-6 rounded-[3rem] shadow-3xl flex flex-col items-center gap-5 border border-red-500 max-w-lg text-center">
                     <div className="flex items-center gap-6">
                         <InfoIcon className="w-6 h-6 flex-shrink-0" />
                         <span className="text-[11px] font-black uppercase tracking-[0.2em]">{error}</span>
-                        <button onClick={() => setError(null)} className="p-2 hover:bg-white/20 rounded-full transition-colors"><XIcon className="w-6 h-6"/></button>
+                        <button onClick={() => setError(null)} className="p-2 hover:bg-white/20 rounded-full transition-colors"><XIcon className="w-6 h-6" /></button>
                     </div>
                 </motion.div>
             )}
