@@ -2,15 +2,11 @@ import React from 'react';
 import Navbar from '../components/landing/Navbar';
 import Hero from '../components/landing/Hero';
 import ProblemStatement from '../components/landing/ProblemStatement';
-import WhyDifferent from '../components/landing/WhyDifferent';
+import HowItWorks from '../components/landing/HowItWorks';
 import Features from '../components/landing/Features';
-import Validation from '../components/landing/Validation';
-import Workflow from '../components/landing/Workflow';
-import UseCases from '../components/landing/UseCases';
 import VisualizationShowcase from '../components/landing/VisualizationShowcase';
 import FounderStory from '../components/landing/FounderStory';
 import BetaProgram from '../components/landing/BetaProgram';
-import VideoSection from '../components/landing/VideoSection';
 import Pricing from '../components/landing/Pricing';
 import FAQ from '../components/landing/FAQ';
 import CTA from '../components/landing/CTA';
@@ -28,12 +24,12 @@ const LandingPage = () => {
             <Navbar />
             <main>
                 <Hero />
-                <VideoSection />
                 <ProblemStatement />
-                <WhyDifferent />
-                <Validation />
+                <HowItWorks />
+                <Features />
                 <VisualizationShowcase />
                 <Pricing />
+                <FounderStory />
                 <BetaProgram />
                 <FAQ />
                 <CTA />

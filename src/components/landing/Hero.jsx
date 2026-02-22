@@ -1,8 +1,8 @@
 import React, { useRef, Suspense, useState, useEffect } from 'react';
-import { motion, AnimatePresence, useScroll, useTransform, useSpring } from 'framer-motion';
+import { motion, useSpring } from 'framer-motion';
 import { Canvas } from '@react-three/fiber';
-import { Environment, Float, OrbitControls, ContactShadows } from '@react-three/drei';
-import { ArrowRight, Play, Sparkles, ChevronRight, Zap, CheckCircle } from 'lucide-react';
+import { Environment, Float, PerspectiveCamera } from '@react-three/drei';
+import { ArrowRight, Play, CheckCircle, Zap } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import FactorialCube from '../3d/FactorialCube';
 import ResponseSurface from '../3d/ResponseSurface';
@@ -178,15 +178,14 @@ const Hero = () => {
             >
                 <div className="w-[1px] h-12 bg-gradient-to-b from-primary-purple to-transparent" />
             </motion.div>
-        </section>
 
             {/* Micro-Data Status Bar */}
             <div className="absolute bottom-10 left-10 hidden xl:flex flex-col gap-4 opacity-40">
                 <div className="flex items-center gap-4">
-                    <div className="w-2 h-2 rounded-full bg-teal-400 animate-ping" />
-                    <span className="text-[10px] uppercase tracking-widest font-mono">Kernel Dynamic</span>
+                    <div className="w-2 h-2 rounded-full bg-accent-teal animate-ping" />
+                    <span className="text-[10px] uppercase tracking-widest font-mono text-slate-400">Kernel Dynamic</span>
                 </div>
-                <div className="h-[1px] w-40 bg-gradient-to-r from-emerald-500 to-transparent" />
+                <div className="h-[1px] w-40 bg-gradient-to-r from-primary-purple to-transparent" />
                 <div className="flex gap-1">
                     {[1, 2, 3, 4, 5, 6].map(i => (
                         <motion.div

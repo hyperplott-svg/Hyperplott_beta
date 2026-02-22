@@ -54,99 +54,81 @@ const Pricing = () => {
 
     return (
         <section id="pricing" className="py-40 bg-bg-primary relative overflow-hidden">
-            {/* Atmosphere */}
-            <div className="absolute top-[20%] left-[10%] w-[30%] h-[30%] bg-emerald-500/5 blur-[120px] pointer-events-none" />
-            <div className="absolute bottom-[20%] right-[10%] w-[30%] h-[30%] bg-emerald-500/5 blur-[120px] pointer-events-none" />
-
             <div className="container mx-auto px-6 max-w-7xl relative z-10">
                 <div className="text-center mb-32">
+                    <div className="section-badge">Pricing Plans</div>
+                    <h2 className="text-4xl md:text-6xl font-black text-slate-900 mb-8 tracking-tighter">
+                        Simple, <span className="text-gradient">Transparent Pricing.</span>
+                    </h2>
 
-
-                    <motion.h2
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        className="text-5xl md:text-7xl font-black text-white mb-10 tracking-tighter leading-[1.05]"
-                    >
-                        Simple, <span className="text-emerald-500">Transparent Pricing.</span>
-                    </motion.h2>
-
-                    <p className="text-xl md:text-2xl text-text-secondary max-w-3xl mx-auto font-medium opacity-80 mb-8">
-                        Start with a <span className="text-white font-bold">14-day FREE trial</span>. No credit card required.
+                    <p className="text-xl text-slate-500 max-w-2xl mx-auto font-medium mb-12">
+                        Start with a <span className="text-slate-900 font-bold">14-day FREE trial</span>. No credit card required.
                     </p>
-                    <p className="text-sm text-text-tertiary max-w-2xl mx-auto font-bold uppercase tracking-widest mb-16 px-6 py-3 bg-white/5 border border-white/5 rounded-2xl inline-block">
-                        🎁 Beta Launch: Join 100+ early adopters and lock in 50% discount forever.
-                    </p>
-
-                    {/* Toggle - Premium Dark Design */}
-                    <div className="flex items-center justify-center gap-6">
-                        <span className={`text-[11px] font-black tracking-[0.2em] transition-colors ${!annual ? 'text-white' : 'text-text-tertiary'}`}>MONTHLY</span>
+                    
+                    {/* Toggle */}
+                    <div className="flex items-center justify-center gap-6 mb-16">
+                        <span className={`text-[11px] font-black tracking-[0.2em] transition-colors ${!annual ? 'text-slate-900' : 'text-slate-400'}`}>MONTHLY</span>
                         <button
                             onClick={() => setAnnual(!annual)}
-                            className="w-16 h-8 rounded-full bg-white/10 p-1 relative transition-colors duration-500 hover:bg-white/20"
+                            className="w-16 h-8 rounded-full bg-slate-200 p-1 relative transition-colors duration-500"
                         >
                             <motion.div
                                 animate={{ x: annual ? 32 : 0 }}
-                                className="w-6 h-6 rounded-full bg-emerald-500 shadow-[0_0_10px_#10b981]"
+                                className="w-6 h-6 rounded-full bg-primary-purple shadow-lg"
                             />
                         </button>
-                        <span className={`text-[11px] font-black tracking-[0.2em] transition-colors ${annual ? 'text-white' : 'text-slate-500'}`}>ANNUAL</span>
-                        <div className="px-3 py-1 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[9px] font-black tracking-widest rounded-full">
-                            -20% SAVINGS
+                        <span className={`text-[11px] font-black tracking-[0.2em] transition-colors ${annual ? 'text-slate-900' : 'text-slate-400'}`}>ANNUAL</span>
+                        <div className="px-3 py-1 bg-primary-purple/10 border border-primary-purple/20 text-primary-purple text-[9px] font-black tracking-widest rounded-full">
+                            SAVE 20%
                         </div>
                     </div>
                 </div>
 
-                <div className="grid lg:grid-cols-3 gap-8 md:gap-12 items-center max-w-7xl mx-auto">
+                <div className="grid lg:grid-cols-3 gap-8 items-stretch max-w-6xl mx-auto">
                     {plans.map((plan, i) => (
                         <motion.div
                             key={i}
-                            initial={{ opacity: 0, y: 30 }}
+                            initial={{ opacity: 0, y: 20 }}
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
-                            transition={{ delay: i * 0.1, duration: 0.8, ease: "easeOut" }}
-                            className={`group relative p-12 rounded-[48px] border transition-all duration-700 flex flex-col h-full ${plan.popular
-                                ? 'bg-white/[0.04] border-emerald-500 shadow-glow scale-[1.05] z-10'
-                                : 'bg-white/[0.02] border-white/10 hover:border-emerald-500/30 hover:bg-white/[0.04]'
-                                }`}
+                            transition={{ delay: i * 0.1 }}
+                            className={`card-premium p-10 flex flex-col ${plan.popular ? 'ring-2 ring-primary-purple shadow-2xl scale-105 z-10' : ''}`}
                         >
                             {plan.popular && (
-                                <div className="absolute -top-6 left-1/2 -translate-x-1/2 px-6 py-2 bg-emerald-500 text-slate-950 text-[10px] font-black uppercase tracking-[0.3em] rounded-full shadow-2xl">
+                                <div className="absolute top-0 right-0 px-4 py-1 bg-primary-purple text-white text-[10px] font-black uppercase tracking-widest rounded-bl-xl">
                                     Recommended
                                 </div>
                             )}
 
                             <div className="mb-10">
-                                <span className="text-[10px] font-black uppercase tracking-[0.3em] text-text-tertiary mb-6 block group-hover:text-emerald-500 transition-colors">
+                                <span className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2 block">
                                     {plan.name}
                                 </span>
-                                <div className="flex items-baseline gap-2 mb-6">
-                                    <span className="text-6xl font-black text-white tracking-tight">
+                                <div className="flex items-baseline gap-1 mb-4">
+                                    <span className="text-5xl font-black text-slate-900 tracking-tight">
                                         {plan.price !== "Custom" ? `₹${plan.price}` : plan.price}
                                     </span>
-                                    {plan.price !== "Custom" && <span className="text-xl text-text-tertiary font-bold">/mo</span>}
+                                    {plan.price !== "Custom" && <span className="text-lg text-slate-400 font-bold">/mo</span>}
                                 </div>
-                                <p className="text-text-secondary text-lg font-medium leading-relaxed opacity-80">
+                                <p className="text-slate-500 font-medium">
                                     {plan.description}
                                 </p>
                             </div>
 
-                            <div className="space-y-5 mb-12 flex-grow">
+                            <div className="space-y-4 mb-10 flex-grow">
                                 {plan.features.map((feature, idx) => (
-                                    <div key={idx} className="flex items-center gap-4">
-                                        <div className="w-6 h-6 rounded-full bg-emerald-500/10 flex items-center justify-center border border-emerald-500/20">
-                                            <Check className="w-3.5 h-3.5 text-emerald-500 stroke-[4]" />
-                                        </div>
-                                        <span className="text-lg font-medium text-text-secondary group-hover:text-white transition-colors">{feature}</span>
+                                    <div key={idx} className="flex items-center gap-3">
+                                        <Check className="w-4 h-4 text-primary-purple stroke-[3]" />
+                                        <span className="text-slate-600 font-medium">{feature}</span>
                                     </div>
                                 ))}
                             </div>
 
-                            <button className={`w-full py-6 rounded-[24px] font-black text-xs uppercase tracking-[0.2em] flex items-center justify-center gap-3 transition-all duration-500 active:scale-95 ${plan.popular
-                                ? 'bg-emerald-500 text-slate-950 shadow-xl shadow-emerald-500/20'
-                                : 'bg-white/5 border border-white/10 text-white hover:bg-white/10'
+                            <button className={`w-full py-4 rounded-xl font-black text-xs uppercase tracking-widest transition-all ${plan.popular
+                                ? 'bg-primary-purple text-white shadow-lg hover:shadow-primary-purple/30'
+                                : 'bg-slate-100 text-slate-900 hover:bg-slate-200'
                                 }`}>
-                                {plan.cta} <ArrowRight className="w-5 h-5" />
+                                {plan.cta}
                             </button>
                         </motion.div>
                     ))}

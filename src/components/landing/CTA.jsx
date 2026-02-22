@@ -4,25 +4,15 @@ import { Play, Zap, ArrowRight } from 'lucide-react';
 
 const CTA = () => {
     return (
-        <section className="py-40 relative overflow-hidden flex items-center justify-center bg-bg-primary">
-            {/* Background Texture & Glows */}
-            <div className="absolute inset-0 z-0">
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] bg-[radial-gradient(circle_at_center,rgba(16,185,129,0.1)_0%,transparent_70%)]" />
-                <div className="absolute bottom-[-20%] left-[-10%] w-[60%] h-[60%] bg-emerald-500/20 blur-[120px] rounded-full" />
-                <div className="absolute top-[-20%] right-[-10%] w-[60%] h-[60%] bg-teal-500/10 blur-[120px] rounded-full" />
-            </div>
-
+        <section className="py-40 relative overflow-hidden flex items-center justify-center bg-bg-dark">
             <div className="container mx-auto px-6 max-w-5xl relative z-10 text-center">
-                {/* Visual Anchor */}
-
-
                 <motion.h2
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
-                    className="text-5xl md:text-7xl font-black text-white mb-10 tracking-tighter leading-[1.05]"
+                    className="text-4xl md:text-6xl font-black text-white mb-8 tracking-tighter"
                 >
-                    Ready to Design <br /> Better <span className="text-emerald-500">Experiments?</span>
+                    Ready to Design <br /> Better <span className="text-gradient">Experiments?</span>
                 </motion.h2>
 
                 <motion.p
@@ -30,9 +20,9 @@ const CTA = () => {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ delay: 0.2 }}
-                    className="text-xl md:text-2xl text-text-secondary mb-16 font-medium max-w-3xl mx-auto leading-relaxed opacity-80"
+                    className="text-xl text-slate-400 mb-12 font-medium max-w-2xl mx-auto leading-relaxed"
                 >
-                    Join researchers who are tired of expensive, complicated DoE software.
+                    Join researchers who are tired of expensive, complicated DoE software. 
                     Start your free trial today.
                 </motion.p>
 
@@ -41,19 +31,16 @@ const CTA = () => {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ delay: 0.4 }}
-                    className="flex flex-col sm:flex-row items-center justify-center gap-6 mb-16"
+                    className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16"
                 >
-                    <button className="group relative w-full sm:w-auto px-14 py-6 rounded-2xl bg-emerald-500 text-slate-950 text-xl font-black uppercase tracking-widest overflow-hidden shadow-2xl shadow-emerald-500/20 transition-all hover:-translate-y-1 active:scale-95">
-                        <span className="relative z-10 flex items-center gap-3">
-                            Start Free Trial
-                            <ArrowRight className="w-6 h-6 group-hover:translate-x-2 transition-transform" />
-                        </span>
-                        <div className="absolute inset-0 bg-white opacity-0 group-hover:opacity-20 transition-opacity" />
-                    </button>
+                    <Link to="/signup" className="btn-primary w-full sm:w-auto px-12 py-5 text-xl">
+                        Start Free Trial
+                        <ArrowRight className="w-6 h-6" />
+                    </Link>
 
-                    <button className="w-full sm:w-auto px-12 py-6 rounded-2xl bg-white/5 border border-white/10 text-white text-xl font-black uppercase tracking-widest hover:bg-white/10 transition-all backdrop-blur-md flex items-center justify-center gap-3 group">
-                        <div className="w-8 h-8 rounded-full bg-emerald-500/20 flex items-center justify-center group-hover:scale-110 transition-transform">
-                            <Play className="w-4 h-4 text-emerald-400 fill-current" />
+                    <button className="btn-secondary w-full sm:w-auto px-12 py-5 text-xl !bg-white/5 !text-white !border-white/10 hover:!bg-white/10 transition-all backdrop-blur-md flex items-center justify-center gap-3 group">
+                        <div className="w-8 h-8 rounded-full bg-primary-purple/20 flex items-center justify-center group-hover:scale-110 transition-transform">
+                            <Play className="w-4 h-4 text-primary-purple fill-current" />
                         </div>
                         Watch Demo
                     </button>
@@ -64,20 +51,11 @@ const CTA = () => {
                     whileInView={{ opacity: 1 }}
                     viewport={{ once: true }}
                     transition={{ delay: 0.6 }}
-                    className="flex flex-wrap items-center justify-center gap-10 text-text-tertiary text-[10px] font-black uppercase tracking-[0.4em]"
+                    className="flex flex-wrap items-center justify-center gap-8 text-slate-500 text-[10px] font-black uppercase tracking-widest"
                 >
-                    <div className="flex items-center gap-2">
-                        <div className="w-1 h-1 rounded-full bg-accent-teal" /> No Credit Card Required
-                    </div>
-                    <div className="flex items-center gap-2">
-                        <div className="w-1 h-1 rounded-full bg-accent-teal" /> 14-day Free Trial
-                    </div>
-                    <div className="flex items-center gap-2">
-                        <div className="w-1 h-1 rounded-full bg-accent-teal" /> Cancel Anytime
-                    </div>
-                    <div className="flex items-center gap-2">
-                        <div className="w-1 h-1 rounded-full bg-accent-teal" /> Setup in 5 Minutes
-                    </div>
+                    <span>✓ No Credit Card Required</span>
+                    <span>✓ 14-day Free Trial</span>
+                    <span>✓ Cancel Anytime</span>
                 </motion.div>
             </div>
         </section>
