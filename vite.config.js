@@ -19,7 +19,7 @@ export default defineConfig(({ mode }) => {
       },
     },
     define: {
-      'process.env.API_KEY': JSON.stringify(env.VITE_GEMINI_API_KEY)
+      'process.env.API_KEY': JSON.stringify(env.VITE_GEMINI_API_KEY || env.GOOGLE_API_KEY)
     },
     server: {
       host: '0.0.0.0',

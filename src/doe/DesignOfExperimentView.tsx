@@ -270,8 +270,8 @@ const DesignOfExperimentView: React.FC<{ setActiveView: (view: ViewType) => void
         setIsSuggesting(true);
         setError(null);
         try {
-            const apiKey = (import.meta as any).env.VITE_GEMINI_API_KEY;
-            if (!apiKey) throw new Error("API Key (VITE_GEMINI_API_KEY) is missing. Please configure it in your environment variables.");
+            const apiKey = (import.meta as any).env.VITE_GEMINI_API_KEY || (import.meta as any).env.VITE_GOOGLE_API_KEY;
+            if (!apiKey) throw new Error("API Key is missing. Please configure VITE_GEMINI_API_KEY or GOOGLE_API_KEY in your environment variables.");
 
             const result = await callWithRetry(async () => {
                 const ai = new GoogleGenAI({ apiKey: apiKey as string });
@@ -335,8 +335,8 @@ const DesignOfExperimentView: React.FC<{ setActiveView: (view: ViewType) => void
         setLoadingState('loading');
         setError(null);
         try {
-            const apiKey = (import.meta as any).env.VITE_GEMINI_API_KEY;
-            if (!apiKey) throw new Error("API Key (VITE_GEMINI_API_KEY) is missing. Please configure it in your environment variables.");
+            const apiKey = (import.meta as any).env.VITE_GEMINI_API_KEY || (import.meta as any).env.VITE_GOOGLE_API_KEY;
+            if (!apiKey) throw new Error("API Key is missing. Please configure VITE_GEMINI_API_KEY or GOOGLE_API_KEY in your environment variables.");
 
             const numFactors = factors.length;
             const methodology = designType;
@@ -399,8 +399,8 @@ const DesignOfExperimentView: React.FC<{ setActiveView: (view: ViewType) => void
         setLoadingState('loading');
         setError(null);
         try {
-            const apiKey = (import.meta as any).env.VITE_GEMINI_API_KEY;
-            if (!apiKey) throw new Error("API Key (VITE_GEMINI_API_KEY) is missing. Please configure it in your environment variables.");
+            const apiKey = (import.meta as any).env.VITE_GEMINI_API_KEY || (import.meta as any).env.VITE_GOOGLE_API_KEY;
+            if (!apiKey) throw new Error("API Key is missing. Please configure VITE_GEMINI_API_KEY or GOOGLE_API_KEY in your environment variables.");
 
             const result = await callWithRetry(async () => {
                 const ai = new GoogleGenAI({ apiKey: apiKey as string });
