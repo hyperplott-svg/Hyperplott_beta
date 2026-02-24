@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Play, Zap, ArrowRight } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const CTA = () => {
     return (
@@ -22,7 +23,7 @@ const CTA = () => {
                     transition={{ delay: 0.2 }}
                     className="text-xl text-slate-400 mb-12 font-medium max-w-2xl mx-auto leading-relaxed"
                 >
-                    Join researchers who are tired of expensive, complicated DoE software. 
+                    Join researchers who are tired of expensive, complicated DoE software.
                     Start your free trial today.
                 </motion.p>
 
@@ -33,8 +34,8 @@ const CTA = () => {
                     transition={{ delay: 0.4 }}
                     className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16"
                 >
-                    <Link to="/signup" className="btn-primary w-full sm:w-auto px-12 py-5 text-xl">
-                        Start Free Trial
+                    <Link to="/login" className="btn-primary w-full sm:w-auto px-12 py-5 text-xl">
+                        Enter Lab
                         <ArrowRight className="w-6 h-6" />
                     </Link>
 
@@ -53,9 +54,9 @@ const CTA = () => {
                     transition={{ delay: 0.6 }}
                     className="flex flex-wrap items-center justify-center gap-8 text-slate-500 text-[10px] font-black uppercase tracking-widest"
                 >
-                    <span>✓ No Credit Card Required</span>
-                    <span>✓ 14-day Free Trial</span>
-                    <span>✓ Cancel Anytime</span>
+                    <span>✓ Public Beta Access</span>
+                    <span>✓ No Registration Required</span>
+                    <span>✓ Instant Optimization</span>
                 </motion.div>
             </div>
         </section>

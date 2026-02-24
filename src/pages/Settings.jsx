@@ -62,7 +62,7 @@ const Settings = () => {
                             className={clsx(
                                 "w-full flex items-center gap-4 px-6 py-4 rounded-2xl text-sm font-black transition-all",
                                 activeTab === item.id
-                                    ? "bg-primary text-white shadow-xl shadow-primary/20"
+                                    ? "bg-primary-purple text-white shadow-xl shadow-primary-purple/20"
                                     : "text-slate-400 hover:text-slate-600 hover:bg-slate-50"
                             )}
                         >
@@ -79,7 +79,7 @@ const Settings = () => {
                                 <span className="text-[10px] font-bold text-slate-400">458 / 1024 Plots</span>
                             </div>
                             <div className="w-full h-1.5 bg-slate-200 rounded-full overflow-hidden">
-                                <motion.div initial={{ width: 0 }} animate={{ width: '45%' }} className="h-full bg-primary" />
+                                <motion.div initial={{ width: 0 }} animate={{ width: '45%' }} className="h-full bg-primary-purple" />
                             </div>
                         </div>
                     </div>
@@ -99,7 +99,7 @@ const Settings = () => {
                                             <div className="w-32 h-32 rounded-[2.5rem] bg-slate-100 overflow-hidden border-4 border-white shadow-2xl">
                                                 <img src="https://i.pravatar.cc/150?img=12" alt="Profile" className="w-full h-full object-cover" />
                                             </div>
-                                            <button className="absolute -bottom-2 -right-2 p-3 bg-primary text-white rounded-2xl shadow-xl shadow-primary/30 group-hover/avatar:scale-110 transition-transform">
+                                            <button className="absolute -bottom-2 -right-2 p-3 bg-primary-purple text-white rounded-2xl shadow-xl shadow-primary-purple/30 group-hover/avatar:scale-110 transition-transform">
                                                 <Camera className="w-5 h-5" />
                                             </button>
                                         </div>
@@ -162,16 +162,16 @@ const Settings = () => {
                                         </div>
                                     </div>
                                 </Card>
-                                <Card className="p-10 bg-slate-900 text-white border-none rounded-[2.5rem] relative overflow-hidden group">
-                                    <div className="absolute inset-0 bg-gradient-to-r from-primary/20 to-transparent pointer-events-none" />
+                                <Card className="p-10 bg-white border border-slate-100 rounded-[2.5rem] relative overflow-hidden group shadow-lg">
+                                    <div className="absolute inset-0 bg-gradient-to-r from-primary-purple/5 to-transparent pointer-events-none" />
                                     <div className="relative z-10 flex items-center justify-between gap-10">
                                         <div>
-                                            <Badge variant="white" className="mb-4 bg-white/10 border-white/20">Pro Capability</Badge>
-                                            <h4 className="text-xl font-black mb-2">Automated Peer Review</h4>
-                                            <p className="text-slate-400 text-sm leading-relaxed max-w-sm">Enable AI-driven validation of all experimental matrices before institutional commit.</p>
+                                            <Badge variant="primary" className="mb-4 bg-primary-purple/10 text-primary-purple border-primary-purple/20">Pro Capability</Badge>
+                                            <h4 className="text-xl font-black mb-2 text-slate-900">Automated Peer Review</h4>
+                                            <p className="text-slate-500 text-sm leading-relaxed max-w-sm">Enable AI-driven validation of all experimental matrices before institutional commit.</p>
                                         </div>
-                                        <div className="w-16 h-8 bg-slate-800 rounded-full relative p-1 cursor-pointer">
-                                            <motion.div initial={{ x: 0 }} animate={{ x: 32 }} className="w-6 h-6 bg-primary rounded-full shadow-lg" />
+                                        <div className="w-12 h-8 bg-slate-100 rounded-full relative p-1 cursor-pointer">
+                                            <motion.div initial={{ x: 0 }} animate={{ x: 32 }} className="w-6 h-6 bg-primary-purple rounded-full shadow-lg" />
                                         </div>
                                     </div>
                                 </Card>
@@ -199,7 +199,7 @@ const Settings = () => {
                                                         <p className="text-[10px] font-medium text-slate-500 mt-1">{n.desc}</p>
                                                     </div>
                                                 </div>
-                                                <div className={clsx("w-12 h-6 rounded-full relative p-1 cursor-pointer transition-colors", n.active ? "bg-primary" : "bg-slate-300")}>
+                                                <div className={clsx("w-12 h-6 rounded-full relative p-1 cursor-pointer transition-colors", n.active ? "bg-primary-purple" : "bg-slate-200")}>
                                                     <div className={clsx("w-4 h-4 bg-white rounded-full shadow-lg transition-transform", n.active ? "translate-x-6" : "translate-x-0")} />
                                                 </div>
                                             </div>
@@ -240,14 +240,14 @@ const Settings = () => {
                         {activeTab === 'billing' && (
                             <motion.div key="billing" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
                                 <Card className="p-0 border-none shadow-xl bg-white overflow-hidden rounded-[2.5rem]">
-                                    <div className="p-12 bg-gradient-to-br from-slate-900 to-slate-800 text-white border-none relative overflow-hidden group">
-                                        <div className="absolute top-0 right-0 p-12 opacity-5 scale-150 group-hover:rotate-12 transition-transform duration-1000"><CreditCard className="w-48 h-48" /></div>
-                                        <Badge variant="white" className="mb-6 bg-white/10 border-white/20">Active Subscription</Badge>
+                                    <div className="p-12 bg-white border-b border-slate-100 text-slate-900 border-none relative overflow-hidden group">
+                                        <div className="absolute top-0 right-0 p-12 opacity-[0.03] scale-150 group-hover:rotate-12 transition-transform duration-1000"><CreditCard className="w-48 h-48" /></div>
+                                        <Badge variant="primary" className="mb-6 bg-primary-purple/10 text-primary-purple border-primary-purple/20">Active Subscription</Badge>
                                         <h3 className="text-4xl font-black mb-4 tracking-tight">Professional Institutional</h3>
-                                        <p className="text-slate-400 font-medium mb-10 leading-relaxed max-w-sm">Your license covers unlimited matrices and up to 5 institutional collaborators.</p>
+                                        <p className="text-slate-500 font-medium mb-10 leading-relaxed max-w-sm">Your license covers unlimited matrices and up to 5 institutional collaborators.</p>
                                         <div className="flex items-center gap-4">
-                                            <Button className="bg-white text-slate-900 font-black px-8">Manage Billing</Button>
-                                            <Button variant="ghost" className="text-white border-white/20">View Ledger</Button>
+                                            <Button className="bg-primary-purple text-white font-black px-8">Manage Billing</Button>
+                                            <Button variant="secondary" className="border-slate-100">View Ledger</Button>
                                         </div>
                                     </div>
                                     <div className="p-12">

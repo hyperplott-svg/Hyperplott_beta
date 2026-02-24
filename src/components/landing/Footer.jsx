@@ -40,15 +40,16 @@ const Footer = () => {
                             {['Matrix Generation', '3D Optimization', 'Statistical Engine'].map(item => (
                                 <li key={item}><a href="#" className="text-slate-400 hover:text-primary-purple transition-colors text-base font-medium">{item}</a></li>
                             ))}
+                            <li><Link to="/pricing" className="text-slate-400 hover:text-primary-purple transition-colors text-base font-medium">Pricing</Link></li>
                         </ul>
                     </div>
 
                     <div>
                         <h4 className="text-[11px] font-black uppercase tracking-[0.4em] text-slate-500 mb-10">Company</h4>
                         <ul className="space-y-5">
-                            {['About Us', 'Founder Story', 'Beta Program'].map(item => (
-                                <li key={item}><a href="#" className="text-slate-400 hover:text-primary-purple transition-colors text-base font-medium">{item}</a></li>
-                            ))}
+                            <li><Link to="/about" className="text-slate-400 hover:text-primary-purple transition-colors text-base font-medium">About Us</Link></li>
+                            <li><Link to="/about" className="text-slate-400 hover:text-primary-purple transition-colors text-base font-medium">Founder Story</Link></li>
+                            <li><a href="/#beta" className="text-slate-400 hover:text-primary-purple transition-colors text-base font-medium">Beta Program</a></li>
                         </ul>
                     </div>
 

@@ -7,11 +7,12 @@ import CreateDesign from './pages/CreateDesign';
 import DesignViewer from './pages/DesignViewer';
 import Settings from './pages/Settings';
 import LoginPage from './pages/LoginPage';
-import SignupPage from './pages/SignupPage';
 import MainLayout from './components/layout/MainLayout';
 import DOEToolPage from './pages/DOEToolPage';
 import PrivacyPolicy from './pages/PrivacyPolicy';
 import TermsAndConditions from './pages/TermsAndConditions';
+import AboutPage from './pages/AboutPage';
+import PricingPage from './pages/PricingPage';
 
 const ProtectedRoute = ({ children }) => {
   const { user, loading } = useAuth();
@@ -40,7 +41,8 @@ const PublicRoute = ({ children }) => {
 // Simple redirection logic for root and catch-all
 const RootRedirect = () => {
   const { user, loading } = useAuth();
-  if (loading) return null;
+  // Show landing page while loading to avoid blank screen
+  if (loading) return <LandingPage />;
   return user ? <Navigate to="/dashboard" replace /> : <LandingPage />;
 };
 
@@ -53,9 +55,10 @@ function App() {
             {/* Public Routes */}
             <Route path="/" element={<RootRedirect />} />
             <Route path="/login" element={<PublicRoute><LoginPage /></PublicRoute>} />
-            <Route path="/signup" element={<PublicRoute><SignupPage /></PublicRoute>} />
             <Route path="/privacy" element={<PrivacyPolicy />} />
             <Route path="/terms" element={<TermsAndConditions />} />
+            <Route path="/about" element={<AboutPage />} />
+            <Route path="/pricing" element={<PricingPage />} />
 
             {/* Private Routes */}
             <Route path="/dashboard" element={<ProtectedRoute><MainLayout><DashboardPage /></MainLayout></ProtectedRoute>} />

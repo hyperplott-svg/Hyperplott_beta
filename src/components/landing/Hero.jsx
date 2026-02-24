@@ -1,15 +1,18 @@
 import React, { useRef, Suspense, useState, useEffect } from 'react';
-import { motion, useSpring } from 'framer-motion';
+import { motion, useSpring, AnimatePresence } from 'framer-motion';
 import { Canvas } from '@react-three/fiber';
 import { Environment, Float, PerspectiveCamera } from '@react-three/drei';
-import { ArrowRight, Play, CheckCircle, Zap } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { ArrowRight, Play, CheckCircle, Zap, X } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext';
 import FactorialCube from '../3d/FactorialCube';
 import ResponseSurface from '../3d/ResponseSurface';
 import FloatingParticles from '../3d/FloatingParticles';
 import ThreeErrorBoundary from '../common/ThreeErrorBoundary';
 
-const Hero = () => {
+const Hero = ({ showBanner, setShowBanner }) => {
+    const navigate = useNavigate();
+    const { loginDemo } = useAuth();
     const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
 
     useEffect(() => {
@@ -33,13 +36,30 @@ const Hero = () => {
     return (
         <section className="relative min-h-screen flex flex-col items-center justify-center pt-48 pb-20 overflow-hidden bg-bg-primary">
             {/* Beta Banner */}
-            <div className="fixed top-0 left-0 w-full z-[100] py-2 bg-gradient-to-r from-primary-purple to-primary text-white shadow-lg backdrop-blur-md">
-                <div className="container mx-auto px-6 text-center">
-                    <p className="text-xs md:text-sm font-bold tracking-wide">
-                        🚀 <span className="animate-pulse">Now in Beta</span> — First 100 users get <span className="underline decoration-accent-teal decoration-2">50% off forever</span>
-                    </p>
-                </div>
-            </div>
+            <AnimatePresence>
+                {showBanner && (
+                    <motion.div
+                        initial={{ y: -50, opacity: 0 }}
+                        animate={{ y: 0, opacity: 1 }}
+                        exit={{ y: -50, opacity: 0 }}
+                        transition={{ duration: 0.4, ease: "circOut" }}
+                        className="fixed top-0 left-0 w-full z-[110] py-2 bg-gradient-to-r from-primary-purple to-primary text-white shadow-lg backdrop-blur-md"
+                    >
+                        <div className="container mx-auto px-6 relative flex items-center justify-center">
+                            <p className="text-xs md:text-sm font-bold tracking-wide">
+                                🚀 <span className="animate-pulse">Now in Beta</span> — First 100 users get <span className="underline decoration-accent-teal decoration-2">50% off forever</span>
+                            </p>
+                            <button
+                                onClick={() => setShowBanner(false)}
+                                className="absolute right-4 p-1 hover:bg-white/20 rounded-lg transition-all group"
+                                aria-label="Close banner"
+                            >
+                                <X className="w-4 h-4 group-hover:scale-110 group-active:scale-90" />
+                            </button>
+                        </div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
 
             {/* Ambient Background Glows */}
             <div className="absolute inset-0 z-0 pointer-events-none">
@@ -112,40 +132,43 @@ const Hero = () => {
                         transition={{ delay: 0.2, duration: 0.8 }}
                         className="text-xl md:text-2xl text-slate-600 max-w-3xl mb-12 leading-relaxed font-medium"
                     >
-                        Join researchers who are tired of expensive, complicated DoE software. 
+                        Join researchers who are tired of expensive, complicated DoE software.
                         Optimize complex designs with statistical precision in minutes.
                     </motion.p>
 
                     {/* High-Impact Actions */}
-                    <motion.div
-                        initial={{ opacity: 0, y: 30 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.4 }}
-                        className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full max-w-2xl mb-16"
-                    >
-                        <Link to="/signup" className="btn-primary w-full sm:w-auto px-12 py-5 text-xl">
-                            Start Free Trial
-                            <ArrowRight className="w-6 h-6" />
-                        </Link>
+                    <div className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full max-w-2xl mb-16">
+                        <button
+                            onClick={() => {
+                                loginDemo();
+                                navigate('/dashboard');
+                            }}
+                            className="btn-primary w-full sm:w-auto px-12 py-5 text-xl relative group overflow-hidden"
+                        >
+                            <span className="relative z-10 flex items-center gap-2">
+                                Enter Laboratory <ArrowRight className="w-6 h-6 group-hover:translate-x-1 transition-transform" />
+                            </span>
+                            <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity" />
+                        </button>
 
-                        <button className="btn-secondary w-full sm:w-auto px-12 py-5 text-xl flex items-center justify-center gap-3 group">
+                        <button className="btn-secondary w-full sm:w-auto px-12 py-5 text-xl flex items-center justify-center gap-3 group !bg-white/5 !border-white/10 hover:!bg-white/20 transition-all">
                             <div className="w-8 h-8 rounded-full bg-primary-purple/10 flex items-center justify-center group-hover:scale-110 transition-transform">
                                 <Play className="w-4 h-4 text-primary-purple fill-current" />
                             </div>
                             Watch Demo
                         </button>
-                    </motion.div>
+                    </div>
 
                     {/* Trust Signals */}
                     <motion.div
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         transition={{ delay: 0.6 }}
-                        className="flex flex-wrap justify-center gap-x-8 gap-y-4 text-slate-400 text-xs font-bold uppercase tracking-widest"
+                        className="flex flex-wrap justify-center gap-x-8 gap-y-4 text-slate-400 text-[10px] font-black uppercase tracking-[0.3em]"
                     >
-                        <span>✓ No credit card required</span>
-                        <span>✓ 14-day free trial</span>
-                        <span>✓ Cancel anytime</span>
+                        <span>✓ Public Beta Live</span>
+                        <span>✓ Instant Guest Access</span>
+                        <span>✓ Zero Configuration</span>
                     </motion.div>
 
                     {/* Trust Indicators */}

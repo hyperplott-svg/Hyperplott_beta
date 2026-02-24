@@ -152,7 +152,7 @@ const PlotViewer: React.FC<{
     );
 });
 
-const DesignOfExperimentView: React.FC<{ setActiveView: (view: ViewType) => void }> = () => {
+const DesignOfExperimentView: React.FC<{ setActiveView: (view: ViewType) => void }> = ({ setActiveView }) => {
     const [activeTab, setActiveTab] = useState<DoETab>('Dimension');
     const [activePlot, setActivePlot] = useState<PlotType>('3D Surface');
     const [experimentName, setExperimentName] = useState('New Optimization Project');
@@ -174,6 +174,56 @@ const DesignOfExperimentView: React.FC<{ setActiveView: (view: ViewType) => void
     const [error, setError] = useState<string | null>(null);
     const [showExportMenu, setShowExportMenu] = useState(false);
     const [copiedAnova, setCopiedAnova] = useState(false);
+    const [isDemoAutoRunning, setIsDemoAutoRunning] = useState(false);
+
+    const loadDemo = useCallback(() => {
+        setExperimentName("Nanoparticle Synthesis Optimization");
+        setObjective("Seeking to optimize the Yield (%) and minimize the Particle Size (nm) of gold nanoparticles by adjusting pH and Citrate Ratio. This is a standard Response Surface Methodology study.");
+        setDesignType('Central Composite Design (CCD)');
+
+        const demoFactors: DoEFactor[] = [
+            { id: 'df1', name: 'pH Level', unit: 'pH', low: 6.5, high: 8.5, type: 'Numerical' },
+            { id: 'df2', name: 'Citrate Ratio', unit: 'ratio', low: 2.0, high: 6.0, type: 'Numerical' }
+        ];
+        setFactors(demoFactors);
+
+        const demoResponses: DoEResponse[] = [
+            { id: 'dr1', name: 'Yield', unit: '%', goal: 'Maximize' },
+            { id: 'dr2', name: 'Size', unit: 'nm', goal: 'Minimize' }
+        ];
+        setResponses(demoResponses);
+
+        const demoMatrix: DoERun[] = [
+            { factors: { "pH Level": 6.5, "Citrate Ratio": 2.0 }, responses: { "Yield": 65.4, "Size": 45.2 } },
+            { factors: { "pH Level": 8.5, "Citrate Ratio": 2.0 }, responses: { "Yield": 72.1, "Size": 48.5 } },
+            { factors: { "pH Level": 6.5, "Citrate Ratio": 6.0 }, responses: { "Yield": 88.5, "Size": 22.1 } },
+            { factors: { "pH Level": 8.5, "Citrate Ratio": 6.0 }, responses: { "Yield": 94.2, "Size": 18.4 } },
+            { factors: { "pH Level": 6.08, "Citrate Ratio": 4.0 }, responses: { "Yield": 58.2, "Size": 52.1 } },
+            { factors: { "pH Level": 8.91, "Citrate Ratio": 4.0 }, responses: { "Yield": 78.5, "Size": 38.2 } },
+            { factors: { "pH Level": 7.5, "Citrate Ratio": 1.17 }, responses: { "Yield": 45.1, "Size": 62.4 } },
+            { factors: { "pH Level": 7.5, "Citrate Ratio": 6.83 }, responses: { "Yield": 98.2, "Size": 12.5 } },
+            { factors: { "pH Level": 7.5, "Citrate Ratio": 4.0 }, responses: { "Yield": 82.1, "Size": 28.4 } },
+            { factors: { "pH Level": 7.5, "Citrate Ratio": 4.0 }, responses: { "Yield": 81.5, "Size": 29.1 } },
+            { factors: { "pH Level": 7.5, "Citrate Ratio": 4.0 }, responses: { "Yield": 83.2, "Size": 27.8 } }
+        ];
+        setRunMatrix(demoMatrix);
+        setActiveTab('Execution');
+    }, []);
+
+    const runFullDemo = useCallback(() => {
+        loadDemo();
+        setIsDemoAutoRunning(true);
+    }, [loadDemo]);
+
+    useEffect(() => {
+        if (isDemoAutoRunning && runMatrix.length > 0 && activeTab === 'Execution') {
+            const timer = setTimeout(() => {
+                performAnalysis();
+                setIsDemoAutoRunning(false);
+            }, 500);
+            return () => clearTimeout(timer);
+        }
+    }, [isDemoAutoRunning, runMatrix, activeTab]);
 
     const currentAnalysis = useMemo(() => {
         if (!analysis || !selectedAnalysisKey) return null;
@@ -206,34 +256,56 @@ const DesignOfExperimentView: React.FC<{ setActiveView: (view: ViewType) => void
         return [...new Set(indices)];
     }, [runMatrix]);
 
-    const safeJSONParse = (text: any) => {
+    const safeJSONParse = (input: any) => {
+        if (!input) return null;
+        if (typeof input === 'object' && !Array.isArray(input) && Object.keys(input).length > 0) return input;
+
+        let text = String(input).trim();
+
+        const cleanJSONString = (str: string) => {
+            // Remove trailing commas in objects and arrays
+            return str.replace(/,\s*([\]}])/g, '$1');
+        };
+
         try {
-            if (typeof text !== 'string') {
-                console.error("Non-string response received:", text);
-                return text;
-            }
-            let cleanText = text.replace(/```json/g, '').replace(/```/g, '').trim();
+            // First pass: try direct parse after cleaning
+            return JSON.parse(cleanJSONString(text));
+        } catch (initialError) {
             try {
-                return JSON.parse(cleanText);
-            } catch (inner) {
-                const firstBrace = cleanText.indexOf('{');
-                const lastBrace = cleanText.lastIndexOf('}');
-                const firstBracket = cleanText.indexOf('[');
-                const lastBracket = cleanText.lastIndexOf(']');
-                let start = -1, end = -1;
-                if (firstBrace !== -1 && (firstBracket === -1 || firstBrace < firstBracket)) {
-                    start = firstBrace; end = lastBrace;
-                } else if (firstBracket !== -1) {
-                    start = firstBracket; end = lastBracket;
+                // Second pass: remove markdown blocks and then clean
+                let cleanText = text;
+                if (cleanText.includes('```')) {
+                    const match = cleanText.match(/```(?:json)?\s*([\s\S]*?)\s*```/);
+                    if (match) cleanText = match[1].trim();
+                    else cleanText = cleanText.replace(/```json\s?/g, '').replace(/```\s?/g, '').trim();
                 }
-                if (start !== -1 && end !== -1 && end > start) {
-                    return JSON.parse(cleanText.substring(start, end + 1));
+                return JSON.parse(cleanJSONString(cleanText));
+            } catch (markdownError) {
+                // Third pass: find first { or [ and last } or ] and then clean
+                try {
+                    const firstBrace = text.indexOf('{');
+                    const lastBrace = text.lastIndexOf('}');
+                    const firstBracket = text.indexOf('[');
+                    const lastBracket = text.lastIndexOf(']');
+
+                    let start = -1, end = -1;
+                    if (firstBrace !== -1 && (firstBracket === -1 || firstBrace < firstBracket)) {
+                        start = firstBrace;
+                        end = lastBrace;
+                    } else if (firstBracket !== -1) {
+                        start = firstBracket;
+                        end = lastBracket;
+                    }
+
+                    if (start !== -1 && end !== -1 && end > start) {
+                        return JSON.parse(cleanJSONString(text.substring(start, end + 1)));
+                    }
+                    throw markdownError;
+                } catch (extractionError) {
+                    console.error("Critical JSON Parse Failure:", { input, text });
+                    throw new Error("Invalid AI format. The result was too complex or malformed to parse. Please try again.");
                 }
-                throw inner;
             }
-        } catch (e) {
-            console.error("JSON Parse Error on text:", text);
-            throw new Error("Malformed JSON response from AI. Please try again.");
         }
     };
 
@@ -281,7 +353,7 @@ const DesignOfExperimentView: React.FC<{ setActiveView: (view: ViewType) => void
                     config: {
                         temperature: 0,
                         maxOutputTokens: 2048,
-                        systemInstruction: "Concise DoE Expert. Suggest exactly 3-4 numerical factors and 1-2 responses. Output JSON only.",
+                        systemInstruction: "Concise DoE Expert. Suggest 3-4 numerical factors and 1-2 responses. Output RAW JSON ONLY. No preamble, no postamble, no markdown. Standard JSON format.",
                         responseMimeType: "application/json",
                         responseSchema: {
                             type: Type.OBJECT,
@@ -315,7 +387,8 @@ const DesignOfExperimentView: React.FC<{ setActiveView: (view: ViewType) => void
                         }
                     }
                 });
-                return safeJSONParse(response.text());
+                const responseText = response.text || (response.candidates?.[0]?.content?.parts?.[0] as any)?.text || "";
+                return safeJSONParse(responseText);
             });
 
             setFactors(result.factors.map((f: any) => ({
@@ -354,7 +427,7 @@ const DesignOfExperimentView: React.FC<{ setActiveView: (view: ViewType) => void
                     config: {
                         temperature: 0,
                         maxOutputTokens: 4096,
-                        systemInstruction: "Fast DoE Engine. Generate accurate coded matrices. Keep numeric values at 4 decimal places. Output JSON ONLY.",
+                        systemInstruction: "Fast DoE Engine. Generate accurate coded matrices. Output RAW JSON ONLY. No preamble, no postamble. Numeric values must use dot notation.",
                         responseMimeType: "application/json",
                         responseSchema: {
                             type: Type.ARRAY,
@@ -372,7 +445,8 @@ const DesignOfExperimentView: React.FC<{ setActiveView: (view: ViewType) => void
                         }
                     }
                 });
-                return safeJSONParse(response.text());
+                const responseText = response.text || (response.candidates?.[0]?.content?.parts?.[0] as any)?.text || "";
+                return safeJSONParse(responseText);
             });
 
             const actual = coded.map((row: any) => {
@@ -417,8 +491,8 @@ const DesignOfExperimentView: React.FC<{ setActiveView: (view: ViewType) => void
                     }],
                     config: {
                         temperature: 0,
-                        maxOutputTokens: 4096,
-                        systemInstruction: "Senior Statistician. Provide ANOVA and 6x6 plot grid. Keep numeric values at 4 decimal places. Output JSON ONLY.",
+                        maxOutputTokens: 8192,
+                        systemInstruction: "Expert Statistician. Fit a Quadratic Response Surface Model. Output valid RAW JSON ONLY. No preamble, no postamble, no markdown. Ensure all numeric values are formatted correctly for JSON.parse.",
                         responseMimeType: "application/json",
                         responseSchema: {
                             type: Type.OBJECT,
@@ -449,7 +523,8 @@ const DesignOfExperimentView: React.FC<{ setActiveView: (view: ViewType) => void
                         }
                     }
                 });
-                return safeJSONParse(response.text());
+                const responseText = response.text || (response.candidates?.[0]?.content?.parts?.[0] as any)?.text || "";
+                return safeJSONParse(responseText);
             });
 
             setAnalysis(result);
@@ -630,48 +705,55 @@ const DesignOfExperimentView: React.FC<{ setActiveView: (view: ViewType) => void
     };
 
     return (
-        <div className="h-full flex flex-col bg-[#FBFCFE] overflow-hidden">
-            <header className="bg-slate-950/95 backdrop-blur-xl border-b border-emerald-500/10 px-3 sm:px-6 lg:px-10 py-3 sm:py-5 flex flex-col lg:flex-row items-center justify-between gap-4 lg:gap-6 z-20 relative overflow-hidden">
-                {/* Scientific Aesthetic Overlays */}
-                <div className="absolute inset-0 pointer-events-none opacity-10" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, #10b981 1px, transparent 0)', backgroundSize: '24px 24px' }} />
-                <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/5 via-transparent to-transparent pointer-events-none" />
-
-                <div className="flex items-center justify-between w-full lg:w-auto gap-4 lg:gap-6 transition-all relative z-10">
-                    <div className="flex items-center gap-3 sm:gap-6">
-                        <div className="relative group">
-                            <div className="absolute inset-0 bg-emerald-500/20 blur-xl group-hover:bg-emerald-500/40 transition-all rounded-full" />
-                            <Logo className="w-8 h-8 sm:w-11 sm:h-11 shadow-2xl rounded-xl sm:rounded-2xl relative z-10 border border-white/10" />
+        <div className="h-full flex flex-col bg-bg-primary overflow-hidden selection:bg-primary-purple/20">
+            <header className="glass border-b border-slate-100 px-4 sm:px-10 py-5 flex flex-col lg:flex-row items-center justify-between gap-6 z-30 relative">
+                {/* Branding Section */}
+                <div className="flex items-center justify-between w-full lg:w-auto gap-8 relative z-10">
+                    <div className="flex items-center gap-6">
+                        <div className="relative group cursor-pointer" onClick={() => setActiveView('dashboard')}>
+                            <div className="absolute inset-0 bg-primary-purple/20 blur-2xl group-hover:bg-primary-purple/40 transition-all rounded-full" />
+                            <Logo className="w-12 h-12 shadow-2xl rounded-2xl relative z-10 border border-white/50 backdrop-blur-sm" />
                         </div>
                         <div>
-                            <h2 className="text-base sm:text-2xl font-black tracking-tighter text-white uppercase flex items-center gap-2">
-                                HyperPlott <span className="text-[8px] sm:text-[10px] bg-emerald-500 text-black px-1.5 py-0.5 rounded leading-none font-black">PRO</span>
+                            <h2 className="text-2xl sm:text-3xl font-black tracking-tighter text-slate-900 uppercase flex items-center gap-2">
+                                Hyper<span className="text-gradient">Plott</span>
+                                <span className="text-[10px] bg-primary-purple text-white px-2 py-1 rounded-md leading-none font-black tracking-widest ml-1 shadow-lg shadow-primary-purple/20">PRO</span>
                             </h2>
-                            <p className="text-[7px] sm:text-[9px] font-black text-emerald-400/60 uppercase tracking-[0.2em] -mt-0.5 truncate max-w-[120px] sm:max-w-none">
-                                <span className="text-emerald-500 animate-pulse mr-1.5">●</span> {experimentName}
+                            <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em] flex items-center gap-2 -mt-1">
+                                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                                {experimentName}
                             </p>
                         </div>
                     </div>
-                    {/* Progress Indicator for Mobile */}
-                    <div className="lg:hidden flex items-center gap-2">
-                        <span className="text-[8px] sm:text-[10px] font-black text-black uppercase tracking-tighter bg-emerald-400 px-3 py-1.5 rounded-full shadow-lg shadow-emerald-500/20 whitespace-nowrap">
-                            STAGE {(['Dimension', 'Execution', 'Insight', 'Synthesis'].indexOf(activeTab) + 1)} OF 4
+
+                    <button
+                        onClick={runFullDemo}
+                        className="hidden sm:flex items-center gap-3 px-6 py-2.5 bg-emerald-50 text-emerald-600 rounded-full text-[10px] font-black uppercase tracking-[0.2em] border border-emerald-100 hover:bg-emerald-100 hover:shadow-lg hover:shadow-emerald-500/10 transition-all active:scale-95 group"
+                    >
+                        <SparklesIcon className="w-4 h-4 group-hover:rotate-12 transition-transform" />
+                        Live Demo
+                    </button>
+
+                    <div className="lg:hidden">
+                        <span className="text-[10px] font-black text-white bg-primary-purple px-4 py-2 rounded-full shadow-xl shadow-primary-purple/20">
+                            STEP {(['Dimension', 'Execution', 'Insight', 'Synthesis'].indexOf(activeTab) + 1)}/4
                         </span>
                     </div>
                 </div>
 
-                <nav className="flex items-center bg-white/5 p-1 rounded-full gap-1 border border-white/5 overflow-x-auto max-w-full no-scrollbar scroll-smooth w-full lg:w-auto justify-start lg:justify-center relative z-10">
+                <nav className="flex items-center bg-slate-100/30 p-1.5 rounded-full gap-1 border border-slate-100 w-full lg:w-auto overflow-x-auto no-scrollbar relative z-10">
                     {(['Dimension', 'Execution', 'Insight', 'Synthesis'] as DoETab[]).map(tab => (
                         <button
                             key={tab}
                             onClick={() => setActiveTab(tab)}
-                            className={`px-4 sm:px-10 py-2 sm:py-3 text-[8px] sm:text-[10px] font-black uppercase tracking-[0.2em] rounded-full transition-all whitespace-nowrap flex-1 lg:flex-none relative group ${activeTab === tab
-                                ? 'bg-gradient-to-br from-emerald-400 to-emerald-600 text-black shadow-lg shadow-emerald-500/20 translate-y-[-1px]'
-                                : 'text-slate-400 hover:text-white hover:bg-white/5'
+                            className={`px-6 sm:px-10 py-3 text-[10px] font-black uppercase tracking-[0.25em] rounded-full transition-all duration-500 whitespace-nowrap flex-1 lg:flex-none relative group overflow-hidden ${activeTab === tab
+                                ? 'bg-white text-primary-purple shadow-xl shadow-primary-purple/10 translate-y-[-1px]'
+                                : 'text-slate-400 hover:text-slate-600 hover:bg-white/50'
                                 }`}
                         >
-                            {tab}
+                            <span className="relative z-10">{tab}</span>
                             {activeTab === tab && (
-                                <motion.div layoutId="tab-glow" className="absolute inset-0 bg-emerald-400 blur-md opacity-20 rounded-full" />
+                                <motion.div layoutId="tab-highlight" className="absolute inset-0 bg-primary-purple/5 opacity-50 rounded-full" />
                             )}
                         </button>
                     ))}
@@ -684,79 +766,161 @@ const DesignOfExperimentView: React.FC<{ setActiveView: (view: ViewType) => void
                         <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -15 }} className="max-w-6xl mx-auto space-y-6 sm:space-y-12 pb-20">
                             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-10">
                                 <section className="space-y-4 sm:space-y-8">
-                                    <div className="bg-white p-5 sm:p-10 rounded-[1.5rem] sm:rounded-[3rem] border border-slate-100 shadow-xl">
-                                        <div className="mb-4 sm:mb-8">
-                                            <label className="text-[8px] sm:text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1 sm:mb-3 block">Experiment Title</label>
+                                    <div className="card-premium p-6 sm:p-12">
+                                        <div className="mb-6 sm:mb-10">
+                                            <div className="section-badge">Optimization Context</div>
+                                            <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-3 sm:mb-4 block">Experiment Identifier</label>
                                             <input
                                                 value={experimentName}
                                                 onChange={e => setExperimentName(e.target.value)}
-                                                className="w-full bg-slate-50 px-4 sm:px-8 py-3 sm:py-5 rounded-xl sm:rounded-2xl border-none focus:ring-2 focus:ring-emerald-500/20 text-slate-800 text-base sm:text-xl font-black"
+                                                className="w-full bg-slate-50/50 px-4 sm:px-8 py-3 sm:py-5 rounded-xl sm:rounded-2xl border border-slate-100 focus:border-primary-purple focus:ring-4 focus:ring-primary-purple/5 text-slate-900 text-base sm:text-xl font-black transition-all outline-none"
                                             />
                                         </div>
-                                        <label className="text-[8px] sm:text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 sm:mb-6 block">Experimental Objective</label>
-                                        <textarea value={objective} onChange={e => setObjective(e.target.value)} placeholder="e.g. Optimize particle size..." className="w-full bg-slate-50 p-4 sm:p-8 rounded-[1rem] sm:rounded-[2rem] border-none h-32 sm:h-44 resize-none focus:ring-2 focus:ring-emerald-500/20 text-slate-800 text-sm sm:text-lg font-medium" />
-                                        <button onClick={suggestVariablesWithAI} disabled={isSuggesting || !objective} className="w-full mt-4 sm:mt-8 py-4 sm:py-6 bg-slate-900 text-white rounded-xl sm:rounded-2xl text-[8px] sm:text-[10px] font-black uppercase flex items-center justify-center gap-3 sm:gap-4 hover:bg-black transition-all">
-                                            {isSuggesting ? <LoaderIcon className="w-4 h-4 sm:w-5 sm:h-5" /> : <SparklesIcon className="w-4 h-4 sm:w-5 sm:h-5 text-emerald-400" />} AI Dimensioning
-                                        </button>
+                                        <div className="mb-6 sm:mb-10">
+                                            <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-3 sm:mb-4 block">Scientific Objective</label>
+                                            <textarea
+                                                value={objective}
+                                                onChange={e => setObjective(e.target.value)}
+                                                placeholder="e.g. Seeking high-precision yield optimization..."
+                                                className="w-full bg-slate-50/50 p-6 sm:p-8 rounded-2xl sm:rounded-3xl border border-slate-100 focus:border-primary-purple focus:ring-4 focus:ring-primary-purple/5 h-32 sm:h-48 resize-none text-slate-800 text-sm sm:text-lg font-medium transition-all outline-none"
+                                            />
+                                        </div>
+                                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-5 mt-4">
+                                            <button
+                                                onClick={suggestVariablesWithAI}
+                                                disabled={isSuggesting || !objective}
+                                                className="btn-primary group !py-4 sm:!py-6"
+                                            >
+                                                {isSuggesting ? <LoaderIcon className="w-4 h-4 sm:w-5 sm:h-5 animate-spin" /> : <SparklesIcon className="w-4 h-4 sm:w-5 sm:h-5 group-hover:scale-110 transition-all text-white/80" />}
+                                                <span className="tracking-[0.1em] sm:tracking-[0.2em] text-[10px] sm:text-xs">{isSuggesting ? 'PROBING...' : 'AI DIMENSIONING'}</span>
+                                            </button>
+                                            <button onClick={runFullDemo} className="btn-secondary !py-4 sm:!py-6 border-emerald-100 bg-emerald-50/30 text-emerald-600 hover:bg-emerald-50 text-[10px] sm:text-xs">
+                                                <ZapIcon className="w-4 h-4 sm:w-5 sm:h-5 fill-current" />
+                                                <span className="tracking-[0.1em] sm:tracking-[0.2em]">DEMO WORKFLOW</span>
+                                            </button>
+                                        </div>
                                     </div>
-                                    <div className="bg-white p-5 sm:p-10 rounded-[1.5rem] sm:rounded-[3rem] border border-slate-100 shadow-xl">
-                                        <label className="text-[8px] sm:text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 sm:mb-6 block">Statistical Design Methodology</label>
-                                        <div className="grid grid-cols-2 sm:grid-cols-2 gap-2 sm:gap-3">
+                                    <div className="card-premium p-8 sm:p-12">
+                                        <div className="section-badge">Model selection</div>
+                                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-6 block">Experimental Design Framework</label>
+                                        <div className="grid grid-cols-2 gap-4">
                                             {['Central Composite Design (CCD)', 'Box-Behnken Design (BBD)', 'Full Factorial', 'Partial Factorial'].map(t => (
-                                                <button key={t} onClick={() => setDesignType(t as any)} className={`p-3 sm:p-5 rounded-lg sm:rounded-2xl text-[7px] sm:text-[8px] font-black transition-all leading-tight ${designType === t ? 'bg-emerald-50 text-emerald-600 border-2 border-emerald-500 shadow-inner' : 'bg-slate-50 text-slate-400 hover:bg-slate-100'}`}>{t.toUpperCase()}</button>
+                                                <button
+                                                    key={t}
+                                                    onClick={() => setDesignType(t as any)}
+                                                    className={`p-5 rounded-2xl text-[9px] font-black uppercase tracking-widest transition-all duration-300 border-2 ${designType === t
+                                                        ? 'bg-primary-purple/5 text-primary-purple border-primary-purple shadow-lg shadow-primary-purple/10'
+                                                        : 'bg-slate-50 border-slate-50 text-slate-400 hover:bg-slate-100 hover:text-slate-500'}`}
+                                                >
+                                                    {t.replace(' Design', '')}
+                                                </button>
                                             ))}
                                         </div>
                                     </div>
                                 </section>
                                 <section className="space-y-4 sm:space-y-8">
-                                    <div className="bg-white p-5 sm:p-10 rounded-[1.5rem] sm:rounded-[3rem] border border-slate-100 shadow-xl">
-                                        <div className="flex justify-between items-center mb-4 sm:mb-8"><p className="text-[8px] sm:text-[10px] font-black text-slate-900 uppercase tracking-widest">Input Parameters (X)</p><button onClick={() => setFactors([...factors, { id: Math.random().toString(), name: 'New Factor', unit: 'u', low: 0, high: 100, type: 'Numerical' }])} className="p-1.5 sm:p-2.5 bg-emerald-50 text-emerald-600 rounded-lg sm:rounded-xl hover:bg-emerald-100 transition-colors"><PlusIcon className="w-4 h-4 sm:w-5 sm:h-5" /></button></div>
-                                        <div className="space-y-3 sm:space-y-4">
+                                    <div className="card-premium p-8 sm:p-12">
+                                        <div className="flex justify-between items-center mb-8">
+                                            <div>
+                                                <div className="section-badge">Input parameters</div>
+                                                <p className="text-[10px] font-black text-slate-900 uppercase tracking-[0.2em]">Variable Factors (X)</p>
+                                            </div>
+                                            <button
+                                                onClick={() => setFactors([...factors, { id: Math.random().toString(), name: 'New Factor', unit: 'u', low: 0, high: 100, type: 'Numerical' }])}
+                                                className="w-12 h-12 flex items-center justify-center bg-primary-purple text-white rounded-2xl hover:bg-primary-purple/90 transition-all shadow-xl shadow-primary-purple/20"
+                                            >
+                                                <PlusIcon className="w-6 h-6" />
+                                            </button>
+                                        </div>
+                                        <div className="space-y-4">
                                             {factors.map((f, i) => (
-                                                <div key={f.id} className="bg-slate-50 p-2.5 sm:p-4 rounded-xl sm:rounded-3xl flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-4 group border border-slate-100 sm:border-none">
-                                                    <div className="flex-1 min-w-0 flex items-center gap-3">
-                                                        <div className="w-6 h-6 rounded-full bg-slate-200 flex items-center justify-center text-[10px] font-black text-slate-500 shrink-0">{i + 1}</div>
-                                                        <div className="min-w-0 flex-1">
-                                                            <input value={f.name} onChange={e => { const nf = [...factors]; nf[i].name = e.target.value; setFactors(nf); }} className="bg-transparent border-none p-0 text-[11px] sm:text-sm font-black w-full outline-none truncate" />
-                                                            <input value={f.unit} onChange={e => { const nf = [...factors]; nf[i].unit = e.target.value; setFactors(nf); }} className="bg-transparent border-none p-0 text-[8px] sm:text-[10px] font-bold text-slate-400 outline-none" />
+                                                <div key={f.id} className="bg-slate-50/50 p-6 rounded-[2rem] border border-slate-100/50 group hover:bg-white hover:shadow-xl transition-all duration-500">
+                                                    <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-6">
+                                                        <div className="flex-1 flex items-center gap-4">
+                                                            <div className="w-8 h-8 rounded-full bg-slate-900 text-white flex items-center justify-center text-[10px] font-black shadow-lg">{i + 1}</div>
+                                                            <div className="flex-1">
+                                                                <input
+                                                                    value={f.name}
+                                                                    onChange={e => { const nf = [...factors]; nf[i].name = e.target.value; setFactors(nf); }}
+                                                                    className="bg-transparent border-none p-0 text-sm font-black w-full outline-none text-slate-900"
+                                                                />
+                                                                <input
+                                                                    value={f.unit}
+                                                                    onChange={e => { const nf = [...factors]; nf[i].unit = e.target.value; setFactors(nf); }}
+                                                                    className="bg-transparent border-none p-0 text-[10px] font-bold text-slate-400 outline-none uppercase tracking-widest"
+                                                                />
+                                                            </div>
                                                         </div>
-                                                        <button onClick={() => setFactors(factors.filter(it => it.id !== f.id))} className="sm:hidden p-1.5 text-slate-400 hover:text-red-500"><TrashIcon className="w-3.5 h-3.5" /></button>
-                                                    </div>
-                                                    <div className="flex gap-2 items-center justify-between border-t border-slate-200/50 sm:border-none pt-2 sm:pt-0">
-                                                        <div className="flex-1 flex items-center gap-2 bg-white px-3 py-1.5 rounded-lg border border-slate-200">
-                                                            <span className="text-[7px] font-black text-slate-300 uppercase shrink-0">Low</span>
-                                                            <input type="number" value={f.low} onChange={e => { const nf = [...factors]; nf[i].low = +e.target.value; setFactors(nf); }} className="bg-transparent w-full text-[9px] sm:text-[10px] text-center font-black outline-none" />
+                                                        <div className="flex gap-4">
+                                                            <div className="flex flex-col gap-1">
+                                                                <span className="text-[8px] font-black text-slate-400 uppercase ml-3">LOW (-1)</span>
+                                                                <input type="number" value={f.low} onChange={e => { const nf = [...factors]; nf[i].low = +e.target.value; setFactors(nf); }} className="w-24 bg-white px-4 py-2 rounded-xl text-xs font-black text-slate-700 border border-slate-100 outline-none focus:border-primary-purple" />
+                                                            </div>
+                                                            <div className="flex flex-col gap-1">
+                                                                <span className="text-[8px] font-black text-slate-400 uppercase ml-3">HIGH (+1)</span>
+                                                                <input type="number" value={f.high} onChange={e => { const nf = [...factors]; nf[i].high = +e.target.value; setFactors(nf); }} className="w-24 bg-white px-4 py-2 rounded-xl text-xs font-black text-slate-700 border border-slate-100 outline-none focus:border-primary-purple" />
+                                                            </div>
+                                                            <button
+                                                                onClick={() => setFactors(factors.filter(it => it.id !== f.id))}
+                                                                className="w-10 h-10 flex items-center justify-center text-slate-300 hover:text-red-500 transition-colors opacity-0 group-hover:opacity-100"
+                                                            >
+                                                                <TrashIcon className="w-5 h-5" />
+                                                            </button>
                                                         </div>
-                                                        <div className="flex-1 flex items-center gap-2 bg-white px-3 py-1.5 rounded-lg border border-slate-200">
-                                                            <span className="text-[7px] font-black text-slate-300 uppercase shrink-0">High</span>
-                                                            <input type="number" value={f.high} onChange={e => { const nf = [...factors]; nf[i].high = +e.target.value; setFactors(nf); }} className="bg-transparent w-full text-[9px] sm:text-[10px] text-center font-black outline-none" />
-                                                        </div>
-                                                        <button onClick={() => setFactors(factors.filter(it => it.id !== f.id))} className="hidden sm:block p-1 text-slate-300 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity"><TrashIcon className="w-4 h-4" /></button>
                                                     </div>
                                                 </div>
                                             ))}
                                         </div>
                                     </div>
-                                    <div className="bg-slate-900 p-5 sm:p-10 rounded-[1.5rem] sm:rounded-[3rem] shadow-2xl">
-                                        <div className="flex justify-between items-center mb-4 sm:mb-8"><p className="text-[8px] sm:text-[10px] font-black text-emerald-400 uppercase tracking-widest">Response Metrics (Y)</p><button onClick={() => setResponses([...responses, { id: Math.random().toString(), name: 'New Response', unit: '%', goal: 'Maximize' }])} className="p-1.5 sm:p-2.5 bg-white/10 text-emerald-400 rounded-lg sm:rounded-xl hover:bg-white/20 transition-colors"><PlusIcon className="w-4 h-4 sm:w-5 sm:h-5" /></button></div>
-                                        <div className="space-y-3 sm:space-y-4">
+                                    <div className="card-premium p-8 sm:p-12">
+                                        <div className="flex justify-between items-center mb-8">
+                                            <div>
+                                                <div className="section-badge">Response metrics</div>
+                                                <p className="text-[10px] font-black text-slate-900 uppercase tracking-[0.2em]">Quality Indicators (Y)</p>
+                                            </div>
+                                            <button
+                                                onClick={() => setResponses([...responses, { id: Math.random().toString(), name: 'New Response', unit: '%', goal: 'Maximize' }])}
+                                                className="w-12 h-12 flex items-center justify-center bg-primary-purple/10 text-primary-purple rounded-2xl hover:bg-primary-purple/20 transition-all"
+                                            >
+                                                <PlusIcon className="w-6 h-6" />
+                                            </button>
+                                        </div>
+                                        <div className="space-y-4">
                                             {responses.map((r, i) => (
-                                                <div key={r.id} className="bg-white/5 p-2.5 sm:p-4 rounded-xl sm:rounded-3xl flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-4 group border border-white/5">
-                                                    <div className="flex-1 min-w-0 flex items-center gap-3">
-                                                        <div className="w-6 h-6 rounded-full bg-white/10 flex items-center justify-center text-[10px] font-black text-emerald-400/50 shrink-0">{i + 1}</div>
-                                                        <div className="min-w-0 flex-1">
-                                                            <input value={r.name} onChange={e => { const nr = [...responses]; nr[i].name = e.target.value; setResponses(nr); }} className="bg-transparent border-none p-0 text-[11px] sm:text-sm font-black w-full text-white outline-none truncate" />
-                                                            <input value={r.unit} onChange={e => { const nr = [...responses]; nr[i].unit = e.target.value; setResponses(nr); }} className="bg-transparent border-none p-0 text-[8px] sm:text-[10px] font-bold text-emerald-500/50 outline-none" />
+                                                <div key={r.id} className="bg-slate-50/50 p-6 rounded-[2rem] border border-slate-100/50 group hover:bg-white hover:shadow-xl transition-all duration-500">
+                                                    <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-6">
+                                                        <div className="flex-1 flex items-center gap-4">
+                                                            <div className="w-8 h-8 rounded-full bg-primary-purple/10 text-primary-purple flex items-center justify-center text-[10px] font-black shadow-inner">{i + 1}</div>
+                                                            <div className="flex-1">
+                                                                <input
+                                                                    value={r.name}
+                                                                    onChange={e => { const nr = [...responses]; nr[i].name = e.target.value; setResponses(nr); }}
+                                                                    className="bg-transparent border-none p-0 text-sm font-black w-full outline-none text-slate-900"
+                                                                />
+                                                                <input
+                                                                    value={r.unit}
+                                                                    onChange={e => { const nr = [...responses]; nr[i].unit = e.target.value; setResponses(nr); }}
+                                                                    className="bg-transparent border-none p-0 text-[10px] font-bold text-slate-400 outline-none uppercase tracking-widest"
+                                                                />
+                                                            </div>
                                                         </div>
-                                                        <button onClick={() => setResponses(responses.filter(it => it.id !== r.id))} className="sm:hidden p-1.5 text-white/30 hover:text-red-400"><TrashIcon className="w-3.5 h-3.5" /></button>
-                                                    </div>
-                                                    <div className="flex items-center gap-2 border-t border-white/5 sm:border-none pt-2 sm:pt-0">
-                                                        <select value={r.goal} onChange={e => { const nr = [...responses]; nr[i].goal = e.target.value as any; setResponses(nr); }} className="flex-1 bg-black/40 text-[9px] sm:text-[10px] font-black text-emerald-400 border border-white/10 rounded-lg px-3 py-1.5 outline-none">
-                                                            <option value="Maximize">Maximize</option>
-                                                            <option value="Minimize">Minimize</option>
-                                                            <option value="Target">Target</option>
-                                                        </select>
-                                                        <button onClick={() => setResponses(responses.filter(it => it.id !== r.id))} className="hidden sm:block p-1 text-white/20 hover:text-red-400 opacity-0 group-hover:opacity-100 transition-opacity"><TrashIcon className="w-4 h-4" /></button>
+                                                        <div className="flex items-center gap-4">
+                                                            <select
+                                                                value={r.goal}
+                                                                onChange={e => { const nr = [...responses]; nr[i].goal = e.target.value as any; setResponses(nr); }}
+                                                                className="bg-white text-[10px] font-black text-primary-purple border border-slate-100 rounded-xl px-4 py-2 outline-none uppercase tracking-widest shadow-sm"
+                                                            >
+                                                                <option value="Maximize">Maximize</option>
+                                                                <option value="Minimize">Minimize</option>
+                                                                <option value="Target">Target</option>
+                                                            </select>
+                                                            <button
+                                                                onClick={() => setResponses(responses.filter(it => it.id !== r.id))}
+                                                                className="w-10 h-10 flex items-center justify-center text-slate-300 hover:text-red-500 transition-colors opacity-0 group-hover:opacity-100"
+                                                            >
+                                                                <TrashIcon className="w-5 h-5" />
+                                                            </button>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             ))}
@@ -764,33 +928,41 @@ const DesignOfExperimentView: React.FC<{ setActiveView: (view: ViewType) => void
                                     </div>
                                 </section>
                             </div>
-                            <div className="flex justify-center pb-12"><button onClick={generateDesign} className="w-full sm:w-auto px-12 sm:px-24 py-5 sm:py-6 bg-emerald-600 text-white rounded-xl sm:rounded-[2rem] text-[9px] sm:text-[10px] font-black uppercase tracking-[0.4em] sm:tracking-[0.6em] shadow-2xl hover:bg-emerald-700 transition-all">Initialize Design Matrix</button></div>
+                            <div className="flex justify-center pb-12 px-4">
+                                <button
+                                    onClick={generateDesign}
+                                    className="btn-primary w-full sm:w-auto !px-12 sm:!px-20 !py-5 sm:!py-8 text-xs sm:text-sm tracking-[0.3em] sm:tracking-[0.4em] shadow-2xl shadow-primary-purple/20"
+                                >
+                                    INITIALIZE DESIGN MATRIX
+                                </button>
+                            </div>
                         </motion.div>
                     )}
 
                     {activeTab === 'Execution' && (
-                        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="max-w-7xl mx-auto space-y-6 sm:space-y-10 pb-20">
-                            <div className="bg-white p-5 sm:p-10 rounded-[1.5rem] sm:rounded-[3rem] border border-slate-100 shadow-xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 sm:gap-6">
+                        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="max-w-7xl mx-auto space-y-12 pb-24">
+                            <div className="card-premium p-10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-8">
                                 <div>
-                                    <h3 className="text-lg sm:text-2xl font-black uppercase text-slate-900">Experimental Grid</h3>
-                                    <div className="flex items-center gap-2 mt-1 sm:mt-2">
-                                        <div className="w-2 h-2 sm:w-3 sm:h-3 bg-emerald-500 rounded-full" />
-                                        <p className="text-[7px] sm:text-[10px] font-black text-emerald-600 uppercase tracking-widest">Replicate Points Highlighted</p>
+                                    <div className="section-badge">Data Acquisition</div>
+                                    <h3 className="text-3xl font-black uppercase text-slate-900 tracking-tighter">Experimental Matrix</h3>
+                                    <div className="flex items-center gap-2 mt-2">
+                                        <div className="w-2.5 h-2.5 bg-emerald-500 rounded-full animate-pulse" />
+                                        <p className="text-[10px] font-black text-emerald-600 uppercase tracking-[0.2em] px-2 py-0.5 bg-emerald-50 rounded-md">Live Validation Active</p>
                                     </div>
                                 </div>
-                                <div className="flex gap-2 w-full sm:w-auto">
-                                    <button onClick={() => setRunMatrix(runMatrix.map(run => ({ ...run, responses: Object.fromEntries(responses.map(r => [r.name, Number((Math.random() * 100).toFixed(2))])) })))} className="flex-1 sm:flex-none px-4 py-3 sm:px-8 sm:py-4 bg-slate-50 border border-slate-200 rounded-lg sm:rounded-2xl text-[7px] sm:text-[10px] font-black uppercase tracking-widest hover:bg-slate-100 whitespace-nowrap">Simulate</button>
-                                    <button onClick={performAnalysis} className="flex-1 sm:flex-none px-4 py-3 sm:px-12 sm:py-4 bg-emerald-600 text-white rounded-lg sm:rounded-2xl text-[7px] sm:text-[10px] font-black uppercase tracking-widest shadow-xl hover:bg-emerald-700 transition-all whitespace-nowrap">Analyze</button>
+                                <div className="flex gap-4 w-full sm:w-auto">
+                                    <button onClick={() => setRunMatrix(runMatrix.map(run => ({ ...run, responses: Object.fromEntries(responses.map(r => [r.name, Number((Math.random() * 100).toFixed(2))])) })))} className="btn-secondary !px-8 !py-4 text-[10px] tracking-widest uppercase">Simulate Results</button>
+                                    <button onClick={performAnalysis} className="btn-primary !px-12 !py-4 text-[10px] tracking-widest uppercase">Perform Analysis</button>
                                 </div>
                             </div>
-                            <div className="bg-white rounded-[1rem] sm:rounded-[3rem] border border-slate-100 shadow-2xl overflow-hidden mb-8 sm:mb-12">
+                            <div className="card-premium !p-0 shadow-2xl overflow-hidden mb-12 border-slate-100">
                                 <div className="overflow-x-auto select-text no-scrollbar">
-                                    <table className="w-full text-left text-[8px] sm:text-[11px] border-collapse min-w-[500px]">
+                                    <table className="w-full text-left text-[11px] border-collapse min-w-[600px]">
                                         <thead>
-                                            <tr className="bg-slate-50 text-slate-500 font-black uppercase border-b border-slate-200">
-                                                <th className="px-3 sm:px-8 py-3 sm:py-6 rounded-tl-3xl">Run</th>
-                                                {factors.map(f => <th key={f.id} className="px-2 sm:px-4 py-3 sm:py-6">{f.name}</th>)}
-                                                {responses.map(r => <th key={r.id} className="px-2 sm:px-4 py-3 sm:py-6 text-emerald-600 font-black">{r.name}</th>)}
+                                            <tr className="bg-slate-50 text-slate-400 font-black uppercase border-b border-slate-100">
+                                                <th className="px-10 py-8">Sequence</th>
+                                                {factors.map(f => <th key={f.id} className="px-4 py-8">{f.name}</th>)}
+                                                {responses.map(r => <th key={r.id} className="px-4 py-8 text-primary-purple">{r.name}</th>)}
                                             </tr>
                                         </thead>
                                         <tbody className="divide-y divide-slate-100 font-medium">
@@ -826,55 +998,55 @@ const DesignOfExperimentView: React.FC<{ setActiveView: (view: ViewType) => void
                     )}
 
                     {activeTab === 'Insight' && (
-                        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="max-w-[1500px] mx-auto min-h-[600px] pb-24">
+                        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="max-w-[1600px] mx-auto min-h-[600px] pb-32">
                             {currentAnalysis ? (
-                                <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
-                                    <div className="lg:col-span-8 space-y-6 sm:space-y-10">
-                                        <div className="bg-white p-5 sm:p-8 rounded-[2rem] sm:rounded-[3rem] border border-slate-100 shadow-xl overflow-hidden relative">
-                                            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-8 gap-6">
-                                                <div className="flex flex-col gap-2 w-full sm:w-auto">
-                                                    <label className="text-[8px] sm:text-[10px] font-black text-slate-400 uppercase tracking-widest px-1">Active Metric Analysis</label>
+                                <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
+                                    <div className="lg:col-span-8 space-y-12">
+                                        <div className="card-premium p-6 sm:p-10 overflow-visible relative">
+                                            <div className="flex flex-col sm:flex-row items-center justify-between mb-8 sm:mb-10 gap-6 sm:gap-8">
+                                                <div className="flex flex-col gap-3 w-full sm:w-72">
+                                                    <div className="section-badge !mb-0">Selected Response</div>
                                                     <select
                                                         value={selectedAnalysisKey}
                                                         onChange={(e) => setSelectedAnalysisKey(e.target.value)}
-                                                        className="bg-slate-900 text-white rounded-xl sm:rounded-2xl px-4 sm:px-6 py-3 sm:py-3.5 text-[9px] sm:text-[11px] font-black uppercase shadow-xl hover:bg-black w-full"
+                                                        className="bg-slate-900 text-white rounded-xl sm:rounded-2xl px-5 py-3 sm:px-6 sm:py-4 text-[10px] sm:text-xs font-black uppercase shadow-2xl hover:bg-black transition-all outline-none w-full"
                                                     >
                                                         {Object.keys(analysis?.analyses || {}).map(k => (
                                                             <option key={k} value={k}>{k}</option>
                                                         ))}
                                                     </select>
                                                 </div>
-                                                <div className="flex flex-wrap gap-1 bg-slate-50 p-1.5 rounded-2xl border border-slate-100 shadow-inner w-full sm:w-auto overflow-x-auto no-scrollbar">
+                                                <div className="flex flex-wrap gap-1 md:gap-2 bg-slate-50 p-1.5 rounded-2xl border border-slate-100 shadow-inner w-full sm:w-auto overflow-x-auto no-scrollbar">
                                                     {(['3D Surface', '2D Contour', 'Perturbation', 'Model Diagnostic'] as PlotType[]).map(pt => (
-                                                        <button key={pt} onClick={() => setActivePlot(pt)} className={`px-3 sm:px-5 py-2 sm:py-2.5 rounded-xl text-[7px] sm:text-[9px] font-black uppercase transition-all duration-300 whitespace-nowrap ${activePlot === pt ? 'bg-emerald-600 text-white shadow-lg' : 'text-slate-400 hover:text-slate-600'}`}>{pt}</button>
+                                                        <button key={pt} onClick={() => setActivePlot(pt)} className={`px-3 py-2 sm:px-6 sm:py-3 rounded-lg sm:rounded-xl text-[8px] sm:text-[10px] font-black uppercase tracking-wider transition-all duration-500 whitespace-nowrap ${activePlot === pt ? 'bg-primary-purple text-white shadow-xl shadow-primary-purple/20 translate-y-[-1px]' : 'text-slate-400 hover:text-slate-600'}`}>{pt}</button>
                                                     ))}
                                                 </div>
                                             </div>
-                                            <div className="h-[280px] sx:h-[350px] sm:h-[450px] lg:h-[520px] bg-white rounded-[1.25rem] sm:rounded-[2.5rem] border border-slate-50 overflow-hidden relative shadow-inner">
+                                            <div className="h-[300px] xs:h-[350px] sm:h-[550px] bg-slate-50 rounded-2xl sm:rounded-[2.5rem] overflow-hidden relative border border-slate-100 inner-shadow">
                                                 <PlotViewer analysis={currentAnalysis} activePlot={activePlot} predVsActualData={analysis?.predVsActualData} experimentName={experimentName} />
                                             </div>
                                         </div>
 
-                                        <div className="bg-white p-6 sm:p-10 rounded-[2rem] sm:rounded-[3rem] border border-slate-100 shadow-xl overflow-hidden">
-                                            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-8 gap-4">
-                                                <div className="flex items-center gap-4">
-                                                    <div className="w-1.5 sm:w-2 h-6 sm:h-8 bg-emerald-500 rounded-full" />
-                                                    <h4 className="text-[10px] sm:text-[12px] font-black text-slate-900 uppercase tracking-[0.2em]">ANOVA Standard Report</h4>
+                                        <div className="card-premium p-10 border-slate-100">
+                                            <div className="flex flex-col sm:flex-row items-center justify-between mb-10 gap-6">
+                                                <div className="flex items-center gap-5">
+                                                    <div className="w-2.5 h-10 bg-primary-purple rounded-full shadow-lg shadow-primary-purple/20" />
+                                                    <h4 className="text-sm font-black text-slate-900 uppercase tracking-widest">ANOVA STATISTICAL DOSSIER</h4>
                                                 </div>
-                                                <button onClick={copyAnovaToClipboard} className={`w-full sm:w-auto flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl text-[9px] sm:text-[10px] font-black uppercase transition-all ${copiedAnova ? 'bg-emerald-500 text-white' : 'bg-slate-100 text-slate-500 hover:bg-slate-200'}`}>
-                                                    {copiedAnova ? <CheckIcon className="w-4 h-4" /> : <CopyIcon className="w-4 h-4" />} {copiedAnova ? 'Copied' : 'Copy Table'}
+                                                <button onClick={copyAnovaToClipboard} className={`btn-secondary !px-8 !py-3 !text-[10px] tracking-widest transition-all ${copiedAnova ? '!bg-emerald-500 !text-white !border-emerald-500' : ''}`}>
+                                                    {copiedAnova ? <CheckIcon className="w-5 h-5" /> : <CopyIcon className="w-5 h-5" />} {copiedAnova ? 'COPIED TO CLIPBOARD' : 'EXTRACT DATA'}
                                                 </button>
                                             </div>
-                                            <div className="overflow-x-auto select-text no-scrollbar">
-                                                <table className="w-full text-left text-[8px] sm:text-[11px] border-collapse min-w-[450px]">
+                                            <div className="overflow-x-auto rounded-[2rem] border border-slate-50">
+                                                <table className="w-full text-left text-[11px] border-collapse min-w-[500px]">
                                                     <thead>
-                                                        <tr className="bg-slate-50 text-slate-500 font-black uppercase border-b border-slate-200">
-                                                            <th className="px-3 sm:px-8 py-3 sm:py-5 rounded-tl-2xl sm:rounded-tl-3xl">Source</th>
-                                                            <th className="px-1 sm:px-4 py-3 sm:py-5 text-center">DF</th>
-                                                            <th className="px-2 sm:px-4 py-3 sm:py-5 text-right">SS</th>
-                                                            <th className="px-2 sm:px-4 py-3 sm:py-5 text-right">MS</th>
-                                                            <th className="px-2 sm:px-4 py-3 sm:py-5 text-right">F</th>
-                                                            <th className="px-3 sm:px-8 py-3 sm:py-5 text-right rounded-tr-2xl sm:rounded-tr-3xl">p</th>
+                                                        <tr className="bg-slate-50/50 text-slate-400 font-black uppercase border-b border-slate-100">
+                                                            <th className="px-10 py-6">Source of Variation</th>
+                                                            <th className="px-4 py-6 text-center">DF</th>
+                                                            <th className="px-4 py-6 text-right">SS</th>
+                                                            <th className="px-4 py-6 text-right">MS</th>
+                                                            <th className="px-4 py-6 text-right">F-Value</th>
+                                                            <th className="px-10 py-6 text-right">Prob &gt; F</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody className="divide-y divide-slate-100 font-medium">
@@ -932,14 +1104,18 @@ const DesignOfExperimentView: React.FC<{ setActiveView: (view: ViewType) => void
                                             </div>
                                         </div>
 
-                                        <div className="bg-emerald-50 p-10 rounded-[3rem] border border-emerald-100 shadow-sm overflow-hidden relative">
-                                            <div className="absolute -top-4 -right-4 p-6 text-emerald-100 opacity-20"><TargetIcon className="w-24 h-24" /></div>
-                                            <h4 className="text-[11px] font-black text-emerald-600 uppercase mb-5">System Summary</h4>
-                                            <p className="text-sm font-bold text-emerald-900 leading-relaxed italic">"{analysis.overallInterpretation}"</p>
+                                        <div className="card-premium p-10 !bg-emerald-50 border-emerald-100 shadow-sm relative overflow-hidden">
+                                            <div className="absolute -top-10 -right-10 p-10 text-emerald-600 opacity-5 rotate-12"><TargetIcon className="w-48 h-48" /></div>
+                                            <h4 className="text-[10px] font-black text-emerald-600 uppercase tracking-widest mb-4 flex items-center gap-2">
+                                                <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                                                Synthesis Insight
+                                            </h4>
+                                            <p className="text-sm font-bold text-emerald-900 leading-relaxed italic relative z-10">"{analysis.overallInterpretation}"</p>
                                         </div>
 
-                                        <button onClick={() => setActiveTab('Synthesis')} className="w-full py-9 bg-emerald-600 text-white rounded-[3.5rem] text-[10px] font-black uppercase tracking-[0.6em] shadow-2xl hover:bg-emerald-700 transition-all flex items-center justify-center gap-5 group">
-                                            <TargetIcon className="w-7 h-7 group-hover:scale-125 transition-transform" /> Synthesis Engine
+                                        <button onClick={() => setActiveTab('Synthesis')} className="btn-primary !py-8 text-sm tracking-[0.4em] shadow-2xl flex items-center justify-center gap-5 group">
+                                            <TargetIcon className="w-6 h-6 group-hover:scale-110 transition-transform" />
+                                            VIEW OPTIMAL SOLUTION
                                         </button>
                                     </div>
                                 </div>
@@ -957,37 +1133,43 @@ const DesignOfExperimentView: React.FC<{ setActiveView: (view: ViewType) => void
                     )}
 
                     {activeTab === 'Synthesis' && analysis && (
-                        <motion.div initial={{ opacity: 0, scale: 0.98 }} animate={{ opacity: 1, scale: 1 }} className="max-w-5xl mx-auto py-8 sm:py-16 space-y-12 sm:space-y-20 pb-24 sm:pb-32">
-                            <div className="text-center space-y-6 sm:space-y-8">
-                                <div className="w-16 h-16 sm:w-24 sm:h-24 bg-emerald-500 rounded-[1.5rem] sm:rounded-[3rem] flex items-center justify-center text-white mx-auto shadow-2xl mb-6 sm:mb-10">
-                                    <TargetIcon className="w-8 h-8 sm:w-12 sm:h-12" />
-                                </div>
-                                <h3 className="text-3xl sm:text-6xl font-black uppercase tracking-tighter text-slate-900">Optimal Solution</h3>
+                        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="max-w-6xl mx-auto py-16 space-y-20 pb-32">
+                            <div className="text-center space-y-4">
+                                <div className="section-badge !mb-4">Final Configuration</div>
+                                <h3 className="text-5xl sm:text-7xl font-black uppercase tracking-tighter text-slate-900 leading-none">Global <span className="text-gradient">Optima</span></h3>
+                                <p className="text-slate-400 font-bold tracking-[0.2em] uppercase text-xs">Recommended Parameters for Peak Performance</p>
                             </div>
-                            <div className="grid grid-cols-2 sm:grid-cols-2 gap-4 sm:gap-10">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
                                 {Object.entries(analysis.optimizedParams || {}).map(([key, val], idx) => (
-                                    <div key={key} className="bg-white p-5 sm:p-14 rounded-[1.5rem] sm:rounded-[4.5rem] border border-slate-100 shadow-2xl hover:border-emerald-500 transition-all text-center">
-                                        <p className="text-[7px] sm:text-[11px] font-black text-slate-300 uppercase mb-1 sm:mb-4">Point {idx + 1}</p>
-                                        <h4 className="text-[10px] sm:text-3xl font-black uppercase mb-2 sm:mb-10 text-slate-900 tracking-tight truncate">{key}</h4>
-                                        <div className="flex flex-col sm:flex-row items-center justify-center sm:items-end sm:justify-between gap-1 sm:gap-0">
-                                            <p className="text-3xl sm:text-8xl font-black tracking-tighter text-slate-900">{(val as number).toFixed(2)}</p>
-                                            <p className="text-[6px] sm:text-sm font-black text-slate-400 mb-1 sm:mb-4 uppercase">{factors.find(f => f.name === key)?.unit || 'units'}</p>
+                                    <div key={key} className="card-premium p-12 hover:border-primary-purple transition-all duration-700 group">
+                                        <div className="flex justify-between items-start mb-8">
+                                            <div className="text-[10px] font-black text-slate-300 uppercase tracking-widest bg-slate-50 px-3 py-1 rounded-md">Variable {idx + 1}</div>
+                                            <div className="w-10 h-10 rounded-xl bg-primary-purple/5 flex items-center justify-center text-primary-purple"><TargetIcon className="w-5 h-5" /></div>
+                                        </div>
+                                        <h4 className="text-2xl font-black uppercase mb-8 text-slate-900 tracking-tight transition-colors group-hover:text-primary-purple">{key}</h4>
+                                        <div className="flex items-end justify-between border-t border-slate-50 pt-8">
+                                            <p className="text-6xl sm:text-8xl font-black tracking-tighter text-slate-900 group-hover:scale-[1.02] transition-transform origin-left text-gradient bg-gradient-to-r from-slate-900 to-slate-600">{(val as number).toFixed(2)}</p>
+                                            <p className="text-sm font-black text-slate-400 mb-4 uppercase tracking-widest">{factors.find(f => f.name === key)?.unit || 'units'}</p>
                                         </div>
                                     </div>
                                 ))}
                             </div>
-                            <div className="flex justify-center relative">
-                                <button onClick={() => setShowExportMenu(!showExportMenu)} className="px-20 py-8 bg-slate-900 text-white rounded-[2.5rem] text-[11px] font-black uppercase tracking-[0.5em] flex items-center gap-6 shadow-2xl hover:bg-black transition-all"><DownloadIcon className="w-7 h-7 text-emerald-400" /> Export Professional Dossier <ChevronDownIcon className={`w-5 h-5 transition-transform ${showExportMenu ? 'rotate-180' : ''}`} /></button>
+                            <div className="flex justify-center relative px-4">
+                                <button onClick={() => setShowExportMenu(!showExportMenu)} className="btn-primary w-full sm:w-auto !px-8 sm:!px-16 !py-5 sm:!py-8 text-[10px] sm:text-xs tracking-[0.3em] sm:tracking-[0.5em] shadow-3xl shadow-primary-purple/20">
+                                    <DownloadIcon className="w-5 h-5 sm:w-6 sm:h-6 animate-bounce" />
+                                    DOWNLOAD DOSSIER
+                                    <ChevronDownIcon className={`w-4 h-4 sm:w-5 sm:h-5 transition-transform duration-500 ${showExportMenu ? 'rotate-180' : ''}`} />
+                                </button>
                                 <AnimatePresence>{showExportMenu && (
-                                    <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 15 }} className="absolute bottom-full mb-8 w-full max-w-sm bg-white rounded-[3rem] border border-slate-100 shadow-2xl overflow-hidden z-50 p-3">
-                                        <button onClick={handleGeneratePDFReport} className="w-full text-left px-10 py-7 hover:bg-slate-50 rounded-[2.5rem] flex items-center gap-6 transition-colors group">
-                                            <div className="w-14 h-14 rounded-full bg-emerald-50 flex items-center justify-center text-emerald-500 transition-all group-hover:bg-emerald-500 group-hover:text-white"><FileSignatureIcon className="w-7 h-7" /></div>
-                                            <div><p className="text-[12px] font-black uppercase text-slate-900">Scientific PDF</p><p className="text-[10px] font-bold text-slate-400 mt-1">Full Report • Visuals • ANOVA</p></div>
+                                    <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 15 }} className="absolute bottom-full mb-6 w-full max-w-sm glass rounded-[1.5rem] sm:rounded-[2.5rem] overflow-hidden z-50 p-2 shadow-2xl border-white/50">
+                                        <button onClick={handleGeneratePDFReport} className="w-full text-left p-4 sm:p-6 hover:bg-slate-50 rounded-xl sm:rounded-[2rem] flex items-center gap-4 sm:gap-6 transition-all group">
+                                            <div className="w-10 h-10 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl bg-emerald-50 flex items-center justify-center text-emerald-500 transition-all group-hover:bg-emerald-500 group-hover:text-white group-hover:shadow-lg group-hover:shadow-emerald-500/20"><FileSignatureIcon className="w-5 h-5 sm:w-7 sm:h-7" /></div>
+                                            <div><p className="text-[10px] sm:text-[11px] font-black uppercase text-slate-900 tracking-wider">Scientific PDF</p><p className="text-[8px] sm:text-[9px] font-bold text-slate-400 mt-1 uppercase tracking-widest">Visuals • ANOVA</p></div>
                                         </button>
-                                        <div className="h-px bg-slate-100 my-2 mx-6" />
-                                        <button onClick={handleGenerateWordReport} className="w-full text-left px-10 py-7 hover:bg-slate-50 rounded-[2.5rem] flex items-center gap-6 transition-colors group">
-                                            <div className="w-14 h-14 rounded-full bg-blue-50 flex items-center justify-center text-blue-500 transition-all group-hover:bg-blue-500 group-hover:text-white"><ZapIcon className="w-7 h-7" /></div>
-                                            <div><p className="text-[12px] font-black uppercase text-slate-900">Editable Word</p><p className="text-[10px] font-bold text-slate-400 mt-1">Structured Tables • Equations</p></div>
+                                        <div className="h-px bg-slate-100 my-1 mx-4 sm:mx-6" />
+                                        <button onClick={handleGenerateWordReport} className="w-full text-left p-4 sm:p-6 hover:bg-slate-50 rounded-xl sm:rounded-[2rem] flex items-center gap-4 sm:gap-6 transition-all group">
+                                            <div className="w-10 h-10 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl bg-primary-purple/5 flex items-center justify-center text-primary-purple transition-all group-hover:bg-primary-purple group-hover:text-white group-hover:shadow-lg group-hover:shadow-primary-purple/20"><ZapIcon className="w-5 h-5 sm:w-7 sm:h-7" /></div>
+                                            <div><p className="text-[10px] sm:text-[11px] font-black uppercase text-slate-900 tracking-wider">Editable Word</p><p className="text-[8px] sm:text-[9px] font-bold text-slate-400 mt-1 uppercase tracking-widest">Tables • Equations</p></div>
                                         </button>
                                     </motion.div>
                                 )}</AnimatePresence>

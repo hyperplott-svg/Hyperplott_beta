@@ -1,4 +1,4 @@
-export type ViewType = 'Design of Experiment' | 'Settings';
+export type ViewType = 'Design of Experiment' | 'Settings' | 'dashboard';
 export type LoadingState = 'idle' | 'loading' | 'success' | 'error';
 
 // --- Advanced DoE Types ---

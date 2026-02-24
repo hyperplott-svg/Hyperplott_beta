@@ -3,7 +3,7 @@ import { motion, useScroll, AnimatePresence } from 'framer-motion';
 import { Menu, X, ArrowRight, Layers, Sparkles } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
-const Navbar = () => {
+const Navbar = ({ bannerActive }) => {
     const [scrolled, setScrolled] = useState(false);
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const { scrollY } = useScroll();
@@ -22,10 +22,10 @@ const Navbar = () => {
     }, [lastScrollY]);
 
     const navLinks = [
-        { name: 'Features', href: '/#features' },
-        { name: 'Pricing', href: '/#pricing' },
-        { name: 'Resources', href: '/#resources' },
-        { name: 'Docs', href: '/#docs' },
+        { name: 'Features', href: '/#features', type: 'anchor' },
+        { name: 'Pricing', href: '/pricing', type: 'link' },
+        { name: 'About', href: '/about', type: 'link' },
+        { name: 'Docs', href: '/#docs', type: 'anchor' },
     ];
 
     return (
@@ -34,7 +34,8 @@ const Navbar = () => {
                 variants={{ visible: { y: 0 }, hidden: { y: '-100%' } }}
                 animate={hidden ? 'hidden' : 'visible'}
                 transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-                className={`fixed top-0 left-0 right-0 z-50 h-[80px] flex items-center transition-all duration-500 ${scrolled ? 'bg-white/80 backdrop-blur-2xl border-b border-slate-200 shadow-lg' : 'bg-transparent'
+                style={{ top: bannerActive ? '36px' : '0px' }}
+                className={`fixed left-0 right-0 z-50 h-[80px] flex items-center transition-all duration-500 ${scrolled ? 'bg-white/80 backdrop-blur-2xl border-b border-slate-200 shadow-lg' : 'bg-transparent'
                     }`}
             >
                 <div className="container mx-auto px-6 md:px-12 flex items-center justify-between">
@@ -56,16 +57,25 @@ const Navbar = () => {
                         </div>
                     </Link>
 
-                    {/* Desktop Navigation - Centered Pill */}
                     <div className="hidden lg:flex items-center gap-1 bg-slate-100/50 backdrop-blur-md px-2 py-1.5 rounded-2xl border border-slate-200 shadow-sm">
                         {navLinks.map((link) => (
-                            <a
-                                key={link.name}
-                                href={link.href}
-                                className="px-6 py-2 text-[12px] font-black uppercase tracking-[0.15em] text-slate-500 hover:text-primary-purple transition-all rounded-xl hover:bg-white"
-                            >
-                                {link.name}
-                            </a>
+                            link.type === 'link' ? (
+                                <Link
+                                    key={link.name}
+                                    to={link.href}
+                                    className="px-6 py-2 text-[12px] font-black uppercase tracking-[0.15em] text-slate-500 hover:text-primary-purple transition-all rounded-xl hover:bg-white"
+                                >
+                                    {link.name}
+                                </Link>
+                            ) : (
+                                <a
+                                    key={link.name}
+                                    href={link.href}
+                                    className="px-6 py-2 text-[12px] font-black uppercase tracking-[0.15em] text-slate-500 hover:text-primary-purple transition-all rounded-xl hover:bg-white"
+                                >
+                                    {link.name}
+                                </a>
+                            )
                         ))}
                     </div>
 
@@ -75,11 +85,11 @@ const Navbar = () => {
                             Sign In
                         </Link>
                         <Link
-                            to="/signup"
+                            to="/login"
                             className="relative group px-8 py-3.5 rounded-xl bg-gradient-to-r from-primary-purple to-primary text-white text-[12px] font-black uppercase tracking-[0.1em] shadow-lg shadow-primary-purple/20 overflow-hidden"
                         >
                             <span className="relative z-10 flex items-center gap-2">
-                                Start Free Trial
+                                Access Lab
                                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                             </span>
                             <div className="absolute inset-0 bg-white opacity-0 group-hover:opacity-10 transition-opacity duration-500" />
@@ -124,24 +134,41 @@ const Navbar = () => {
 
                         <div className="flex flex-col gap-4 relative z-10">
                             {navLinks.map((link, i) => (
-                                <motion.a
-                                    key={link.name}
-                                    href={link.href}
-                                    initial={{ opacity: 0, x: -20 }}
-                                    animate={{ opacity: 1, x: 0 }}
-                                    transition={{ delay: 0.1 + i * 0.1 }}
-                                    className="text-5xl font-black text-text-primary tracking-tight hover:text-emerald-500 transition-colors"
-                                    onClick={() => setMobileMenuOpen(false)}
-                                >
-                                    {link.name}
-                                </motion.a>
+                                link.type === 'link' ? (
+                                    <motion.div
+                                        key={link.name}
+                                        initial={{ opacity: 0, x: -20 }}
+                                        animate={{ opacity: 1, x: 0 }}
+                                        transition={{ delay: 0.1 + i * 0.1 }}
+                                    >
+                                        <Link
+                                            to={link.href}
+                                            className="text-5xl font-black text-text-primary tracking-tight hover:text-emerald-500 transition-colors"
+                                            onClick={() => setMobileMenuOpen(false)}
+                                        >
+                                            {link.name}
+                                        </Link>
+                                    </motion.div>
+                                ) : (
+                                    <motion.a
+                                        key={link.name}
+                                        href={link.href}
+                                        initial={{ opacity: 0, x: -20 }}
+                                        animate={{ opacity: 1, x: 0 }}
+                                        transition={{ delay: 0.1 + i * 0.1 }}
+                                        className="text-5xl font-black text-text-primary tracking-tight hover:text-emerald-500 transition-colors"
+                                        onClick={() => setMobileMenuOpen(false)}
+                                    >
+                                        {link.name}
+                                    </motion.a>
+                                )
                             ))}
                         </div>
 
                         <div className="mt-auto flex flex-col gap-4 relative z-10">
                             <Link to="/login" className="w-full py-5 text-center text-white font-black text-xl border-2 border-white/10 rounded-3xl hover:bg-white/5 transition-colors">Sign In</Link>
-                            <Link to="/signup" className="w-full py-6 text-center bg-emerald-500 text-slate-950 rounded-3xl font-black text-xl shadow-2xl shadow-emerald-500/20 active:scale-95 transition-transform">
-                                Start Free Trial
+                            <Link to="/login" className="w-full py-6 text-center bg-emerald-500 text-slate-950 rounded-3xl font-black text-xl shadow-2xl shadow-emerald-500/20 active:scale-95 transition-transform">
+                                Access Demo Lab
                             </Link>
                         </div>
                     </motion.div>

@@ -26,7 +26,7 @@ const FAQ = () => {
         },
         {
             q: "Can I try before buying?",
-            a: "Yes! 14-day free trial, no credit card required. Test all features risk-free."
+            a: "Hyperplott is currently in public beta. You can explore all premium features instantly through our priority demo gateway without any registration."
         }
     ];
 
@@ -51,7 +51,7 @@ const FAQ = () => {
 
                 <div className="grid md:grid-cols-2 gap-6">
                     {questions.map((faq, i) => (
-                        <motion.div 
+                        <motion.div
                             key={i}
                             initial={{ opacity: 0, y: 10 }}
                             whileInView={{ opacity: 1, y: 0 }}

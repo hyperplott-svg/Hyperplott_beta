@@ -8,7 +8,7 @@ const FounderStory = () => {
                 <div className="grid lg:grid-cols-2 gap-16 items-center">
                     <div className="grid md:grid-cols-2 gap-6 order-2 lg:order-1">
                         {/* Founder 1 */}
-                        <motion.div 
+                        <motion.div
                             initial={{ opacity: 0, y: 20 }}
                             whileInView={{ opacity: 1, y: 0 }}
                             className="card-premium p-8 text-center"
@@ -18,7 +18,7 @@ const FounderStory = () => {
                             </div>
                             <h3 className="text-xl font-black text-slate-900 mb-1 uppercase tracking-tight">Shiva Kailash</h3>
                             <span className="text-primary-purple font-black uppercase tracking-[0.2em] text-[10px] mb-4 block">PhD Researcher</span>
-                            
+
                             <div className="pt-4 border-t border-slate-100 flex justify-center gap-4">
                                 <div className="text-center">
                                     <div className="text-lg font-black text-slate-900 leading-none">200+</div>
@@ -32,7 +32,7 @@ const FounderStory = () => {
                         </motion.div>
 
                         {/* Founder 2 */}
-                        <motion.div 
+                        <motion.div
                             initial={{ opacity: 0, y: 20 }}
                             whileInView={{ opacity: 1, y: 0 }}
                             transition={{ delay: 0.1 }}
@@ -42,18 +42,7 @@ const FounderStory = () => {
                                 <img src="/founder-madhan.jpg" alt="J Madhan" className="w-full h-full object-cover" />
                             </div>
                             <h3 className="text-xl font-black text-slate-900 mb-1 uppercase tracking-tight">J Madhan</h3>
-                            <span className="text-accent-teal font-black uppercase tracking-[0.2em] text-[10px] mb-4 block">PhD Researcher</span>
-
-                            <div className="pt-4 border-t border-slate-100 flex justify-center gap-4">
-                                <div className="text-center">
-                                    <div className="text-lg font-black text-slate-900 leading-none">100+</div>
-                                    <div className="text-[8px] font-bold text-slate-400 uppercase tracking-widest">Students</div>
-                                </div>
-                                <div className="text-center">
-                                    <div className="text-lg font-black text-slate-900 leading-none">24/7</div>
-                                    <div className="text-[8px] font-bold text-slate-400 uppercase tracking-widest">Support</div>
-                                </div>
-                            </div>
+                            <span className="text-accent-teal font-black uppercase tracking-[0.2em] text-[10px] mb-4 block">I have developed this...</span>
                         </motion.div>
                     </div>
 
@@ -72,8 +61,8 @@ const FounderStory = () => {
                                 "After years of struggling with legacy tools in the lab, we built Hyperplott — the tool we wish we had during our research."
                             </blockquote>
                             <p className="text-slate-500 leading-relaxed font-medium mb-8">
-                                We founded Hyperplott to transform how researchers interact with complex statistical tools. 
-                                Our mission is to make advanced Design of Experiments accessible to every scientist, 
+                                We founded Hyperplott to transform how researchers interact with complex statistical tools.
+                                Our mission is to make advanced Design of Experiments accessible to every scientist,
                                 regardless of their statistical background.
                             </p>
                         </motion.div>

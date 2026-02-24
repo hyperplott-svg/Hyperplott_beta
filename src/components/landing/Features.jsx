@@ -85,7 +85,7 @@ const Features = () => {
                         transition={{ duration: 0.8, delay: 0.2 }}
                         className="text-xl md:text-2xl text-slate-500 max-w-3xl mx-auto font-medium"
                     >
-                        Comprehensive suite of experimental design tools. 
+                        Comprehensive suite of experimental design tools.
                         Engineered for researchers, validated for precision.
                     </motion.p>
                 </div>
@@ -114,7 +114,7 @@ const FeatureCard = ({ feature, index }) => {
             transition={{ duration: 0.8, delay: index * 0.1 }}
             className="card-premium h-full group flex flex-col"
         >
-            <Link to="/signup" className="flex flex-col h-full w-full">
+            <Link to="/login" className="flex flex-col h-full w-full">
                 {/* Visual Header */}
                 <div className="relative w-full h-56 bg-slate-50 border-b border-slate-100 overflow-hidden">
                     {isInView && (
@@ -132,7 +132,7 @@ const FeatureCard = ({ feature, index }) => {
                             </Canvas>
                         </ThreeErrorBoundary>
                     )}
-                    
+
                     {feature.badge && (
                         <div className="absolute top-4 right-4 px-2 py-1 rounded bg-slate-900 text-white text-[8px] font-black uppercase tracking-widest">
                             {feature.badge}

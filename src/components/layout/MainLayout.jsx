@@ -8,7 +8,7 @@ const MainLayout = ({ children, noPadding = false }) => {
     const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
     return (
-        <div className="flex h-screen bg-bg-main overflow-hidden transition-colors duration-500">
+        <div className="flex h-screen bg-bg-primary overflow-hidden transition-colors duration-500">
             {/* Dynamic Background */}
             <div className="fixed inset-0 pointer-events-none overflow-hidden -z-0">
                 <div className="absolute top-[-10%] right-[-10%] w-[40%] h-[40%] bg-primary/5 rounded-full blur-[120px] animate-pulse" />

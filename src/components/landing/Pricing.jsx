@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Check, ArrowRight, Star, ShieldCheck, Globe } from 'lucide-react';
+import { Check } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const Pricing = () => {
     const [annual, setAnnual] = useState(false);
@@ -8,7 +9,7 @@ const Pricing = () => {
     const plans = [
         {
             name: "Researcher",
-            price: annual ? "399" : "499",
+            price: "0",
             description: "Essential tools for students and independent researchers.",
             features: [
                 "10 active experimental designs",
@@ -17,12 +18,12 @@ const Pricing = () => {
                 "Standard Export Formats",
                 "Community Forum Access"
             ],
-            cta: "Choose Researcher",
+            cta: "Enter Laboratory",
             popular: false
         },
         {
             name: "Professional",
-            price: annual ? "1599" : "1999",
+            price: "0",
             description: "Advanced intelligence engine for enterprise labs.",
             features: [
                 "Unlimited active designs",
@@ -32,12 +33,12 @@ const Pricing = () => {
                 "Priority Technical Support",
                 "Custom Export Templates"
             ],
-            cta: "Choose Professional",
+            cta: "Enter Laboratory",
             popular: true
         },
         {
             name: "Enterprise",
-            price: "Custom",
+            price: "Free Beta",
             description: "Infrastructure for global research institutions.",
             features: [
                 "Private VPC Deployment",
@@ -47,7 +48,7 @@ const Pricing = () => {
                 "Guaranteed SLA response",
                 "Regulatory Compliance Mode"
             ],
-            cta: "Contact Sales",
+            cta: "Access Demo",
             popular: false
         }
     ];
@@ -56,15 +57,15 @@ const Pricing = () => {
         <section id="pricing" className="py-40 bg-bg-primary relative overflow-hidden">
             <div className="container mx-auto px-6 max-w-7xl relative z-10">
                 <div className="text-center mb-32">
-                    <div className="section-badge">Pricing Plans</div>
+                    <div className="section-badge">Public Beta Path</div>
                     <h2 className="text-4xl md:text-6xl font-black text-slate-900 mb-8 tracking-tighter">
-                        Simple, <span className="text-gradient">Transparent Pricing.</span>
+                        Open <span className="text-gradient">Scientific Research.</span>
                     </h2>
 
                     <p className="text-xl text-slate-500 max-w-2xl mx-auto font-medium mb-12">
-                        Start with a <span className="text-slate-900 font-bold">14-day FREE trial</span>. No credit card required.
+                        Currently in public beta. <span className="text-slate-900 font-bold">All premium features</span> are accessible via our priority demo gateway.
                     </p>
-                    
+
                     {/* Toggle */}
                     <div className="flex items-center justify-center gap-6 mb-16">
                         <span className={`text-[11px] font-black tracking-[0.2em] transition-colors ${!annual ? 'text-slate-900' : 'text-slate-400'}`}>MONTHLY</span>
@@ -106,9 +107,9 @@ const Pricing = () => {
                                 </span>
                                 <div className="flex items-baseline gap-1 mb-4">
                                     <span className="text-5xl font-black text-slate-900 tracking-tight">
-                                        {plan.price !== "Custom" ? `₹${plan.price}` : plan.price}
+                                        {plan.price !== "Free Beta" ? `₹${plan.price}` : plan.price}
                                     </span>
-                                    {plan.price !== "Custom" && <span className="text-lg text-slate-400 font-bold">/mo</span>}
+                                    {plan.price !== "Free Beta" && <span className="text-lg text-slate-400 font-bold">/mo</span>}
                                 </div>
                                 <p className="text-slate-500 font-medium">
                                     {plan.description}
@@ -124,12 +125,14 @@ const Pricing = () => {
                                 ))}
                             </div>
 
-                            <button className={`w-full py-4 rounded-xl font-black text-xs uppercase tracking-widest transition-all ${plan.popular
-                                ? 'bg-primary-purple text-white shadow-lg hover:shadow-primary-purple/30'
-                                : 'bg-slate-100 text-slate-900 hover:bg-slate-200'
-                                }`}>
+                            <Link
+                                to="/login"
+                                className={`w-full py-4 rounded-xl font-black text-xs uppercase tracking-widest transition-all text-center ${plan.popular
+                                    ? 'bg-primary-purple text-white shadow-lg hover:shadow-primary-purple/30'
+                                    : 'bg-slate-100 text-slate-900 hover:bg-slate-200'
+                                    }`}>
                                 {plan.cta}
-                            </button>
+                            </Link>
                         </motion.div>
                     ))}
                 </div>

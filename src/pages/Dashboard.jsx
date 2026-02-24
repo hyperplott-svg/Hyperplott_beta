@@ -56,67 +56,67 @@ const Dashboard = () => {
                         initial={{ opacity: 0, scale: 0.98, y: 10 }}
                         animate={{ opacity: 1, scale: 1, y: 0 }}
                         exit={{ opacity: 0, scale: 0.98 }}
-                        className="relative overflow-hidden rounded-[2.5rem] bg-[#0F172A] p-12 text-white shadow-2xl shadow-indigo-900/20 group min-h-[400px] flex flex-col justify-center"
+                        className="relative overflow-hidden rounded-[2.5rem] bg-white border border-slate-100 p-12 text-slate-900 shadow-xl shadow-indigo-100/20 group min-h-[400px] flex flex-col justify-center"
                     >
                         {/* Dynamic Background */}
-                        <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 brightness-100 contrast-150 mix-blend-overlay"></div>
-                        <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-gradient-to-b from-indigo-500/20 to-purple-500/20 blur-[120px] rounded-full -translate-y-1/2 translate-x-1/2 animate-pulse" style={{ animationDuration: '4s' }} />
-                        <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-cyan-500/10 blur-[100px] rounded-full translate-y-1/2 -translate-x-1/2" />
+                        <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.03] brightness-100 contrast-150 mix-blend-overlay"></div>
+                        <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-gradient-to-b from-primary-purple/10 to-primary/10 blur-[120px] rounded-full -translate-y-1/2 translate-x-1/2 animate-pulse" style={{ animationDuration: '4s' }} />
+                        <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-cyan-500/5 blur-[100px] rounded-full translate-y-1/2 -translate-x-1/2" />
 
                         <div className="relative z-10 grid lg:grid-cols-2 gap-12 items-center">
-                            <div className="space-y-8">
-                                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 backdrop-blur-sm">
-                                    <div className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
-                                    <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-300">System Operational</span>
+                            <div className="space-y-8 text-left">
+                                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary-purple/5 border border-primary-purple/10 backdrop-blur-sm">
+                                    <div className="w-2 h-2 rounded-full bg-primary-purple animate-pulse" />
+                                    <span className="text-[10px] font-black uppercase tracking-[0.2em] text-primary-purple">Laboratory Active</span>
                                 </div>
 
-                                <h1 className="text-5xl md:text-7xl font-black tracking-tight font-display leading-[1.05]">
-                                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-indigo-100 to-slate-400">Quantum</span> <br />
+                                <h1 className="text-5xl md:text-7xl font-black tracking-tight font-display leading-[1.05] text-slate-900">
+                                    <span className="text-gradient">Scientific</span> <br />
                                     Workspace.
                                 </h1>
 
-                                <p className="text-lg text-slate-400 font-medium max-w-lg leading-relaxed">
-                                    Initiate high-precision combinatorial matrices using our advanced optimization engine.
+                                <p className="text-lg text-slate-500 font-medium max-w-lg leading-relaxed">
+                                    Initiate high-precision experimental matrices using our AI-powered statistical optimization engine.
                                 </p>
 
                                 <div className="flex flex-wrap gap-4">
                                     <Link to="/workspace">
-                                        <button className="h-14 px-8 bg-white text-slate-900 font-black rounded-2xl hover:bg-indigo-50 hover:scale-105 transition-all shadow-xl shadow-white/10 active:scale-95 flex items-center gap-3 group">
-                                            <Zap className="w-5 h-5 fill-slate-900 group-hover:rotate-12 transition-transform" />
-                                            Launch Workspace
+                                        <button className="btn-primary h-14 px-10 group">
+                                            <Zap className="w-5 h-5 fill-white group-hover:rotate-12 transition-transform" />
+                                            Initialize New DoE
                                         </button>
                                     </Link>
                                 </div>
                             </div>
 
-                            {/* Decorative HUD Element */}
+                            {/* Decorative HUD Element - Light Version */}
                             <div className="hidden lg:block relative">
-                                <div className="absolute inset-0 bg-gradient-to-r from-indigo-500/10 to-purple-500/10 rounded-3xl blur-xl" />
-                                <div className="relative bg-white/5 border border-white/10 backdrop-blur-md rounded-3xl p-8 transform rotate-2 hover:rotate-0 transition-transform duration-700 hover:scale-[1.02]">
+                                <div className="absolute inset-0 bg-gradient-to-r from-primary-purple/5 to-primary/5 rounded-3xl blur-xl" />
+                                <div className="relative bg-white border border-slate-100 shadow-2xl rounded-3xl p-8 transform rotate-2 hover:rotate-0 transition-transform duration-700 hover:scale-[1.02]">
                                     <div className="flex justify-between items-start mb-8">
                                         <div className="flex gap-2">
-                                            <div className="w-3 h-3 rounded-full bg-red-400/80" />
-                                            <div className="w-3 h-3 rounded-full bg-yellow-400/80" />
-                                            <div className="w-3 h-3 rounded-full bg-green-400/80" />
+                                            <div className="w-3 h-3 rounded-full bg-slate-200" />
+                                            <div className="w-3 h-3 rounded-full bg-slate-200" />
+                                            <div className="w-3 h-3 rounded-full bg-slate-200" />
                                         </div>
-                                        <div className="text-[10px] font-mono text-slate-400">CMD_EXEC_01</div>
+                                        <div className="text-[10px] font-black uppercase tracking-widest text-slate-300">System Kernel v2.4</div>
                                     </div>
-                                    <div className="space-y-4 font-mono text-xs text-indigo-200">
-                                        <div className="flex justify-between border-b border-white/5 pb-2">
-                                            <span>&gt; INITIALIZING_CORE</span>
-                                            <span className="text-green-400">DONE</span>
+                                    <div className="space-y-4 font-mono text-[11px] text-slate-600">
+                                        <div className="flex justify-between border-b border-slate-50 pb-2">
+                                            <span className="font-bold">&gt; ANALYZING_INTERACTIONS</span>
+                                            <span className="text-primary-purple font-black">ACTIVE</span>
                                         </div>
-                                        <div className="flex justify-between border-b border-white/5 pb-2">
-                                            <span>&gt; LOADING_FACTORS</span>
-                                            <span className="text-green-400">3 ACTIVE</span>
+                                        <div className="flex justify-between border-b border-slate-50 pb-2">
+                                            <span className="font-bold">&gt; OPTIMIZING_YIELD</span>
+                                            <span className="text-primary-purple font-black">98.2%</span>
                                         </div>
-                                        <div className="flex justify-between border-b border-white/5 pb-2">
-                                            <span>&gt; PREDICTING_YIELD</span>
-                                            <span className="text-cyan-400 animate-pulse">98.4%</span>
+                                        <div className="flex justify-between border-b border-slate-50 pb-2">
+                                            <span className="font-bold">&gt; VALIDATING_RESIDUALS</span>
+                                            <span className="text-accent-teal font-black">PASSED</span>
                                         </div>
-                                        <div className="h-32 mt-4 bg-gradient-to-b from-indigo-500/20 to-transparent rounded-lg border border-white/5 relative overflow-hidden flex items-end justify-between px-2 pb-2">
+                                        <div className="h-32 mt-4 bg-slate-50 rounded-lg border border-slate-100 relative overflow-hidden flex items-end justify-between px-2 pb-2">
                                             {[40, 70, 50, 90, 60, 80, 55].map((h, i) => (
-                                                <div key={i} className="w-6 bg-indigo-400/50 rounded-t-sm" style={{ height: `${h}%` }} />
+                                                <div key={i} className="w-6 bg-primary-purple/20 rounded-t-sm" style={{ height: `${h}%` }} />
                                             ))}
                                         </div>
                                     </div>

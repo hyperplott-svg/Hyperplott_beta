@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { getAuth, GoogleAuthProvider, signInWithPopup, signOut } from "firebase/auth";
+import { getAuth, GoogleAuthProvider, signInWithPopup as firebaseSignInWithPopup, signOut as firebaseSignOut } from "firebase/auth";
 import { getAnalytics } from "firebase/analytics";
 
 const firebaseConfig = {
@@ -13,9 +13,28 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const analytics = getAnalytics(app);
-const googleProvider = new GoogleAuthProvider();
+let auth;
+let googleProvider;
+let analytics;
+let signInWithPopup = () => Promise.reject(new Error("Auth not initialized"));
+let signOut = () => Promise.resolve();
+
+try {
+    if (!firebaseConfig.apiKey || firebaseConfig.apiKey === 'undefined') {
+        throw new Error('Firebase API Key is missing');
+    }
+    const app = initializeApp(firebaseConfig);
+    auth = getAuth(app);
+    analytics = getAnalytics(app);
+    googleProvider = new GoogleAuthProvider();
+    signInWithPopup = firebaseSignInWithPopup;
+    signOut = firebaseSignOut;
+} catch (error) {
+    console.error("Firebase Initialization Error:", error.message);
+    // Provide mock objects to prevent site-wide crashes
+    auth = { onAuthStateChanged: (cb) => { cb(null); return () => { }; } };
+    googleProvider = {};
+    analytics = {};
+}
 
 export { auth, googleProvider, signInWithPopup, signOut, analytics };

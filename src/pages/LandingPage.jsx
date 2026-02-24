@@ -14,6 +14,8 @@ import Footer from '../components/landing/Footer';
 import SEO from '../components/common/SEO';
 
 const LandingPage = () => {
+    const [showBanner, setShowBanner] = React.useState(true);
+
     return (
         <div className="bg-bg-primary min-h-screen text-text-primary font-sans selection:bg-emerald-500/20 selection:text-emerald-500 overflow-x-hidden">
             <SEO
@@ -21,9 +23,9 @@ const LandingPage = () => {
                 description="Hyperplott is an AI-powered Design of Experiments (DoE) platform that helps researchers, scientists, and students optimize their experimental designs with statistical precision."
                 keywords="Design of Experiments, DoE, AI Science, Scientific Optimization, Research Tools, Statistical Design"
             />
-            <Navbar />
+            <Navbar bannerActive={showBanner} />
             <main>
-                <Hero />
+                <Hero showBanner={showBanner} setShowBanner={setShowBanner} />
                 <ProblemStatement />
                 <HowItWorks />
                 <Features />

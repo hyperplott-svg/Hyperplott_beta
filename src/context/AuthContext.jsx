@@ -1,6 +1,4 @@
-import React, { createContext, useContext, useEffect, useState } from 'react';
-import { onAuthStateChanged } from 'firebase/auth';
-import { auth } from '../firebase';
+import React, { createContext, useContext, useState } from 'react';
 
 const AuthContext = createContext();
 
@@ -8,24 +6,31 @@ export const useAuth = () => useContext(AuthContext);
 
 export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false);
 
-    useEffect(() => {
-        const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-            setUser(currentUser);
-            setLoading(false);
+    const loginDemo = () => {
+        setUser({
+            uid: 'demo-user-id',
+            displayName: 'Guest Researcher',
+            email: 'demo@hyperplott.ai',
+            isDemo: true
         });
-        return unsubscribe;
-    }, []);
+    };
+
+    const logout = () => {
+        setUser(null);
+    };
 
     const value = {
         user,
-        loading
+        loading,
+        loginDemo,
+        logout
     };
 
     return (
         <AuthContext.Provider value={value}>
-            {!loading && children}
+            {children}
         </AuthContext.Provider>
     );
 };
