@@ -49,14 +49,14 @@ const Dashboard = () => {
     ];
 
     return (
-        <div className="space-y-10 pb-20 max-w-[1400px] mx-auto">
+        <div className="space-y-6 md:space-y-10 pb-20 max-w-[1400px] mx-auto px-4 md:px-0">
             <AnimatePresence>
                 {showBanner && (
                     <motion.div
                         initial={{ opacity: 0, scale: 0.98, y: 10 }}
                         animate={{ opacity: 1, scale: 1, y: 0 }}
                         exit={{ opacity: 0, scale: 0.98 }}
-                        className="relative overflow-hidden rounded-[2.5rem] bg-white border border-slate-100 p-12 text-slate-900 shadow-xl shadow-indigo-100/20 group min-h-[400px] flex flex-col justify-center"
+                        className="relative overflow-hidden rounded-[2.5rem] bg-white border border-slate-100 p-8 md:p-12 text-slate-900 shadow-xl shadow-indigo-100/20 group md:min-h-[400px] flex flex-col justify-center"
                     >
                         {/* Dynamic Background */}
                         <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.03] brightness-100 contrast-150 mix-blend-overlay"></div>
@@ -70,8 +70,8 @@ const Dashboard = () => {
                                     <span className="text-[10px] font-black uppercase tracking-[0.2em] text-primary-purple">Laboratory Active</span>
                                 </div>
 
-                                <h1 className="text-5xl md:text-7xl font-black tracking-tight font-display leading-[1.05] text-slate-900">
-                                    <span className="text-gradient">Scientific</span> <br />
+                                <h1 className="text-4xl md:text-5xl lg:text-7xl font-black tracking-tight font-display leading-[1.05] text-slate-900">
+                                    <span className="text-gradient">Scientific</span> <br className="hidden sm:block" />
                                     Workspace.
                                 </h1>
 

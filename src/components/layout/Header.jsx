@@ -17,21 +17,27 @@ import { useAuth } from '../../context/AuthContext';
 import { signOut } from 'firebase/auth';
 import { auth } from '../../firebase';
 
-const Header = ({ toggleSidebar }) => {
+const Header = ({ toggleSidebar, isSidebarOpen }) => {
     const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
-    const { user } = useAuth();
+    const { user, logout } = useAuth();
 
     const handleLogout = async () => {
         try {
-            await signOut(auth);
+            await logout();
         } catch (error) {
             console.error("Error signing out: ", error);
         }
     };
 
     return (
-        <header className="h-20 bg-white border-b border-gray-100 px-8 flex items-center justify-between sticky top-0 z-[40]">
-            <div className="flex items-center gap-4">
+        <header className="h-20 bg-white border-b border-gray-100 px-4 md:px-8 flex items-center justify-between sticky top-0 z-[40]">
+            <div className="flex items-center gap-2 md:gap-4">
+                <button
+                    onClick={toggleSidebar}
+                    className="p-2.5 rounded-xl hover:bg-slate-50 text-slate-400 transition-all flex items-center justify-center lg:hidden"
+                >
+                    <Command className="w-5 h-5" />
+                </button>
                 <Link
                     to="/"
                     className="flex items-center gap-2 p-2.5 rounded-xl bg-slate-50 border border-slate-100 text-slate-400 hover:text-emerald-500 hover:bg-emerald-50 transition-all group"

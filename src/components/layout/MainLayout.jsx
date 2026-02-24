@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { clsx } from 'clsx';
 
 const MainLayout = ({ children, noPadding = false }) => {
-    const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+    const [isSidebarOpen, setIsSidebarOpen] = useState(window.innerWidth >= 1024);
 
     return (
         <div className="flex h-screen bg-bg-primary overflow-hidden transition-colors duration-500">
@@ -18,11 +18,14 @@ const MainLayout = ({ children, noPadding = false }) => {
             <Sidebar isOpen={isSidebarOpen} setIsOpen={setIsSidebarOpen} />
 
             <div className="flex-1 flex flex-col min-w-0 overflow-hidden relative z-10">
-                <Header toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)} />
+                <Header
+                    toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)}
+                    isSidebarOpen={isSidebarOpen}
+                />
 
                 <main className={clsx(
-                    "flex-1 overflow-hidden scroll-smooth",
-                    !noPadding && "px-6 py-12 sm:px-10 lg:px-16"
+                    "flex-1 overflow-x-hidden overflow-y-auto scroll-smooth",
+                    !noPadding && "px-4 py-8 sm:px-10 lg:px-16"
                 )}>
                     <motion.div
                         className={clsx(noPadding && "h-full")}

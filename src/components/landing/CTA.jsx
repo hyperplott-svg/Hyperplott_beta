@@ -24,7 +24,7 @@ const CTA = () => {
                     className="text-xl text-slate-400 mb-12 font-medium max-w-2xl mx-auto leading-relaxed"
                 >
                     Join researchers who are tired of expensive, complicated DoE software.
-                    Start your free trial today.
+                    Access our public beta and start optimizing today.
                 </motion.p>
 
                 <motion.div
@@ -34,8 +34,8 @@ const CTA = () => {
                     transition={{ delay: 0.4 }}
                     className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16"
                 >
-                    <Link to="/login" className="btn-primary w-full sm:w-auto px-12 py-5 text-xl">
-                        Enter Lab
+                    <Link to="/signup" className="btn-primary w-full sm:w-auto px-12 py-5 text-xl">
+                        Build Your Lab
                         <ArrowRight className="w-6 h-6" />
                     </Link>
 

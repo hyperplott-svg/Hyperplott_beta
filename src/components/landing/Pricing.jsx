@@ -126,7 +126,7 @@ const Pricing = () => {
                             </div>
 
                             <Link
-                                to="/login"
+                                to="/signup"
                                 className={`w-full py-4 rounded-xl font-black text-xs uppercase tracking-widest transition-all text-center ${plan.popular
                                     ? 'bg-primary-purple text-white shadow-lg hover:shadow-primary-purple/30'
                                     : 'bg-slate-100 text-slate-900 hover:bg-slate-200'

@@ -7,6 +7,7 @@ import CreateDesign from './pages/CreateDesign';
 import DesignViewer from './pages/DesignViewer';
 import Settings from './pages/Settings';
 import LoginPage from './pages/LoginPage';
+import SignupPage from './pages/SignupPage';
 import MainLayout from './components/layout/MainLayout';
 import DOEToolPage from './pages/DOEToolPage';
 import PrivacyPolicy from './pages/PrivacyPolicy';
@@ -55,6 +56,7 @@ function App() {
             {/* Public Routes */}
             <Route path="/" element={<RootRedirect />} />
             <Route path="/login" element={<PublicRoute><LoginPage /></PublicRoute>} />
+            <Route path="/signup" element={<PublicRoute><SignupPage /></PublicRoute>} />
             <Route path="/privacy" element={<PrivacyPolicy />} />
             <Route path="/terms" element={<TermsAndConditions />} />
             <Route path="/about" element={<AboutPage />} />

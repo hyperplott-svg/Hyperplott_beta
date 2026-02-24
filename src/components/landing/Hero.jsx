@@ -138,18 +138,15 @@ const Hero = ({ showBanner, setShowBanner }) => {
 
                     {/* High-Impact Actions */}
                     <div className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full max-w-2xl mb-16">
-                        <button
-                            onClick={() => {
-                                loginDemo();
-                                navigate('/dashboard');
-                            }}
-                            className="btn-primary w-full sm:w-auto px-12 py-5 text-xl relative group overflow-hidden"
+                        <Link
+                            to="/signup"
+                            className="btn-primary w-full sm:w-auto px-12 py-5 text-xl relative group overflow-hidden flex items-center justify-center gap-2"
                         >
                             <span className="relative z-10 flex items-center gap-2">
-                                Enter Laboratory <ArrowRight className="w-6 h-6 group-hover:translate-x-1 transition-transform" />
+                                Start Free Research <ArrowRight className="w-6 h-6 group-hover:translate-x-1 transition-transform" />
                             </span>
                             <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity" />
-                        </button>
+                        </Link>
 
                         <button className="btn-secondary w-full sm:w-auto px-12 py-5 text-xl flex items-center justify-center gap-3 group !bg-white/5 !border-white/10 hover:!bg-white/20 transition-all">
                             <div className="w-8 h-8 rounded-full bg-primary-purple/10 flex items-center justify-center group-hover:scale-110 transition-transform">
