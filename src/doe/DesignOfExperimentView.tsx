@@ -348,7 +348,7 @@ const DesignOfExperimentView: React.FC<{ setActiveView: (view: ViewType) => void
             const result = await callWithRetry(async () => {
                 const ai = new GoogleGenAI({ apiKey: apiKey as string });
                 const response = await ai.models.generateContent({
-                    model: "gemini-1.5-flash",
+                    model: "gemini-3-flash-preview",
                     contents: [{ role: 'user', parts: [{ text: `Scientific Study Objective: "${objective}"` }] }],
                     config: {
                         temperature: 0,
@@ -417,7 +417,7 @@ const DesignOfExperimentView: React.FC<{ setActiveView: (view: ViewType) => void
             const coded = await callWithRetry(async () => {
                 const ai = new GoogleGenAI({ apiKey: apiKey as string });
                 const response = await ai.models.generateContent({
-                    model: "gemini-1.5-flash",
+                    model: "gemini-3-flash-preview",
                     contents: [{
                         role: 'user', parts: [{
                             text: `Generate an accurate, industrially standard ${methodology} matrix for ${numFactors} factors: ${factors.map(f => f.name).join(', ')}. 
@@ -479,7 +479,7 @@ const DesignOfExperimentView: React.FC<{ setActiveView: (view: ViewType) => void
             const result = await callWithRetry(async () => {
                 const ai = new GoogleGenAI({ apiKey: apiKey as string });
                 const response = await ai.models.generateContent({
-                    model: "gemini-1.5-flash",
+                    model: "gemini-3-flash-preview",
                     contents: [{
                         role: 'user', parts: [{
                             text: `Perform high-precision statistical regression for "${experimentName}".
