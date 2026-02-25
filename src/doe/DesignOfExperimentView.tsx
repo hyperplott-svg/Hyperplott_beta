@@ -348,7 +348,7 @@ const DesignOfExperimentView: React.FC<{ setActiveView: (view: ViewType) => void
             const result = await callWithRetry(async () => {
                 const ai = new GoogleGenAI({ apiKey: apiKey as string });
                 const response = await ai.models.generateContent({
-                    model: "gemini-3-flash-preview",
+                    model: "gemini-1.5-flash",
                     contents: [{ role: 'user', parts: [{ text: `Scientific Study Objective: "${objective}"` }] }],
                     config: {
                         temperature: 0,
@@ -387,7 +387,7 @@ const DesignOfExperimentView: React.FC<{ setActiveView: (view: ViewType) => void
                         }
                     }
                 });
-                const responseText = response.text || (response.candidates?.[0]?.content?.parts?.[0] as any)?.text || "";
+                const responseText = (response as any).text || (response.candidates?.[0]?.content?.parts?.[0] as any)?.text || "";
                 return safeJSONParse(responseText);
             });
 
@@ -417,7 +417,7 @@ const DesignOfExperimentView: React.FC<{ setActiveView: (view: ViewType) => void
             const coded = await callWithRetry(async () => {
                 const ai = new GoogleGenAI({ apiKey: apiKey as string });
                 const response = await ai.models.generateContent({
-                    model: "gemini-3-flash-preview",
+                    model: "gemini-1.5-flash",
                     contents: [{
                         role: 'user', parts: [{
                             text: `Generate an accurate, industrially standard ${methodology} matrix for ${numFactors} factors: ${factors.map(f => f.name).join(', ')}. 
@@ -445,7 +445,7 @@ const DesignOfExperimentView: React.FC<{ setActiveView: (view: ViewType) => void
                         }
                     }
                 });
-                const responseText = response.text || (response.candidates?.[0]?.content?.parts?.[0] as any)?.text || "";
+                const responseText = (response as any).text || (response.candidates?.[0]?.content?.parts?.[0] as any)?.text || "";
                 return safeJSONParse(responseText);
             });
 
@@ -479,7 +479,7 @@ const DesignOfExperimentView: React.FC<{ setActiveView: (view: ViewType) => void
             const result = await callWithRetry(async () => {
                 const ai = new GoogleGenAI({ apiKey: apiKey as string });
                 const response = await ai.models.generateContent({
-                    model: "gemini-3-flash-preview",
+                    model: "gemini-1.5-flash",
                     contents: [{
                         role: 'user', parts: [{
                             text: `Perform high-precision statistical regression for "${experimentName}".
@@ -523,7 +523,7 @@ const DesignOfExperimentView: React.FC<{ setActiveView: (view: ViewType) => void
                         }
                     }
                 });
-                const responseText = response.text || (response.candidates?.[0]?.content?.parts?.[0] as any)?.text || "";
+                const responseText = (response as any).text || (response.candidates?.[0]?.content?.parts?.[0] as any)?.text || "";
                 return safeJSONParse(responseText);
             });
 
@@ -1051,14 +1051,20 @@ const DesignOfExperimentView: React.FC<{ setActiveView: (view: ViewType) => void
                                                     </thead>
                                                     <tbody className="divide-y divide-slate-100 font-medium">
                                                         {currentAnalysis.anovaTable?.map((row: any, idx: number) => (
-                                                            <tr key={idx} className={`hover:bg-slate-50/80 transition-colors group ${['model', 'total'].includes(row.source.toLowerCase()) ? 'bg-slate-50/40 font-black' : ''}`}>
-                                                                <td className={`px-3 sm:px-8 py-3 sm:py-5 font-black text-slate-900 group-hover:text-emerald-600 transition-colors`}>{row.source}</td>
-                                                                <td className="px-1 sm:px-4 py-3 sm:py-5 text-center font-bold text-slate-600">{row.df}</td>
-                                                                <td className="px-2 sm:px-4 py-3 sm:py-5 text-right font-mono text-slate-500 whitespace-nowrap">{row.sumOfSquares?.toFixed(2)}</td>
-                                                                <td className="px-2 sm:px-4 py-3 sm:py-5 text-right font-mono text-slate-500 whitespace-nowrap">{row.meanSquare?.toFixed(2)}</td>
-                                                                <td className="px-2 sm:px-4 py-3 sm:py-5 text-right font-mono text-emerald-600 font-black">{row.fValue ? row.fValue.toFixed(2) : '-'}</td>
-                                                                <td className={`px-3 sm:px-8 py-3 sm:py-5 text-right font-black ${row.pValue < 0.05 ? 'text-emerald-500' : 'text-slate-400'}`}>
-                                                                    {row.pValue === undefined || row.pValue === null ? '-' : row.pValue < 0.0001 ? '<.0001' : row.pValue.toFixed(3)}
+                                                            <tr key={idx} className={`hover:bg-slate-50/80 transition-colors group ${['model', 'total'].includes(String(row.source || '').toLowerCase()) ? 'bg-slate-50/40 font-black' : ''}`}>
+                                                                <td className={`px-3 sm:px-8 py-3 sm:py-5 font-black text-slate-900 group-hover:text-emerald-600 transition-colors`}>{row.source || '-'}</td>
+                                                                <td className="px-1 sm:px-4 py-3 sm:py-5 text-center font-bold text-slate-600">{row.df ?? '-'}</td>
+                                                                <td className="px-2 sm:px-4 py-3 sm:py-5 text-right font-mono text-slate-500 whitespace-nowrap">
+                                                                    {typeof row.sumOfSquares === 'number' ? row.sumOfSquares.toFixed(2) : '-'}
+                                                                </td>
+                                                                <td className="px-2 sm:px-4 py-3 sm:py-5 text-right font-mono text-slate-500 whitespace-nowrap">
+                                                                    {typeof row.meanSquare === 'number' ? row.meanSquare.toFixed(2) : '-'}
+                                                                </td>
+                                                                <td className="px-2 sm:px-4 py-3 sm:py-5 text-right font-mono text-emerald-600 font-black">
+                                                                    {typeof row.fValue === 'number' ? row.fValue.toFixed(2) : '-'}
+                                                                </td>
+                                                                <td className={`px-3 sm:px-8 py-3 sm:py-5 text-right font-black ${typeof row.pValue === 'number' && row.pValue < 0.05 ? 'text-emerald-500' : 'text-slate-400'}`}>
+                                                                    {typeof row.pValue === 'number' ? (row.pValue < 0.0001 ? '<.0001' : row.pValue.toFixed(3)) : '-'}
                                                                 </td>
                                                             </tr>
                                                         ))}
