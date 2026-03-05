@@ -54,15 +54,18 @@ const Features = () => {
         },
     ];
 
+    const headerRef = useRef(null);
+    const headerInView = useInView(headerRef, { once: true, margin: "-80px" });
+
     return (
-        <section id="features" className="py-40 bg-white relative overflow-hidden">
-            <div className="container mx-auto px-6 max-w-7xl relative z-10">
+        <section id="features" className="py-24 bg-white relative overflow-hidden">
+            <div className="container mx-auto px-4 sm:px-6 max-w-7xl relative z-10">
                 {/* Header */}
-                <div className="max-w-4xl mx-auto text-center mb-32">
+                <div ref={headerRef} className="max-w-4xl mx-auto text-center mb-16">
                     <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
+                        initial={{ opacity: 0, y: 16 }}
+                        animate={headerInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 16 }}
+                        transition={{ duration: 0.5 }}
                         className="section-badge"
                     >
                         Intelligence Modules
@@ -70,20 +73,18 @@ const Features = () => {
 
                     <motion.h2
                         initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.8 }}
-                        className="text-5xl md:text-7xl font-black text-slate-900 mb-8 tracking-tight"
+                        animate={headerInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+                        transition={{ duration: 0.8, delay: 0.1 }}
+                        className="text-4xl sm:text-5xl md:text-7xl font-black text-slate-900 mb-6 tracking-tight"
                     >
-                        Ready to Design <br /><span className="text-gradient">Better Experiments?</span>
+                        Everything You Need <br className="hidden sm:block" /><span className="text-gradient">to Run Better Science</span>
                     </motion.h2>
 
                     <motion.p
                         initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
+                        animate={headerInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
                         transition={{ duration: 0.8, delay: 0.2 }}
-                        className="text-xl md:text-2xl text-slate-500 max-w-3xl mx-auto font-medium"
+                        className="text-lg sm:text-xl md:text-2xl text-slate-500 max-w-2xl mx-auto font-medium"
                     >
                         Comprehensive suite of experimental design tools.
                         Engineered for researchers, validated for precision.
@@ -91,7 +92,7 @@ const Features = () => {
                 </div>
 
                 {/* Cards Grid */}
-                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10">
+                <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
                     {features.map((feature, index) => (
                         <FeatureCard key={index} feature={feature} index={index} />
                     ))}
@@ -104,19 +105,19 @@ const Features = () => {
 const FeatureCard = ({ feature, index }) => {
     const ref = useRef(null);
     const isInView = useInView(ref, { once: true, margin: "-50px" });
-    const Icon = feature.icon;
 
     return (
         <motion.div
             ref={ref}
             initial={{ opacity: 0, y: 40 }}
             animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
-            transition={{ duration: 0.8, delay: index * 0.1 }}
+            transition={{ duration: 0.6, delay: index * 0.08, ease: [0.16, 1, 0.3, 1] }}
+            whileHover={{ y: -4, transition: { type: 'spring', stiffness: 400, damping: 20 } }}
             className="card-premium h-full group flex flex-col"
         >
             <Link to="/login" className="flex flex-col h-full w-full">
                 {/* Visual Header */}
-                <div className="relative w-full h-56 bg-slate-50 border-b border-slate-100 overflow-hidden">
+                <div className="relative w-full h-44 bg-slate-50 border-b border-slate-100 overflow-hidden">
                     {isInView && (
                         <ThreeErrorBoundary>
                             <Canvas dpr={[1, 2]}>
@@ -140,11 +141,11 @@ const FeatureCard = ({ feature, index }) => {
                     )}
                 </div>
 
-                <div className="p-8 flex flex-col flex-grow">
-                    <h3 className="text-2xl font-black text-slate-900 mb-3 tracking-tight group-hover:text-primary-purple transition-colors uppercase">
+                <div className="p-6 sm:p-8 flex flex-col flex-grow">
+                    <h3 className="text-xl sm:text-2xl font-black text-slate-900 mb-3 tracking-tight group-hover:text-primary-purple transition-colors duration-300 uppercase">
                         {feature.title}
                     </h3>
-                    <p className="text-slate-500 leading-relaxed font-medium mb-6 flex-grow">
+                    <p className="text-slate-500 leading-relaxed font-medium mb-6 flex-grow text-sm sm:text-base">
                         {feature.description}
                     </p>
 

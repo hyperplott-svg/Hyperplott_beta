@@ -95,7 +95,12 @@ const CreateDesign = () => {
 
     return (
         <div className="pb-32 max-w-7xl mx-auto">
-            <SEO title="Create Design" />
+            <SEO
+                title="Create Experimental Design"
+                description="Build a new DoE design matrix — define your factors, select a strategy (Factorial, RSM, Mixture), and generate an optimized experimental plan in minutes."
+                keywords="create DoE, factorial design, response surface methodology, experimental matrix, design of experiments"
+                url="https://hyperplott.com/create"
+            />
             {/* Progress Indicator */}
             <div className="mb-20 px-8">
                 <div className="flex items-center justify-between relative">

@@ -16,8 +16,10 @@ const AboutPage = () => {
     return (
         <div className="bg-bg-primary min-h-screen text-text-primary font-sans selection:bg-emerald-500/20 selection:text-emerald-500 overflow-x-hidden">
             <SEO
-                title="About Us - The Team Behind Hyperplott"
-                description="Hyperplott is built by scientists, for scientists. Learn about our mission to democratize advanced experimental design."
+                title="About Us — The Team Behind Hyperplott"
+                description="Hyperplott is built by PhD researchers and engineers on a mission to democratize advanced experimental design. Learn our story and meet the team."
+                keywords="about Hyperplott, DoE research team, scientific AI company, design of experiments founders, PhD researchers"
+                url="https://hyperplott.com/about"
             />
             <Navbar />
 

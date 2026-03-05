@@ -706,7 +706,7 @@ const DesignOfExperimentView: React.FC<{ setActiveView: (view: ViewType) => void
 
     return (
         <div className="h-full flex flex-col bg-bg-primary overflow-hidden selection:bg-primary-purple/20">
-            <header className="glass border-b border-slate-100 px-4 sm:px-10 py-5 flex flex-col lg:flex-row items-center justify-between gap-6 z-30 relative">
+            <header className="glass border-b border-slate-100 px-3 sm:px-10 py-3 sm:py-5 flex flex-col lg:flex-row items-center justify-between gap-4 sm:gap-6 z-30 relative">
                 {/* Branding Section */}
                 <div className="flex items-center justify-between w-full lg:w-auto gap-8 relative z-10">
                     <div className="flex items-center gap-6">
@@ -717,10 +717,10 @@ const DesignOfExperimentView: React.FC<{ setActiveView: (view: ViewType) => void
                         <div>
                             <h2 className="text-2xl sm:text-3xl font-black tracking-tighter text-slate-900 uppercase flex items-center gap-2">
                                 Hyper<span className="text-gradient">Plott</span>
-                                <span className="text-[10px] bg-primary-purple text-white px-2 py-1 rounded-md leading-none font-black tracking-widest ml-1 shadow-lg shadow-primary-purple/20">PRO</span>
+                                <span className="text-[9px] sm:text-[10px] bg-primary-purple text-white px-2 py-0.5 sm:py-1 rounded-md leading-none font-black tracking-widest ml-1 shadow-lg shadow-primary-purple/20">PRO</span>
                             </h2>
-                            <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em] flex items-center gap-2 -mt-1">
-                                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                            <p className="text-[8px] sm:text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] sm:tracking-[0.3em] flex items-center gap-2 -mt-1 truncate max-w-[150px] sm:max-w-none">
+                                <span className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-emerald-500 animate-pulse shrink-0" />
                                 {experimentName}
                             </p>
                         </div>
@@ -741,13 +741,13 @@ const DesignOfExperimentView: React.FC<{ setActiveView: (view: ViewType) => void
                     </div>
                 </div>
 
-                <nav className="flex items-center bg-slate-100/30 p-1.5 rounded-full gap-1 border border-slate-100 w-full lg:w-auto overflow-x-auto no-scrollbar relative z-10">
+                <nav className="flex items-center bg-slate-100/30 p-1 sm:p-1.5 rounded-full gap-1 border border-slate-100 w-full lg:w-auto overflow-x-auto no-scrollbar relative z-10 scroll-smooth">
                     {(['Dimension', 'Execution', 'Insight', 'Synthesis'] as DoETab[]).map(tab => (
                         <button
                             key={tab}
                             onClick={() => setActiveTab(tab)}
-                            className={`px-6 sm:px-10 py-3 text-[10px] font-black uppercase tracking-[0.25em] rounded-full transition-all duration-500 whitespace-nowrap flex-1 lg:flex-none relative group overflow-hidden ${activeTab === tab
-                                ? 'bg-white text-primary-purple shadow-xl shadow-primary-purple/10 translate-y-[-1px]'
+                            className={`px-4 sm:px-10 py-2.5 sm:py-3 text-[9px] sm:text-[10px] font-black uppercase tracking-[0.15em] sm:tracking-[0.25em] rounded-full transition-all duration-500 whitespace-nowrap flex-1 lg:flex-none relative group overflow-hidden ${activeTab === tab
+                                ? 'bg-white text-primary-purple shadow-lg sm:shadow-xl shadow-primary-purple/10 translate-y-[-1px]'
                                 : 'text-slate-400 hover:text-slate-600 hover:bg-white/50'
                                 }`}
                         >
@@ -760,13 +760,13 @@ const DesignOfExperimentView: React.FC<{ setActiveView: (view: ViewType) => void
                 </nav>
             </header>
 
-            <main className="flex-1 overflow-y-auto p-4 sm:p-8 lg:p-12 bg-[#FBFCFE] custom-scrollbar">
+            <main className="flex-1 overflow-y-auto p-3 sm:p-8 lg:p-12 bg-[#FBFCFE] custom-scrollbar">
                 <AnimatePresence mode="wait">
                     {activeTab === 'Dimension' && (
                         <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -15 }} className="max-w-6xl mx-auto space-y-6 sm:space-y-12 pb-20">
                             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-10">
                                 <section className="space-y-4 sm:space-y-8">
-                                    <div className="card-premium p-6 sm:p-12">
+                                    <div className="card-premium p-5 sm:p-12">
                                         <div className="mb-6 sm:mb-10">
                                             <div className="section-badge">Optimization Context</div>
                                             <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-3 sm:mb-4 block">Experiment Identifier</label>
@@ -782,7 +782,7 @@ const DesignOfExperimentView: React.FC<{ setActiveView: (view: ViewType) => void
                                                 value={objective}
                                                 onChange={e => setObjective(e.target.value)}
                                                 placeholder="e.g. Seeking high-precision yield optimization..."
-                                                className="w-full bg-slate-50/50 p-6 sm:p-8 rounded-2xl sm:rounded-3xl border border-slate-100 focus:border-primary-purple focus:ring-4 focus:ring-primary-purple/5 h-32 sm:h-48 resize-none text-slate-800 text-sm sm:text-lg font-medium transition-all outline-none"
+                                                className="w-full bg-slate-50/50 p-4 sm:p-8 rounded-2xl sm:rounded-3xl border border-slate-100 focus:border-primary-purple focus:ring-4 focus:ring-primary-purple/5 h-24 sm:h-48 resize-none text-slate-800 text-xs sm:text-lg font-medium transition-all outline-none"
                                             />
                                         </div>
                                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-5 mt-4">
@@ -800,15 +800,15 @@ const DesignOfExperimentView: React.FC<{ setActiveView: (view: ViewType) => void
                                             </button>
                                         </div>
                                     </div>
-                                    <div className="card-premium p-8 sm:p-12">
+                                    <div className="card-premium p-5 sm:p-12">
                                         <div className="section-badge">Model selection</div>
                                         <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-6 block">Experimental Design Framework</label>
-                                        <div className="grid grid-cols-2 gap-4">
+                                        <div className="grid grid-cols-2 gap-2 sm:gap-4">
                                             {['Central Composite Design (CCD)', 'Box-Behnken Design (BBD)', 'Full Factorial', 'Partial Factorial'].map(t => (
                                                 <button
                                                     key={t}
                                                     onClick={() => setDesignType(t as any)}
-                                                    className={`p-5 rounded-2xl text-[9px] font-black uppercase tracking-widest transition-all duration-300 border-2 ${designType === t
+                                                    className={`p-3 sm:p-5 rounded-xl sm:rounded-2xl text-[8px] sm:text-[9px] font-black uppercase tracking-widest transition-all duration-300 border-2 ${designType === t
                                                         ? 'bg-primary-purple/5 text-primary-purple border-primary-purple shadow-lg shadow-primary-purple/10'
                                                         : 'bg-slate-50 border-slate-50 text-slate-400 hover:bg-slate-100 hover:text-slate-500'}`}
                                                 >
@@ -819,7 +819,7 @@ const DesignOfExperimentView: React.FC<{ setActiveView: (view: ViewType) => void
                                     </div>
                                 </section>
                                 <section className="space-y-4 sm:space-y-8">
-                                    <div className="card-premium p-8 sm:p-12">
+                                    <div className="card-premium p-5 sm:p-12">
                                         <div className="flex justify-between items-center mb-8">
                                             <div>
                                                 <div className="section-badge">Input parameters</div>
@@ -827,44 +827,44 @@ const DesignOfExperimentView: React.FC<{ setActiveView: (view: ViewType) => void
                                             </div>
                                             <button
                                                 onClick={() => setFactors([...factors, { id: Math.random().toString(), name: 'New Factor', unit: 'u', low: 0, high: 100, type: 'Numerical' }])}
-                                                className="w-12 h-12 flex items-center justify-center bg-primary-purple text-white rounded-2xl hover:bg-primary-purple/90 transition-all shadow-xl shadow-primary-purple/20"
+                                                className="w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center bg-primary-purple text-white rounded-xl sm:rounded-2xl hover:bg-primary-purple/90 transition-all shadow-xl shadow-primary-purple/20"
                                             >
-                                                <PlusIcon className="w-6 h-6" />
+                                                <PlusIcon className="w-5 h-5 sm:w-6 sm:h-6" />
                                             </button>
                                         </div>
                                         <div className="space-y-4">
                                             {factors.map((f, i) => (
-                                                <div key={f.id} className="bg-slate-50/50 p-6 rounded-[2rem] border border-slate-100/50 group hover:bg-white hover:shadow-xl transition-all duration-500">
-                                                    <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-6">
-                                                        <div className="flex-1 flex items-center gap-4">
-                                                            <div className="w-8 h-8 rounded-full bg-slate-900 text-white flex items-center justify-center text-[10px] font-black shadow-lg">{i + 1}</div>
+                                                <div key={f.id} className="bg-slate-50/50 p-4 sm:p-6 rounded-2xl sm:rounded-[2rem] border border-slate-100/50 group hover:bg-white hover:shadow-xl transition-all duration-500">
+                                                    <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 sm:gap-6">
+                                                        <div className="flex-1 flex items-center gap-3 sm:gap-4">
+                                                            <div className="w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-slate-900 text-white flex items-center justify-center text-[8px] sm:text-[10px] font-black shadow-lg">{i + 1}</div>
                                                             <div className="flex-1">
                                                                 <input
                                                                     value={f.name}
                                                                     onChange={e => { const nf = [...factors]; nf[i].name = e.target.value; setFactors(nf); }}
-                                                                    className="bg-transparent border-none p-0 text-sm font-black w-full outline-none text-slate-900"
+                                                                    className="bg-transparent border-none p-0 text-xs sm:text-sm font-black w-full outline-none text-slate-900"
                                                                 />
                                                                 <input
                                                                     value={f.unit}
                                                                     onChange={e => { const nf = [...factors]; nf[i].unit = e.target.value; setFactors(nf); }}
-                                                                    className="bg-transparent border-none p-0 text-[10px] font-bold text-slate-400 outline-none uppercase tracking-widest"
+                                                                    className="bg-transparent border-none p-0 text-[8px] sm:text-[10px] font-bold text-slate-400 outline-none uppercase tracking-widest"
                                                                 />
                                                             </div>
                                                         </div>
-                                                        <div className="flex gap-4">
+                                                        <div className="flex gap-2 sm:gap-4">
                                                             <div className="flex flex-col gap-1">
-                                                                <span className="text-[8px] font-black text-slate-400 uppercase ml-3">LOW (-1)</span>
-                                                                <input type="number" value={f.low} onChange={e => { const nf = [...factors]; nf[i].low = +e.target.value; setFactors(nf); }} className="w-24 bg-white px-4 py-2 rounded-xl text-xs font-black text-slate-700 border border-slate-100 outline-none focus:border-primary-purple" />
+                                                                <span className="text-[7px] sm:text-[8px] font-black text-slate-400 uppercase ml-2 sm:ml-3">LOW (-1)</span>
+                                                                <input type="number" value={f.low} onChange={e => { const nf = [...factors]; nf[i].low = +e.target.value; setFactors(nf); }} className="w-16 sm:w-24 bg-white px-2 sm:px-4 py-1.5 sm:py-2 rounded-lg sm:rounded-xl text-[10px] sm:text-xs font-black text-slate-700 border border-slate-100 outline-none focus:border-primary-purple" />
                                                             </div>
                                                             <div className="flex flex-col gap-1">
-                                                                <span className="text-[8px] font-black text-slate-400 uppercase ml-3">HIGH (+1)</span>
-                                                                <input type="number" value={f.high} onChange={e => { const nf = [...factors]; nf[i].high = +e.target.value; setFactors(nf); }} className="w-24 bg-white px-4 py-2 rounded-xl text-xs font-black text-slate-700 border border-slate-100 outline-none focus:border-primary-purple" />
+                                                                <span className="text-[7px] sm:text-[8px] font-black text-slate-400 uppercase ml-2 sm:ml-3">HIGH (+1)</span>
+                                                                <input type="number" value={f.high} onChange={e => { const nf = [...factors]; nf[i].high = +e.target.value; setFactors(nf); }} className="w-16 sm:w-24 bg-white px-2 sm:px-4 py-1.5 sm:py-2 rounded-lg sm:rounded-xl text-[10px] sm:text-xs font-black text-slate-700 border border-slate-100 outline-none focus:border-primary-purple" />
                                                             </div>
                                                             <button
                                                                 onClick={() => setFactors(factors.filter(it => it.id !== f.id))}
-                                                                className="w-10 h-10 flex items-center justify-center text-slate-300 hover:text-red-500 transition-colors opacity-0 group-hover:opacity-100"
+                                                                className="w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center text-slate-300 hover:text-red-500 transition-colors opacity-100 sm:opacity-0 sm:group-hover:opacity-100"
                                                             >
-                                                                <TrashIcon className="w-5 h-5" />
+                                                                <TrashIcon className="w-4 h-4 sm:w-5 sm:h-5" />
                                                             </button>
                                                         </div>
                                                     </div>
@@ -872,7 +872,7 @@ const DesignOfExperimentView: React.FC<{ setActiveView: (view: ViewType) => void
                                             ))}
                                         </div>
                                     </div>
-                                    <div className="card-premium p-8 sm:p-12">
+                                    <div className="card-premium p-5 sm:p-12">
                                         <div className="flex justify-between items-center mb-8">
                                             <div>
                                                 <div className="section-badge">Response metrics</div>
@@ -880,35 +880,35 @@ const DesignOfExperimentView: React.FC<{ setActiveView: (view: ViewType) => void
                                             </div>
                                             <button
                                                 onClick={() => setResponses([...responses, { id: Math.random().toString(), name: 'New Response', unit: '%', goal: 'Maximize' }])}
-                                                className="w-12 h-12 flex items-center justify-center bg-primary-purple/10 text-primary-purple rounded-2xl hover:bg-primary-purple/20 transition-all"
+                                                className="w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center bg-primary-purple/10 text-primary-purple rounded-xl sm:rounded-2xl hover:bg-primary-purple/20 transition-all"
                                             >
-                                                <PlusIcon className="w-6 h-6" />
+                                                <PlusIcon className="w-5 h-5 sm:w-6 sm:h-6" />
                                             </button>
                                         </div>
                                         <div className="space-y-4">
                                             {responses.map((r, i) => (
-                                                <div key={r.id} className="bg-slate-50/50 p-6 rounded-[2rem] border border-slate-100/50 group hover:bg-white hover:shadow-xl transition-all duration-500">
-                                                    <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-6">
-                                                        <div className="flex-1 flex items-center gap-4">
-                                                            <div className="w-8 h-8 rounded-full bg-primary-purple/10 text-primary-purple flex items-center justify-center text-[10px] font-black shadow-inner">{i + 1}</div>
+                                                <div key={r.id} className="bg-slate-50/50 p-4 sm:p-6 rounded-2xl sm:rounded-[2.5rem] border border-slate-100/50 group hover:bg-white hover:shadow-xl transition-all duration-500">
+                                                    <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 sm:gap-6">
+                                                        <div className="flex-1 flex items-center gap-3 sm:gap-4">
+                                                            <div className="w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-primary-purple/10 text-primary-purple flex items-center justify-center text-[8px] sm:text-[10px] font-black shadow-inner">{i + 1}</div>
                                                             <div className="flex-1">
                                                                 <input
                                                                     value={r.name}
                                                                     onChange={e => { const nr = [...responses]; nr[i].name = e.target.value; setResponses(nr); }}
-                                                                    className="bg-transparent border-none p-0 text-sm font-black w-full outline-none text-slate-900"
+                                                                    className="bg-transparent border-none p-0 text-xs sm:text-sm font-black w-full outline-none text-slate-900"
                                                                 />
                                                                 <input
                                                                     value={r.unit}
                                                                     onChange={e => { const nr = [...responses]; nr[i].unit = e.target.value; setResponses(nr); }}
-                                                                    className="bg-transparent border-none p-0 text-[10px] font-bold text-slate-400 outline-none uppercase tracking-widest"
+                                                                    className="bg-transparent border-none p-0 text-[8px] sm:text-[10px] font-bold text-slate-400 outline-none uppercase tracking-widest"
                                                                 />
                                                             </div>
                                                         </div>
-                                                        <div className="flex items-center gap-4">
+                                                        <div className="flex items-center gap-3 sm:gap-4">
                                                             <select
                                                                 value={r.goal}
                                                                 onChange={e => { const nr = [...responses]; nr[i].goal = e.target.value as any; setResponses(nr); }}
-                                                                className="bg-white text-[10px] font-black text-primary-purple border border-slate-100 rounded-xl px-4 py-2 outline-none uppercase tracking-widest shadow-sm"
+                                                                className="bg-white text-[8px] sm:text-[10px] font-black text-primary-purple border border-slate-100 rounded-lg sm:rounded-xl px-3 sm:px-4 py-1.5 sm:py-2 outline-none uppercase tracking-widest shadow-sm"
                                                             >
                                                                 <option value="Maximize">Maximize</option>
                                                                 <option value="Minimize">Minimize</option>
@@ -916,9 +916,9 @@ const DesignOfExperimentView: React.FC<{ setActiveView: (view: ViewType) => void
                                                             </select>
                                                             <button
                                                                 onClick={() => setResponses(responses.filter(it => it.id !== r.id))}
-                                                                className="w-10 h-10 flex items-center justify-center text-slate-300 hover:text-red-500 transition-colors opacity-0 group-hover:opacity-100"
+                                                                className="w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center text-slate-300 hover:text-red-500 transition-colors opacity-100 sm:opacity-0 sm:group-hover:opacity-100"
                                                             >
-                                                                <TrashIcon className="w-5 h-5" />
+                                                                <TrashIcon className="w-4 h-4 sm:w-5 sm:h-5" />
                                                             </button>
                                                         </div>
                                                     </div>
@@ -936,254 +936,260 @@ const DesignOfExperimentView: React.FC<{ setActiveView: (view: ViewType) => void
                                     INITIALIZE DESIGN MATRIX
                                 </button>
                             </div>
-                        </motion.div>
+                        </motion.div >
                     )}
 
-                    {activeTab === 'Execution' && (
-                        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="max-w-7xl mx-auto space-y-12 pb-24">
-                            <div className="card-premium p-10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-8">
-                                <div>
-                                    <div className="section-badge">Data Acquisition</div>
-                                    <h3 className="text-3xl font-black uppercase text-slate-900 tracking-tighter">Experimental Matrix</h3>
-                                    <div className="flex items-center gap-2 mt-2">
-                                        <div className="w-2.5 h-2.5 bg-emerald-500 rounded-full animate-pulse" />
-                                        <p className="text-[10px] font-black text-emerald-600 uppercase tracking-[0.2em] px-2 py-0.5 bg-emerald-50 rounded-md">Live Validation Active</p>
+                    {
+                        activeTab === 'Execution' && (
+                            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="max-w-7xl mx-auto space-y-6 sm:space-y-12 pb-24">
+                                <div className="card-premium p-5 sm:p-10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 sm:gap-8">
+                                    <div>
+                                        <div className="section-badge !mb-2 sm:!mb-4">Data Acquisition</div>
+                                        <h3 className="text-xl sm:text-3xl font-black uppercase text-slate-900 tracking-tighter shrink-0">Experimental Matrix</h3>
+                                        <div className="flex items-center gap-2 mt-2">
+                                            <div className="w-2.5 h-2.5 bg-emerald-500 rounded-full animate-pulse" />
+                                            <p className="text-[10px] font-black text-emerald-600 uppercase tracking-[0.2em] px-2 py-0.5 bg-emerald-50 rounded-md">Live Validation Active</p>
+                                        </div>
+                                    </div>
+                                    <div className="flex gap-4 w-full sm:w-auto">
+                                        <button onClick={() => setRunMatrix(runMatrix.map(run => ({ ...run, responses: Object.fromEntries(responses.map(r => [r.name, Number((Math.random() * 100).toFixed(2))])) })))} className="btn-secondary !px-8 !py-4 text-[10px] tracking-widest uppercase">Simulate Results</button>
+                                        <button onClick={performAnalysis} className="btn-primary !px-12 !py-4 text-[10px] tracking-widest uppercase">Perform Analysis</button>
                                     </div>
                                 </div>
-                                <div className="flex gap-4 w-full sm:w-auto">
-                                    <button onClick={() => setRunMatrix(runMatrix.map(run => ({ ...run, responses: Object.fromEntries(responses.map(r => [r.name, Number((Math.random() * 100).toFixed(2))])) })))} className="btn-secondary !px-8 !py-4 text-[10px] tracking-widest uppercase">Simulate Results</button>
-                                    <button onClick={performAnalysis} className="btn-primary !px-12 !py-4 text-[10px] tracking-widest uppercase">Perform Analysis</button>
-                                </div>
-                            </div>
-                            <div className="card-premium !p-0 shadow-2xl overflow-hidden mb-12 border-slate-100">
-                                <div className="overflow-x-auto select-text no-scrollbar">
-                                    <table className="w-full text-left text-[11px] border-collapse min-w-[600px]">
-                                        <thead>
-                                            <tr className="bg-slate-50 text-slate-400 font-black uppercase border-b border-slate-100">
-                                                <th className="px-10 py-8">Sequence</th>
-                                                {factors.map(f => <th key={f.id} className="px-4 py-8">{f.name}</th>)}
-                                                {responses.map(r => <th key={r.id} className="px-4 py-8 text-primary-purple">{r.name}</th>)}
-                                            </tr>
-                                        </thead>
-                                        <tbody className="divide-y divide-slate-100 font-medium">
-                                            {runMatrix.map((run, idx) => (
-                                                <tr key={idx} className={`hover:bg-slate-50/80 transition-colors group ${duplicateRunsIndices.includes(idx) ? 'bg-emerald-50/40' : ''}`}>
-                                                    <td className="px-4 sm:px-8 py-3 sm:py-4 font-black text-slate-900 border-l-4 border-transparent group-hover:border-emerald-500 uppercase text-[9px] sm:text-[11px]">RUN_{idx + 1}</td>
-                                                    {factors.map(f => (
-                                                        <td key={f.id} className="px-3 sm:px-4 py-3 sm:py-4 font-mono text-slate-500">
-                                                            {typeof run.factors[f.name] === 'number' ? (run.factors[f.name] as number).toFixed(2) : run.factors[f.name] || '-'}
-                                                        </td>
-                                                    ))}
-                                                    {responses.map(r => (
-                                                        <td key={r.id} className="px-3 sm:px-4 py-3 sm:py-4">
-                                                            <input
-                                                                type="number"
-                                                                value={run.responses[r.name] ?? ''}
-                                                                onChange={e => {
-                                                                    const nm = [...runMatrix];
-                                                                    nm[idx].responses[r.name] = e.target.value === '' ? null : +e.target.value;
-                                                                    setRunMatrix(nm);
-                                                                }}
-                                                                className="w-16 sm:w-20 bg-white border border-slate-200 px-2 sm:px-3 py-1.5 sm:py-2 rounded-lg sm:rounded-xl font-black text-emerald-600 text-[10px] sm:text-[12px] outline-none shadow-sm focus:ring-2 focus:ring-emerald-500/20"
-                                                            />
-                                                        </td>
-                                                    ))}
+                                <div className="card-premium !p-0 shadow-2xl overflow-hidden mb-12 border-slate-100">
+                                    <div className="overflow-x-auto select-text no-scrollbar">
+                                        <table className="w-full text-left text-[11px] border-collapse min-w-[600px]">
+                                            <thead>
+                                                <tr className="bg-slate-50 text-slate-400 font-black uppercase border-b border-slate-100">
+                                                    <th className="px-4 py-4 sm:px-10 sm:py-8">Sequence</th>
+                                                    {factors.map(f => <th key={f.id} className="px-3 py-4 sm:px-4 sm:py-8">{f.name}</th>)}
+                                                    {responses.map(r => <th key={r.id} className="px-3 py-4 sm:px-4 sm:py-8 text-primary-purple">{r.name}</th>)}
                                                 </tr>
-                                            ))}
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </motion.div>
-                    )}
-
-                    {activeTab === 'Insight' && (
-                        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="max-w-[1600px] mx-auto min-h-[600px] pb-32">
-                            {currentAnalysis ? (
-                                <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
-                                    <div className="lg:col-span-8 space-y-12">
-                                        <div className="card-premium p-6 sm:p-10 overflow-visible relative">
-                                            <div className="flex flex-col sm:flex-row items-center justify-between mb-8 sm:mb-10 gap-6 sm:gap-8">
-                                                <div className="flex flex-col gap-3 w-full sm:w-72">
-                                                    <div className="section-badge !mb-0">Selected Response</div>
-                                                    <select
-                                                        value={selectedAnalysisKey}
-                                                        onChange={(e) => setSelectedAnalysisKey(e.target.value)}
-                                                        className="bg-slate-900 text-white rounded-xl sm:rounded-2xl px-5 py-3 sm:px-6 sm:py-4 text-[10px] sm:text-xs font-black uppercase shadow-2xl hover:bg-black transition-all outline-none w-full"
-                                                    >
-                                                        {Object.keys(analysis?.analyses || {}).map(k => (
-                                                            <option key={k} value={k}>{k}</option>
+                                            </thead>
+                                            <tbody className="divide-y divide-slate-100 font-medium">
+                                                {runMatrix.map((run, idx) => (
+                                                    <tr key={idx} className={`hover:bg-slate-50/80 transition-colors group ${duplicateRunsIndices.includes(idx) ? 'bg-emerald-50/40' : ''}`}>
+                                                        <td className="px-4 sm:px-8 py-3 sm:py-4 font-black text-slate-900 border-l-4 border-transparent group-hover:border-emerald-500 uppercase text-[9px] sm:text-[11px]">RUN_{idx + 1}</td>
+                                                        {factors.map(f => (
+                                                            <td key={f.id} className="px-3 sm:px-4 py-3 sm:py-4 font-mono text-slate-500">
+                                                                {typeof run.factors[f.name] === 'number' ? (run.factors[f.name] as number).toFixed(2) : run.factors[f.name] || '-'}
+                                                            </td>
                                                         ))}
-                                                    </select>
+                                                        {responses.map(r => (
+                                                            <td key={r.id} className="px-3 sm:px-4 py-3 sm:py-4">
+                                                                <input
+                                                                    type="number"
+                                                                    value={run.responses[r.name] ?? ''}
+                                                                    onChange={e => {
+                                                                        const nm = [...runMatrix];
+                                                                        nm[idx].responses[r.name] = e.target.value === '' ? null : +e.target.value;
+                                                                        setRunMatrix(nm);
+                                                                    }}
+                                                                    className="w-16 sm:w-20 bg-white border border-slate-200 px-2 sm:px-3 py-1.5 sm:py-2 rounded-lg sm:rounded-xl font-black text-emerald-600 text-[10px] sm:text-[12px] outline-none shadow-sm focus:ring-2 focus:ring-emerald-500/20"
+                                                                />
+                                                            </td>
+                                                        ))}
+                                                    </tr>
+                                                ))}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </motion.div>
+                        )
+                    }
+
+                    {
+                        activeTab === 'Insight' && (
+                            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="max-w-[1600px] mx-auto min-h-[600px] pb-32">
+                                {currentAnalysis ? (
+                                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-12">
+                                        <div className="lg:col-span-8 space-y-12">
+                                            <div className="card-premium p-6 sm:p-10 overflow-visible relative">
+                                                <div className="flex flex-col sm:flex-row items-center justify-between mb-8 sm:mb-10 gap-6 sm:gap-8">
+                                                    <div className="flex flex-col gap-3 w-full sm:w-72">
+                                                        <div className="section-badge !mb-0">Selected Response</div>
+                                                        <select
+                                                            value={selectedAnalysisKey}
+                                                            onChange={(e) => setSelectedAnalysisKey(e.target.value)}
+                                                            className="bg-slate-900 text-white rounded-xl sm:rounded-2xl px-5 py-3 sm:px-6 sm:py-4 text-[10px] sm:text-xs font-black uppercase shadow-2xl hover:bg-black transition-all outline-none w-full"
+                                                        >
+                                                            {Object.keys(analysis?.analyses || {}).map(k => (
+                                                                <option key={k} value={k}>{k}</option>
+                                                            ))}
+                                                        </select>
+                                                    </div>
+                                                    <div className="flex flex-wrap gap-1 md:gap-2 bg-slate-50 p-1.5 rounded-2xl border border-slate-100 shadow-inner w-full sm:w-auto overflow-x-auto no-scrollbar">
+                                                        {(['3D Surface', '2D Contour', 'Perturbation', 'Model Diagnostic'] as PlotType[]).map(pt => (
+                                                            <button key={pt} onClick={() => setActivePlot(pt)} className={`px-3 py-2 sm:px-6 sm:py-3 rounded-lg sm:rounded-xl text-[8px] sm:text-[10px] font-black uppercase tracking-wider transition-all duration-500 whitespace-nowrap ${activePlot === pt ? 'bg-primary-purple text-white shadow-xl shadow-primary-purple/20 translate-y-[-1px]' : 'text-slate-400 hover:text-slate-600'}`}>{pt}</button>
+                                                        ))}
+                                                    </div>
                                                 </div>
-                                                <div className="flex flex-wrap gap-1 md:gap-2 bg-slate-50 p-1.5 rounded-2xl border border-slate-100 shadow-inner w-full sm:w-auto overflow-x-auto no-scrollbar">
-                                                    {(['3D Surface', '2D Contour', 'Perturbation', 'Model Diagnostic'] as PlotType[]).map(pt => (
-                                                        <button key={pt} onClick={() => setActivePlot(pt)} className={`px-3 py-2 sm:px-6 sm:py-3 rounded-lg sm:rounded-xl text-[8px] sm:text-[10px] font-black uppercase tracking-wider transition-all duration-500 whitespace-nowrap ${activePlot === pt ? 'bg-primary-purple text-white shadow-xl shadow-primary-purple/20 translate-y-[-1px]' : 'text-slate-400 hover:text-slate-600'}`}>{pt}</button>
+                                                <div className="h-[300px] xs:h-[350px] sm:h-[550px] bg-slate-50 rounded-2xl sm:rounded-[2.5rem] overflow-hidden relative border border-slate-100 inner-shadow">
+                                                    <PlotViewer analysis={currentAnalysis} activePlot={activePlot} predVsActualData={analysis?.predVsActualData} experimentName={experimentName} />
+                                                </div>
+                                            </div>
+
+                                            <div className="card-premium p-5 sm:p-10 border-slate-100">
+                                                <div className="flex flex-col sm:flex-row items-center justify-between mb-8 sm:mb-10 gap-4 sm:gap-6">
+                                                    <div className="flex items-center gap-3 sm:gap-5">
+                                                        <div className="w-2 h-8 sm:w-2.5 sm:h-10 bg-primary-purple rounded-full shadow-lg shadow-primary-purple/20" />
+                                                        <h4 className="text-[10px] sm:text-sm font-black text-slate-900 uppercase tracking-widest">ANOVA STATISTICAL DOSSIER</h4>
+                                                    </div>
+                                                    <button onClick={copyAnovaToClipboard} className={`btn-secondary !px-8 !py-3 !text-[10px] tracking-widest transition-all ${copiedAnova ? '!bg-emerald-500 !text-white !border-emerald-500' : ''}`}>
+                                                        {copiedAnova ? <CheckIcon className="w-5 h-5" /> : <CopyIcon className="w-5 h-5" />} {copiedAnova ? 'COPIED TO CLIPBOARD' : 'EXTRACT DATA'}
+                                                    </button>
+                                                </div>
+                                                <div className="overflow-x-auto rounded-[2rem] border border-slate-50">
+                                                    <table className="w-full text-left text-[11px] border-collapse min-w-[500px]">
+                                                        <thead>
+                                                            <tr className="bg-slate-50/50 text-slate-400 font-black uppercase border-b border-slate-100">
+                                                                <th className="px-4 py-4 sm:px-10 sm:py-6 text-[9px] sm:text-[11px]">Source</th>
+                                                                <th className="px-2 py-4 sm:px-4 sm:py-6 text-center">DF</th>
+                                                                <th className="px-2 py-4 sm:px-4 sm:py-6 text-right">SS</th>
+                                                                <th className="px-2 py-4 sm:px-4 sm:py-6 text-right">MS</th>
+                                                                <th className="px-2 py-4 sm:px-4 sm:py-6 text-right font-black">F-Value</th>
+                                                                <th className="px-4 py-4 sm:px-10 sm:py-6 text-right">p-Value</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody className="divide-y divide-slate-100 font-medium">
+                                                            {currentAnalysis.anovaTable?.map((row: any, idx: number) => (
+                                                                <tr key={idx} className={`hover:bg-slate-50/80 transition-colors group ${['model', 'total'].includes(String(row.source || '').toLowerCase()) ? 'bg-slate-50/40 font-black' : ''}`}>
+                                                                    <td className={`px-3 sm:px-8 py-3 sm:py-5 font-black text-slate-900 group-hover:text-emerald-600 transition-colors`}>{row.source || '-'}</td>
+                                                                    <td className="px-1 sm:px-4 py-3 sm:py-5 text-center font-bold text-slate-600">{row.df ?? '-'}</td>
+                                                                    <td className="px-2 sm:px-4 py-3 sm:py-5 text-right font-mono text-slate-500 whitespace-nowrap">
+                                                                        {typeof row.sumOfSquares === 'number' ? row.sumOfSquares.toFixed(2) : '-'}
+                                                                    </td>
+                                                                    <td className="px-2 sm:px-4 py-3 sm:py-5 text-right font-mono text-slate-500 whitespace-nowrap">
+                                                                        {typeof row.meanSquare === 'number' ? row.meanSquare.toFixed(2) : '-'}
+                                                                    </td>
+                                                                    <td className="px-2 sm:px-4 py-3 sm:py-5 text-right font-mono text-emerald-600 font-black">
+                                                                        {typeof row.fValue === 'number' ? row.fValue.toFixed(2) : '-'}
+                                                                    </td>
+                                                                    <td className={`px-3 sm:px-8 py-3 sm:py-5 text-right font-black ${typeof row.pValue === 'number' && row.pValue < 0.05 ? 'text-emerald-500' : 'text-slate-400'}`}>
+                                                                        {typeof row.pValue === 'number' ? (row.pValue < 0.0001 ? '<.0001' : row.pValue.toFixed(3)) : '-'}
+                                                                    </td>
+                                                                </tr>
+                                                            ))}
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                                <div className="mt-6 sm:mt-8 pt-6 sm:pt-8 border-t border-slate-100 flex items-start gap-4">
+                                                    <InfoIcon className="w-5 h-5 sm:w-6 sm:h-6 text-emerald-500 flex-shrink-0 mt-1" />
+                                                    <p className="text-xs sm:text-sm font-bold text-slate-700 leading-relaxed italic">{currentAnalysis.interpretation}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div className="lg:col-span-4 space-y-6 sm:space-y-10">
+                                            <div className="bg-slate-900 p-6 sm:p-8 rounded-3xl sm:rounded-[3rem] shadow-2xl space-y-6 sm:space-y-8 text-white">
+                                                <div className="flex items-center gap-3 mb-2">
+                                                    <ZapIcon className="w-5 h-5 text-emerald-400 animate-pulse" />
+                                                    <h4 className="text-[11px] font-black uppercase tracking-widest text-emerald-400">Precision Diagnostics</h4>
+                                                </div>
+                                                <div className="bg-white/5 p-6 rounded-3xl border border-white/5">
+                                                    <label className="text-[9px] font-black text-slate-500 uppercase tracking-widest mb-2 block">Regression Model Fitting</label>
+                                                    <p className="text-emerald-400 font-black text-sm uppercase tracking-tight">{currentAnalysis.fittingModelUsed || "Standard Quadratic RSM"}</p>
+                                                </div>
+                                                <div className="grid grid-cols-2 gap-3 sm:gap-4">
+                                                    {[
+                                                        { label: 'R²', value: currentAnalysis.stats?.rSquared?.toFixed(3) },
+                                                        { label: 'Adj R²', value: currentAnalysis.stats?.adjRSquared?.toFixed(3) },
+                                                        { label: 'F-Val', value: currentAnalysis.stats?.fValue?.toFixed(1) },
+                                                        { label: 'p-Val', value: currentAnalysis.stats?.pValue?.toFixed(3), highlight: currentAnalysis.stats?.pValue < 0.05 },
+                                                        { label: 'Adeq P', value: currentAnalysis.stats?.adeqPrecision?.toFixed(1) || 'N/A' }
+                                                    ].map((s, i) => (
+                                                        <div key={i} className="bg-white/5 p-4 sm:p-5 rounded-[1.5rem] sm:rounded-[2.5rem] border border-white/5 flex flex-col items-center justify-center text-center">
+                                                            <p className="text-[7px] sm:text-[9px] font-black text-slate-500 uppercase mb-1 leading-none">{s.label}</p>
+                                                            <p className={`text-base sm:text-xl font-black ${s.highlight ? 'text-emerald-400' : 'text-white'}`}>{s.value}</p>
+                                                        </div>
                                                     ))}
                                                 </div>
-                                            </div>
-                                            <div className="h-[300px] xs:h-[350px] sm:h-[550px] bg-slate-50 rounded-2xl sm:rounded-[2.5rem] overflow-hidden relative border border-slate-100 inner-shadow">
-                                                <PlotViewer analysis={currentAnalysis} activePlot={activePlot} predVsActualData={analysis?.predVsActualData} experimentName={experimentName} />
-                                            </div>
-                                        </div>
-
-                                        <div className="card-premium p-10 border-slate-100">
-                                            <div className="flex flex-col sm:flex-row items-center justify-between mb-10 gap-6">
-                                                <div className="flex items-center gap-5">
-                                                    <div className="w-2.5 h-10 bg-primary-purple rounded-full shadow-lg shadow-primary-purple/20" />
-                                                    <h4 className="text-sm font-black text-slate-900 uppercase tracking-widest">ANOVA STATISTICAL DOSSIER</h4>
-                                                </div>
-                                                <button onClick={copyAnovaToClipboard} className={`btn-secondary !px-8 !py-3 !text-[10px] tracking-widest transition-all ${copiedAnova ? '!bg-emerald-500 !text-white !border-emerald-500' : ''}`}>
-                                                    {copiedAnova ? <CheckIcon className="w-5 h-5" /> : <CopyIcon className="w-5 h-5" />} {copiedAnova ? 'COPIED TO CLIPBOARD' : 'EXTRACT DATA'}
-                                                </button>
-                                            </div>
-                                            <div className="overflow-x-auto rounded-[2rem] border border-slate-50">
-                                                <table className="w-full text-left text-[11px] border-collapse min-w-[500px]">
-                                                    <thead>
-                                                        <tr className="bg-slate-50/50 text-slate-400 font-black uppercase border-b border-slate-100">
-                                                            <th className="px-10 py-6">Source of Variation</th>
-                                                            <th className="px-4 py-6 text-center">DF</th>
-                                                            <th className="px-4 py-6 text-right">SS</th>
-                                                            <th className="px-4 py-6 text-right">MS</th>
-                                                            <th className="px-4 py-6 text-right">F-Value</th>
-                                                            <th className="px-10 py-6 text-right">Prob &gt; F</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody className="divide-y divide-slate-100 font-medium">
-                                                        {currentAnalysis.anovaTable?.map((row: any, idx: number) => (
-                                                            <tr key={idx} className={`hover:bg-slate-50/80 transition-colors group ${['model', 'total'].includes(String(row.source || '').toLowerCase()) ? 'bg-slate-50/40 font-black' : ''}`}>
-                                                                <td className={`px-3 sm:px-8 py-3 sm:py-5 font-black text-slate-900 group-hover:text-emerald-600 transition-colors`}>{row.source || '-'}</td>
-                                                                <td className="px-1 sm:px-4 py-3 sm:py-5 text-center font-bold text-slate-600">{row.df ?? '-'}</td>
-                                                                <td className="px-2 sm:px-4 py-3 sm:py-5 text-right font-mono text-slate-500 whitespace-nowrap">
-                                                                    {typeof row.sumOfSquares === 'number' ? row.sumOfSquares.toFixed(2) : '-'}
-                                                                </td>
-                                                                <td className="px-2 sm:px-4 py-3 sm:py-5 text-right font-mono text-slate-500 whitespace-nowrap">
-                                                                    {typeof row.meanSquare === 'number' ? row.meanSquare.toFixed(2) : '-'}
-                                                                </td>
-                                                                <td className="px-2 sm:px-4 py-3 sm:py-5 text-right font-mono text-emerald-600 font-black">
-                                                                    {typeof row.fValue === 'number' ? row.fValue.toFixed(2) : '-'}
-                                                                </td>
-                                                                <td className={`px-3 sm:px-8 py-3 sm:py-5 text-right font-black ${typeof row.pValue === 'number' && row.pValue < 0.05 ? 'text-emerald-500' : 'text-slate-400'}`}>
-                                                                    {typeof row.pValue === 'number' ? (row.pValue < 0.0001 ? '<.0001' : row.pValue.toFixed(3)) : '-'}
-                                                                </td>
-                                                            </tr>
-                                                        ))}
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                            <div className="mt-6 sm:mt-8 pt-6 sm:pt-8 border-t border-slate-100 flex items-start gap-4">
-                                                <InfoIcon className="w-5 h-5 sm:w-6 sm:h-6 text-emerald-500 flex-shrink-0 mt-1" />
-                                                <p className="text-xs sm:text-sm font-bold text-slate-700 leading-relaxed italic">{currentAnalysis.interpretation}</p>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div className="lg:col-span-4 space-y-10">
-                                        <div className="bg-slate-900 p-8 rounded-[3rem] shadow-2xl space-y-8 text-white">
-                                            <div className="flex items-center gap-3 mb-2">
-                                                <ZapIcon className="w-5 h-5 text-emerald-400 animate-pulse" />
-                                                <h4 className="text-[11px] font-black uppercase tracking-widest text-emerald-400">Precision Diagnostics</h4>
-                                            </div>
-                                            <div className="bg-white/5 p-6 rounded-3xl border border-white/5">
-                                                <label className="text-[9px] font-black text-slate-500 uppercase tracking-widest mb-2 block">Regression Model Fitting</label>
-                                                <p className="text-emerald-400 font-black text-sm uppercase tracking-tight">{currentAnalysis.fittingModelUsed || "Standard Quadratic RSM"}</p>
-                                            </div>
-                                            <div className="grid grid-cols-2 gap-3 sm:gap-4">
-                                                {[
-                                                    { label: 'R²', value: currentAnalysis.stats?.rSquared?.toFixed(3) },
-                                                    { label: 'Adj R²', value: currentAnalysis.stats?.adjRSquared?.toFixed(3) },
-                                                    { label: 'F-Val', value: currentAnalysis.stats?.fValue?.toFixed(1) },
-                                                    { label: 'p-Val', value: currentAnalysis.stats?.pValue?.toFixed(3), highlight: currentAnalysis.stats?.pValue < 0.05 },
-                                                    { label: 'Adeq P', value: currentAnalysis.stats?.adeqPrecision?.toFixed(1) || 'N/A' }
-                                                ].map((s, i) => (
-                                                    <div key={i} className="bg-white/5 p-4 sm:p-5 rounded-[1.5rem] sm:rounded-[2.5rem] border border-white/5 flex flex-col items-center justify-center text-center">
-                                                        <p className="text-[7px] sm:text-[9px] font-black text-slate-500 uppercase mb-1 leading-none">{s.label}</p>
-                                                        <p className={`text-base sm:text-xl font-black ${s.highlight ? 'text-emerald-400' : 'text-white'}`}>{s.value}</p>
+                                                <div className="pt-6 border-t border-white/10">
+                                                    <label className="text-[9px] font-black text-slate-500 uppercase tracking-widest mb-4 block">Predictive Equation</label>
+                                                    <div className="bg-black/40 p-6 rounded-3xl font-mono text-[10px] text-emerald-400 italic break-all leading-relaxed shadow-inner">
+                                                        {currentAnalysis.equation}
                                                     </div>
-                                                ))}
-                                            </div>
-                                            <div className="pt-6 border-t border-white/10">
-                                                <label className="text-[9px] font-black text-slate-500 uppercase tracking-widest mb-4 block">Predictive Equation</label>
-                                                <div className="bg-black/40 p-6 rounded-3xl font-mono text-[10px] text-emerald-400 italic break-all leading-relaxed shadow-inner">
-                                                    {currentAnalysis.equation}
                                                 </div>
                                             </div>
-                                        </div>
 
-                                        <div className="card-premium p-10 !bg-emerald-50 border-emerald-100 shadow-sm relative overflow-hidden">
-                                            <div className="absolute -top-10 -right-10 p-10 text-emerald-600 opacity-5 rotate-12"><TargetIcon className="w-48 h-48" /></div>
-                                            <h4 className="text-[10px] font-black text-emerald-600 uppercase tracking-widest mb-4 flex items-center gap-2">
-                                                <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                                                Synthesis Insight
-                                            </h4>
-                                            <p className="text-sm font-bold text-emerald-900 leading-relaxed italic relative z-10">"{analysis.overallInterpretation}"</p>
-                                        </div>
+                                            <div className="card-premium p-6 sm:p-10 !bg-emerald-50 border-emerald-100 shadow-sm relative overflow-hidden">
+                                                <div className="absolute -top-10 -right-10 p-10 text-emerald-600 opacity-5 rotate-12"><TargetIcon className="w-48 h-48" /></div>
+                                                <h4 className="text-[10px] font-black text-emerald-600 uppercase tracking-widest mb-4 flex items-center gap-2">
+                                                    <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                                                    Synthesis Insight
+                                                </h4>
+                                                <p className="text-sm font-bold text-emerald-900 leading-relaxed italic relative z-10">"{analysis.overallInterpretation}"</p>
+                                            </div>
 
-                                        <button onClick={() => setActiveTab('Synthesis')} className="btn-primary !py-8 text-sm tracking-[0.4em] shadow-2xl flex items-center justify-center gap-5 group">
-                                            <TargetIcon className="w-6 h-6 group-hover:scale-110 transition-transform" />
-                                            VIEW OPTIMAL SOLUTION
-                                        </button>
+                                            <button onClick={() => setActiveTab('Synthesis')} className="btn-primary !py-8 text-sm tracking-[0.4em] shadow-2xl flex items-center justify-center gap-5 group">
+                                                <TargetIcon className="w-6 h-6 group-hover:scale-110 transition-transform" />
+                                                VIEW OPTIMAL SOLUTION
+                                            </button>
+                                        </div>
                                     </div>
+                                ) : (
+                                    <div className="flex flex-col items-center justify-center py-24 sm:py-48 bg-white rounded-3xl sm:rounded-[4rem] border border-slate-100 shadow-xl space-y-8 sm:space-y-10">
+                                        <div className="w-20 h-20 sm:w-28 sm:h-28 bg-slate-50 rounded-full flex items-center justify-center text-slate-200"><ChartBarIcon className="w-10 h-10 sm:w-14 sm:h-14" /></div>
+                                        <div className="text-center space-y-3 sm:space-y-4 px-6">
+                                            <h3 className="text-xl sm:text-3xl font-black text-slate-900 uppercase tracking-tight">Analytics Engine Offline</h3>
+                                            <p className="text-[9px] sm:text-[11px] font-black text-slate-400 uppercase tracking-[0.2em] sm:tracking-[0.4em] max-w-sm mx-auto leading-relaxed">Upload or simulate data in the execution grid.</p>
+                                        </div>
+                                        <button onClick={() => setActiveTab('Execution')} className="px-10 py-4 sm:px-14 sm:py-5 bg-slate-900 text-white rounded-xl sm:rounded-2xl text-[9px] sm:text-[10px] font-black uppercase transition-all shadow-2xl hover:scale-105 active:scale-95">Begin Execution</button>
+                                    </div>
+                                )}
+                            </motion.div>
+                        )
+                    }
+
+                    {
+                        activeTab === 'Synthesis' && analysis && (
+                            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="max-w-6xl mx-auto py-8 sm:py-16 space-y-10 sm:space-y-20 pb-32">
+                                <div className="text-center space-y-3 sm:space-y-4 px-4">
+                                    <div className="section-badge !mb-2 sm:!mb-4">Final Configuration</div>
+                                    <h3 className="text-4xl sm:text-7xl font-black uppercase tracking-tighter text-slate-900 leading-none">Global <span className="text-gradient">Optima</span></h3>
+                                    <p className="text-slate-400 font-bold tracking-[0.1em] sm:tracking-[0.2em] uppercase text-[10px] sm:text-xs leading-relaxed">Recommended Parameters for Peak Performance</p>
                                 </div>
-                            ) : (
-                                <div className="flex flex-col items-center justify-center py-48 bg-white rounded-[4rem] border border-slate-100 shadow-xl space-y-10">
-                                    <div className="w-28 h-28 bg-slate-50 rounded-full flex items-center justify-center text-slate-200"><ChartBarIcon className="w-14 h-14" /></div>
-                                    <div className="text-center space-y-4">
-                                        <h3 className="text-3xl font-black text-slate-900 uppercase tracking-tight">Analytics Engine Offline</h3>
-                                        <p className="text-[11px] font-black text-slate-400 uppercase tracking-[0.4em] max-w-sm mx-auto">Upload or simulate data in the execution grid.</p>
-                                    </div>
-                                    <button onClick={() => setActiveTab('Execution')} className="px-14 py-5 bg-slate-900 text-white rounded-2xl text-[10px] font-black uppercase transition-all shadow-2xl hover:scale-105">Begin Execution</button>
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
+                                    {Object.entries(analysis.optimizedParams || {}).map(([key, val], idx) => (
+                                        <div key={key} className="card-premium p-6 sm:p-12 hover:border-primary-purple transition-all duration-700 group">
+                                            <div className="flex justify-between items-start mb-6 sm:mb-8">
+                                                <div className="text-[10px] font-black text-slate-300 uppercase tracking-widest bg-slate-50 px-3 py-1 rounded-md">Variable {idx + 1}</div>
+                                                <div className="w-10 h-10 rounded-xl bg-primary-purple/5 flex items-center justify-center text-primary-purple"><TargetIcon className="w-5 h-5" /></div>
+                                            </div>
+                                            <h4 className="text-lg sm:text-2xl font-black uppercase mb-6 sm:mb-8 text-slate-900 tracking-tight transition-colors group-hover:text-primary-purple">{key}</h4>
+                                            <div className="flex items-end justify-between border-t border-slate-50 pt-6 sm:pt-8">
+                                                <p className="text-5xl sm:text-8xl font-black tracking-tighter text-slate-900 group-hover:scale-[1.02] transition-transform origin-left text-gradient bg-gradient-to-r from-slate-900 to-slate-600">{(val as number).toFixed(2)}</p>
+                                                <p className="text-[10px] sm:text-sm font-black text-slate-400 mb-2 sm:mb-4 uppercase tracking-widest">{factors.find(f => f.name === key)?.unit || 'units'}</p>
+                                            </div>
+                                        </div>
+                                    ))}
                                 </div>
-                            )}
-                        </motion.div>
-                    )}
-
-                    {activeTab === 'Synthesis' && analysis && (
-                        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="max-w-6xl mx-auto py-16 space-y-20 pb-32">
-                            <div className="text-center space-y-4">
-                                <div className="section-badge !mb-4">Final Configuration</div>
-                                <h3 className="text-5xl sm:text-7xl font-black uppercase tracking-tighter text-slate-900 leading-none">Global <span className="text-gradient">Optima</span></h3>
-                                <p className="text-slate-400 font-bold tracking-[0.2em] uppercase text-xs">Recommended Parameters for Peak Performance</p>
-                            </div>
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
-                                {Object.entries(analysis.optimizedParams || {}).map(([key, val], idx) => (
-                                    <div key={key} className="card-premium p-12 hover:border-primary-purple transition-all duration-700 group">
-                                        <div className="flex justify-between items-start mb-8">
-                                            <div className="text-[10px] font-black text-slate-300 uppercase tracking-widest bg-slate-50 px-3 py-1 rounded-md">Variable {idx + 1}</div>
-                                            <div className="w-10 h-10 rounded-xl bg-primary-purple/5 flex items-center justify-center text-primary-purple"><TargetIcon className="w-5 h-5" /></div>
-                                        </div>
-                                        <h4 className="text-2xl font-black uppercase mb-8 text-slate-900 tracking-tight transition-colors group-hover:text-primary-purple">{key}</h4>
-                                        <div className="flex items-end justify-between border-t border-slate-50 pt-8">
-                                            <p className="text-6xl sm:text-8xl font-black tracking-tighter text-slate-900 group-hover:scale-[1.02] transition-transform origin-left text-gradient bg-gradient-to-r from-slate-900 to-slate-600">{(val as number).toFixed(2)}</p>
-                                            <p className="text-sm font-black text-slate-400 mb-4 uppercase tracking-widest">{factors.find(f => f.name === key)?.unit || 'units'}</p>
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
-                            <div className="flex justify-center relative px-4">
-                                <button onClick={() => setShowExportMenu(!showExportMenu)} className="btn-primary w-full sm:w-auto !px-8 sm:!px-16 !py-5 sm:!py-8 text-[10px] sm:text-xs tracking-[0.3em] sm:tracking-[0.5em] shadow-3xl shadow-primary-purple/20">
-                                    <DownloadIcon className="w-5 h-5 sm:w-6 sm:h-6 animate-bounce" />
-                                    DOWNLOAD DOSSIER
-                                    <ChevronDownIcon className={`w-4 h-4 sm:w-5 sm:h-5 transition-transform duration-500 ${showExportMenu ? 'rotate-180' : ''}`} />
-                                </button>
-                                <AnimatePresence>{showExportMenu && (
-                                    <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 15 }} className="absolute bottom-full mb-6 w-full max-w-sm glass rounded-[1.5rem] sm:rounded-[2.5rem] overflow-hidden z-50 p-2 shadow-2xl border-white/50">
-                                        <button onClick={handleGeneratePDFReport} className="w-full text-left p-4 sm:p-6 hover:bg-slate-50 rounded-xl sm:rounded-[2rem] flex items-center gap-4 sm:gap-6 transition-all group">
-                                            <div className="w-10 h-10 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl bg-emerald-50 flex items-center justify-center text-emerald-500 transition-all group-hover:bg-emerald-500 group-hover:text-white group-hover:shadow-lg group-hover:shadow-emerald-500/20"><FileSignatureIcon className="w-5 h-5 sm:w-7 sm:h-7" /></div>
-                                            <div><p className="text-[10px] sm:text-[11px] font-black uppercase text-slate-900 tracking-wider">Scientific PDF</p><p className="text-[8px] sm:text-[9px] font-bold text-slate-400 mt-1 uppercase tracking-widest">Visuals • ANOVA</p></div>
-                                        </button>
-                                        <div className="h-px bg-slate-100 my-1 mx-4 sm:mx-6" />
-                                        <button onClick={handleGenerateWordReport} className="w-full text-left p-4 sm:p-6 hover:bg-slate-50 rounded-xl sm:rounded-[2rem] flex items-center gap-4 sm:gap-6 transition-all group">
-                                            <div className="w-10 h-10 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl bg-primary-purple/5 flex items-center justify-center text-primary-purple transition-all group-hover:bg-primary-purple group-hover:text-white group-hover:shadow-lg group-hover:shadow-primary-purple/20"><ZapIcon className="w-5 h-5 sm:w-7 sm:h-7" /></div>
-                                            <div><p className="text-[10px] sm:text-[11px] font-black uppercase text-slate-900 tracking-wider">Editable Word</p><p className="text-[8px] sm:text-[9px] font-bold text-slate-400 mt-1 uppercase tracking-widest">Tables • Equations</p></div>
-                                        </button>
-                                    </motion.div>
-                                )}</AnimatePresence>
-                            </div>
-                        </motion.div>
-                    )}
-                </AnimatePresence>
-            </main>
+                                <div className="flex justify-center relative px-4">
+                                    <button onClick={() => setShowExportMenu(!showExportMenu)} className="btn-primary w-full sm:w-auto !px-8 sm:!px-16 !py-5 sm:!py-8 text-[10px] sm:text-xs tracking-[0.3em] sm:tracking-[0.5em] shadow-3xl shadow-primary-purple/20">
+                                        <DownloadIcon className="w-5 h-5 sm:w-6 sm:h-6 animate-bounce" />
+                                        DOWNLOAD DOSSIER
+                                        <ChevronDownIcon className={`w-4 h-4 sm:w-5 sm:h-5 transition-transform duration-500 ${showExportMenu ? 'rotate-180' : ''}`} />
+                                    </button>
+                                    <AnimatePresence>{showExportMenu && (
+                                        <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 15 }} className="absolute bottom-full mb-6 w-full max-w-sm glass rounded-[1.5rem] sm:rounded-[2.5rem] overflow-hidden z-50 p-2 shadow-2xl border-white/50">
+                                            <button onClick={handleGeneratePDFReport} className="w-full text-left p-4 sm:p-6 hover:bg-slate-50 rounded-xl sm:rounded-[2rem] flex items-center gap-4 sm:gap-6 transition-all group">
+                                                <div className="w-10 h-10 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl bg-emerald-50 flex items-center justify-center text-emerald-500 transition-all group-hover:bg-emerald-500 group-hover:text-white group-hover:shadow-lg group-hover:shadow-emerald-500/20"><FileSignatureIcon className="w-5 h-5 sm:w-7 sm:h-7" /></div>
+                                                <div><p className="text-[10px] sm:text-[11px] font-black uppercase text-slate-900 tracking-wider">Scientific PDF</p><p className="text-[8px] sm:text-[9px] font-bold text-slate-400 mt-1 uppercase tracking-widest">Visuals • ANOVA</p></div>
+                                            </button>
+                                            <div className="h-px bg-slate-100 my-1 mx-4 sm:mx-6" />
+                                            <button onClick={handleGenerateWordReport} className="w-full text-left p-4 sm:p-6 hover:bg-slate-50 rounded-xl sm:rounded-[2rem] flex items-center gap-4 sm:gap-6 transition-all group">
+                                                <div className="w-10 h-10 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl bg-primary-purple/5 flex items-center justify-center text-primary-purple transition-all group-hover:bg-primary-purple group-hover:text-white group-hover:shadow-lg group-hover:shadow-primary-purple/20"><ZapIcon className="w-5 h-5 sm:w-7 sm:h-7" /></div>
+                                                <div><p className="text-[10px] sm:text-[11px] font-black uppercase text-slate-900 tracking-wider">Editable Word</p><p className="text-[8px] sm:text-[9px] font-bold text-slate-400 mt-1 uppercase tracking-widest">Tables • Equations</p></div>
+                                            </button>
+                                        </motion.div>
+                                    )}</AnimatePresence>
+                                </div>
+                            </motion.div>
+                        )
+                    }
+                </AnimatePresence >
+            </main >
 
             <AnimatePresence>{loadingState === 'loading' && (
                 <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 z-[60] bg-white/70 backdrop-blur-3xl flex flex-col items-center justify-center gap-12">
@@ -1192,16 +1198,18 @@ const DesignOfExperimentView: React.FC<{ setActiveView: (view: ViewType) => void
                 </motion.div>
             )}</AnimatePresence>
 
-            {error && (
-                <motion.div initial={{ y: 60, opacity: 0 }} animate={{ y: 0, opacity: 1 }} className="fixed bottom-12 left-1/2 -translate-x-1/2 z-[70] bg-red-600 text-white px-10 py-6 rounded-[3rem] shadow-3xl flex flex-col items-center gap-5 border border-red-500 max-w-lg text-center">
-                    <div className="flex items-center gap-6">
-                        <InfoIcon className="w-6 h-6 flex-shrink-0" />
-                        <span className="text-[11px] font-black uppercase tracking-[0.2em]">{error}</span>
-                        <button onClick={() => setError(null)} className="p-2 hover:bg-white/20 rounded-full transition-colors"><XIcon className="w-6 h-6" /></button>
-                    </div>
-                </motion.div>
-            )}
-        </div>
+            {
+                error && (
+                    <motion.div initial={{ y: 60, opacity: 0 }} animate={{ y: 0, opacity: 1 }} className="fixed bottom-6 sm:bottom-12 left-4 right-4 sm:left-1/2 sm:-translate-x-1/2 z-[70] bg-red-600 text-white px-6 sm:px-10 py-4 sm:py-6 rounded-2xl sm:rounded-[3rem] shadow-3xl flex flex-col items-center gap-3 sm:gap-5 border border-red-500 max-w-lg text-center mx-auto">
+                        <div className="flex items-center gap-4 sm:gap-6 w-full">
+                            <InfoIcon className="w-5 h-5 sm:w-6 sm:h-6 shrink-0" />
+                            <span className="text-[9px] sm:text-[11px] font-black uppercase tracking-wider grow">{error}</span>
+                            <button onClick={() => setError(null)} className="p-1.5 hover:bg-white/20 rounded-full transition-colors shrink-0"><XIcon className="w-5 h-5 sm:w-6 sm:h-6" /></button>
+                        </div>
+                    </motion.div>
+                )
+            }
+        </div >
     );
 };
 

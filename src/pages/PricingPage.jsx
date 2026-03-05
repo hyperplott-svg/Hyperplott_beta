@@ -16,8 +16,10 @@ const PricingPage = () => {
     return (
         <div className="bg-bg-primary min-h-screen text-text-primary font-sans selection:bg-emerald-500/20 selection:text-emerald-500 overflow-x-hidden">
             <SEO
-                title="Pricing Plans - High-Precision DoE for Everyone"
-                description="Choose the right plan for your research needs. From individual students to enterprise-level research laboratories."
+                title="Pricing Plans — High-Precision DoE for Everyone"
+                description="Hyperplott is free during beta. Choose the plan that fits your research — from individual students to enterprise laboratories. First 100 users get 50% off lifetime."
+                keywords="DoE pricing, design of experiments software price, free research tool, beta access, scientific software cost"
+                url="https://hyperplott.com/pricing"
             />
             <Navbar />
 

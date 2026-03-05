@@ -1,11 +1,18 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Sidebar from './Sidebar';
 import Header from './Header';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { clsx } from 'clsx';
 
 const MainLayout = ({ children, noPadding = false }) => {
-    const [isSidebarOpen, setIsSidebarOpen] = useState(window.innerWidth >= 1024);
+    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+    useEffect(() => {
+        const check = () => setIsSidebarOpen(window.innerWidth >= 1024);
+        check();
+        window.addEventListener('resize', check);
+        return () => window.removeEventListener('resize', check);
+    }, []);
 
     return (
         <div className="flex h-screen bg-bg-primary overflow-hidden transition-colors duration-500">
@@ -25,13 +32,13 @@ const MainLayout = ({ children, noPadding = false }) => {
 
                 <main className={clsx(
                     "flex-1 overflow-x-hidden overflow-y-auto scroll-smooth",
-                    !noPadding && "px-4 py-8 sm:px-10 lg:px-16"
+                    !noPadding && "px-4 py-6 sm:px-6 md:px-10 lg:px-16 md:py-8"
                 )}>
                     <motion.div
                         className={clsx(noPadding && "h-full")}
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.6, ease: "easeOut" }}
+                        transition={{ duration: 0.5, ease: "easeOut" }}
                     >
                         {children}
                     </motion.div>

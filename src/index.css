@@ -55,6 +55,25 @@
     0% { transform: translateY(30px); opacity: 0; }
     100% { transform: translateY(0); opacity: 1; }
   }
+
+  @keyframes gradient-flow {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+  }
+
+  @keyframes slide-up-fade {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes border-glow {
+    0%, 100% { border-color: rgba(124, 58, 237, 0.15); }
+    50% { border-color: rgba(124, 58, 237, 0.4); }
+  }
+
+  --animate-gradient-flow: gradient-flow 4s ease infinite;
+  --animate-slide-up-fade: slide-up-fade 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  --animate-border-glow: border-glow 2s ease-in-out infinite;
 }
 
 @layer base {
@@ -74,7 +93,15 @@
   }
 
   .card-premium {
-    @apply relative overflow-hidden rounded-2xl bg-white border border-slate-200 hover:border-primary-purple/30 hover:shadow-2xl transition-all duration-500 hover:-translate-y-1;
+    @apply relative overflow-hidden rounded-2xl bg-white border border-slate-200 hover:border-primary-purple/30 hover:shadow-2xl hover:shadow-primary-purple/5 transition-all duration-500 hover:-translate-y-1;
+  }
+
+  .animated-underline {
+    @apply relative after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-0 after:bg-primary-purple after:transition-all after:duration-300 hover:after:w-full;
+  }
+
+  .stat-card {
+    @apply relative overflow-hidden rounded-2xl bg-white/80 backdrop-blur-sm border border-slate-100 shadow-sm hover:shadow-lg hover:shadow-primary-purple/5 transition-all duration-300;
   }
 
   .btn-primary {

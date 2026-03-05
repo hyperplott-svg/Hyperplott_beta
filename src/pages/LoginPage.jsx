@@ -71,8 +71,10 @@ const LoginPage = () => {
     return (
         <>
             <SEO
-                title="Login"
-                description="Access your Hyperplott dashboard and continue your experimental optimization."
+                title="Sign In to Hyperplott"
+                description="Sign in to your Hyperplott account to access your experimental designs, AI-powered analysis tools, and research workspace."
+                keywords="login, sign in, DoE dashboard access, Hyperplott account"
+                url="https://hyperplott.com/login"
             />
             <div className="min-h-screen bg-bg-primary font-sans overflow-hidden">
 

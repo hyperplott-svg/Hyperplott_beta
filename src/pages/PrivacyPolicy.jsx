@@ -16,7 +16,9 @@ const PrivacyPolicy = () => {
         <div className="min-h-screen bg-bg-primary text-slate-600 font-sans selection:bg-primary-purple/10">
             <SEO
                 title="Privacy Policy"
-                description="Our privacy policy details how we handle and protect your research data and personal information."
+                description="Hyperplott's privacy policy explains how we collect, store, and protect your research data and personal information. Your data stays private and secure."
+                keywords="Hyperplott privacy policy, data protection, research data security, GDPR"
+                url="https://hyperplott.com/privacy"
             />
             <Navbar />
 

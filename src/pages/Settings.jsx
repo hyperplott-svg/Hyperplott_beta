@@ -41,7 +41,12 @@ const Settings = () => {
 
     return (
         <div className="max-w-7xl mx-auto space-y-12 pb-20">
-            <SEO title="Settings" />
+            <SEO
+                title="Workspace Settings"
+                description="Configure your Hyperplott research environment, manage your API keys, notification preferences, and laboratory credentials."
+                keywords="DoE settings, research workspace, API configuration, laboratory settings"
+                url="https://hyperplott.com/settings"
+            />
             <div className="flex items-center justify-between px-4">
                 <div>
                     <h1 className="text-4xl font-black text-slate-900 tracking-tight mb-2">Workspace Controls</h1>

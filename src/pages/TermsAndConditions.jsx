@@ -14,7 +14,9 @@ const TermsAndConditions = () => {
         <div className="min-h-screen bg-bg-primary text-slate-600 font-sans selection:bg-primary-purple/10">
             <SEO
                 title="Terms & Conditions"
-                description="Our terms and conditions outline the agreement between you and Hyperplott regarding the use of our platform."
+                description="Read Hyperplott's terms and conditions — your agreement with us for using the AI-powered DoE platform, including usage rules and data policies."
+                keywords="Hyperplott terms, terms of service, user agreement, DoE platform terms"
+                url="https://hyperplott.com/terms"
             />
             <Navbar />
 

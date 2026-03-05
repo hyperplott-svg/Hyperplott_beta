@@ -104,7 +104,11 @@ const DesignViewer = () => {
 
     return (
         <div className="space-y-10 pb-32 max-w-[1600px] mx-auto">
-            <SEO title={`Design: ${designName}`} />
+            <SEO
+                title={`${designName} — Design Analysis`}
+                description={`Analyze and visualize the ${designName} experimental design. View response surfaces, ANOVA tables, factor effects, and export publication-ready reports.`}
+                keywords="design analysis, response surface, ANOVA, factorial analysis, DoE results, experimental design viewer"
+            />
             {/* Header Area */}
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-8 bg-white p-10 rounded-[2.5rem] shadow-xl shadow-black/5">
                 <div className="flex items-center gap-6">

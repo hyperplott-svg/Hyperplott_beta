@@ -60,8 +60,10 @@ const SignupPage = () => {
     return (
         <>
             <SEO
-                title="Create Account"
-                description="Join Hyperplott and start optimizing your experimental designs with AI-powered statistical precision."
+                title="Join Hyperplott — Free Beta Access"
+                description="Create your free Hyperplott account and start designing experiments with AI-powered statistical precision. First 100 users get 50% off lifetime pricing."
+                keywords="sign up, create account, free DoE tool, beta registration, design of experiments signup"
+                url="https://hyperplott.com/signup"
             />
             <div className="min-h-screen bg-bg-primary font-sans overflow-hidden">
 

@@ -2,7 +2,7 @@ import React, { useRef, Suspense, useState, useEffect } from 'react';
 import { motion, useSpring, AnimatePresence } from 'framer-motion';
 import { Canvas } from '@react-three/fiber';
 import { Environment, Float, PerspectiveCamera } from '@react-three/drei';
-import { ArrowRight, Play, CheckCircle, Zap, X } from 'lucide-react';
+import { ArrowRight, Play, CheckCircle, Zap, X, FlaskConical, BarChart2, FileText } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import FactorialCube from '../3d/FactorialCube';
@@ -10,10 +10,13 @@ import ResponseSurface from '../3d/ResponseSurface';
 import FloatingParticles from '../3d/FloatingParticles';
 import ThreeErrorBoundary from '../common/ThreeErrorBoundary';
 
+const DOMAINS = ['Chemistry', 'Pharma', 'Materials', 'Engineering', 'Food Science'];
+
 const Hero = ({ showBanner, setShowBanner }) => {
     const navigate = useNavigate();
     const { loginDemo } = useAuth();
     const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+    const [domainIndex, setDomainIndex] = useState(0);
 
     useEffect(() => {
         const handleMouseMove = (e) => {
@@ -22,19 +25,29 @@ const Hero = ({ showBanner, setShowBanner }) => {
             const moveY = (clientY - window.innerHeight / 2) / 60;
             setMousePos({ x: moveX, y: moveY });
         };
-
         window.addEventListener('mousemove', handleMouseMove);
-        return () => {
-            window.removeEventListener('mousemove', handleMouseMove);
-        };
+        return () => window.removeEventListener('mousemove', handleMouseMove);
+    }, []);
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setDomainIndex(prev => (prev + 1) % DOMAINS.length);
+        }, 2500);
+        return () => clearInterval(interval);
     }, []);
 
     const springConfig = { damping: 30, stiffness: 100 };
     const mouseX = useSpring(mousePos.x, springConfig);
     const mouseY = useSpring(mousePos.y, springConfig);
 
+    const valueProps = [
+        { icon: Zap, label: 'Design Matrix', sub: 'in 60 seconds' },
+        { icon: BarChart2, label: 'AI Analysis', sub: 'ANOVA & R²' },
+        { icon: FileText, label: 'Export Ready', sub: 'PDF & DOCX' },
+    ];
+
     return (
-        <section className="relative min-h-screen flex flex-col items-center justify-center pt-48 pb-20 overflow-hidden bg-bg-primary">
+        <section className="relative min-h-screen flex flex-col items-center justify-center pt-28 sm:pt-36 md:pt-48 pb-20 overflow-hidden bg-bg-primary">
             {/* Beta Banner */}
             <AnimatePresence>
                 {showBanner && (
@@ -84,96 +97,161 @@ const Hero = ({ showBanner, setShowBanner }) => {
                             <ambientLight intensity={0.5} />
                             <pointLight position={[10, 10, 10]} intensity={2} color="#7c3aed" />
                             <pointLight position={[-10, -10, -10]} intensity={1} color="#1e3a8a" />
-
                             <Float speed={2} rotationIntensity={1.5} floatIntensity={1.5}>
                                 <motion.group style={{ x: mouseX, y: mouseY }}>
                                     <FactorialCube position={[7, 1.5, -3]} scale={1.5} />
                                 </motion.group>
                             </Float>
-
                             <Float speed={1.5} rotationIntensity={0.8} floatIntensity={1}>
                                 <motion.group style={{ x: useSpring(mousePos.x * -0.5, springConfig), y: useSpring(mousePos.y * -0.5, springConfig) }}>
                                     <ResponseSurface position={[-9, -3, -2]} scale={1} />
                                 </motion.group>
                             </Float>
-
                             <FloatingParticles count={60} color="#7c3aed" />
                         </Suspense>
                     </Canvas>
                 </ThreeErrorBoundary>
             </div>
 
-            <div className="container mx-auto px-6 relative z-20">
+            <div className="container mx-auto px-4 sm:px-6 relative z-20">
                 <div className="flex flex-col items-center text-center">
+
+                    {/* Section badge */}
                     <motion.div
                         initial={{ opacity: 0, y: -20 }}
                         animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.5 }}
                         className="section-badge"
                     >
                         AI-Powered Design of Experiments
                     </motion.div>
 
                     {/* Headline */}
-                    <div className="relative mb-8 max-w-5xl">
+                    <div className="relative mb-4 max-w-5xl">
                         <motion.h1
                             initial={{ opacity: 0, y: 30 }}
                             animate={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.8 }}
-                            className="text-6xl md:text-8xl font-black tracking-tighter leading-[0.9] text-slate-900"
+                            transition={{ duration: 0.8, delay: 0.1 }}
+                            className="text-5xl sm:text-6xl md:text-8xl font-black tracking-tighter leading-[0.9] text-slate-900"
                         >
                             Design <span className="text-gradient">Better</span><br /> Experiments.
                         </motion.h1>
                     </div>
 
-                    {/* Subheadline */}
+                    {/* Animated rotating domain */}
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ delay: 0.3 }}
+                        className="flex items-center gap-2 mb-8"
+                    >
+                        <span className="text-sm font-bold text-slate-400 uppercase tracking-widest">Built for</span>
+                        <div className="relative h-7 overflow-hidden min-w-[130px] flex items-center justify-start">
+                            <AnimatePresence mode="wait">
+                                <motion.span
+                                    key={domainIndex}
+                                    initial={{ opacity: 0, y: 12 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    exit={{ opacity: 0, y: -12 }}
+                                    transition={{ duration: 0.35, ease: "easeInOut" }}
+                                    className="absolute text-sm font-black text-primary-purple uppercase tracking-widest"
+                                >
+                                    {DOMAINS[domainIndex]}
+                                </motion.span>
+                            </AnimatePresence>
+                        </div>
+                    </motion.div>
+
+                    {/* Subheadline — plain English */}
                     <motion.p
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.2, duration: 0.8 }}
-                        className="text-xl md:text-2xl text-slate-600 max-w-3xl mb-12 leading-relaxed font-medium"
+                        transition={{ delay: 0.35, duration: 0.8 }}
+                        className="text-lg sm:text-xl md:text-2xl text-slate-600 max-w-2xl mb-3 leading-relaxed font-medium"
                     >
-                        Join researchers who are tired of expensive, complicated DoE software.
-                        Optimize complex designs with statistical precision in minutes.
+                        Stop wasting weeks on complex DoE software.
+                    </motion.p>
+                    <motion.p
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.45, duration: 0.8 }}
+                        className="text-base sm:text-lg text-slate-500 max-w-xl mb-12 leading-relaxed font-medium"
+                    >
+                        Hyperplott generates your experimental design matrix, runs AI-powered statistical analysis, and exports publication-ready reports — in minutes.
                     </motion.p>
 
                     {/* High-Impact Actions */}
-                    <div className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full max-w-2xl mb-16">
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.55 }}
+                        className="flex flex-col sm:flex-row items-center justify-center gap-3 w-full max-w-lg mb-10"
+                    >
                         <Link
                             to="/signup"
-                            className="btn-primary w-full sm:w-auto px-12 py-5 text-xl relative group overflow-hidden flex items-center justify-center gap-2"
+                            className="btn-primary w-full sm:w-auto px-8 sm:px-12 py-4 sm:py-5 text-base sm:text-lg relative group overflow-hidden flex items-center justify-center gap-2"
                         >
                             <span className="relative z-10 flex items-center gap-2">
-                                Start Free Research <ArrowRight className="w-6 h-6 group-hover:translate-x-1 transition-transform" />
+                                Start Free Research <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                             </span>
                             <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity" />
                         </Link>
 
-                        <button className="btn-secondary w-full sm:w-auto px-12 py-5 text-xl flex items-center justify-center gap-3 group !bg-white/5 !border-white/10 hover:!bg-white/20 transition-all">
-                            <div className="w-8 h-8 rounded-full bg-primary-purple/10 flex items-center justify-center group-hover:scale-110 transition-transform">
-                                <Play className="w-4 h-4 text-primary-purple fill-current" />
+                        <button className="btn-secondary w-full sm:w-auto px-8 sm:px-12 py-4 sm:py-5 text-base sm:text-lg flex items-center justify-center gap-3 group">
+                            <div className="w-7 h-7 rounded-full bg-primary-purple/10 flex items-center justify-center group-hover:scale-110 transition-transform">
+                                <Play className="w-3.5 h-3.5 text-primary-purple fill-current" />
                             </div>
                             Watch Demo
                         </button>
-                    </div>
+                    </motion.div>
 
                     {/* Trust Signals */}
                     <motion.div
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
-                        transition={{ delay: 0.6 }}
-                        className="flex flex-wrap justify-center gap-x-8 gap-y-4 text-slate-400 text-[10px] font-black uppercase tracking-[0.3em]"
+                        transition={{ delay: 0.65 }}
+                        className="flex flex-wrap justify-center gap-x-6 gap-y-3 text-slate-400 text-[10px] font-black uppercase tracking-[0.25em] mb-16"
                     >
-                        <span>✓ Public Beta Live</span>
-                        <span>✓ Instant Guest Access</span>
-                        <span>✓ Zero Configuration</span>
+                        {['Public Beta Live', 'Instant Guest Access', 'Zero Configuration'].map((t, i) => (
+                            <span key={i} className="flex items-center gap-1.5">
+                                <CheckCircle className="w-3 h-3 text-primary-purple" />
+                                {t}
+                            </span>
+                        ))}
+                    </motion.div>
+
+                    {/* Value Proposition Strip */}
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.75 }}
+                        className="w-full max-w-2xl grid grid-cols-1 sm:grid-cols-3 gap-3 mb-12"
+                    >
+                        {valueProps.map((vp, i) => (
+                            <motion.div
+                                key={i}
+                                initial={{ opacity: 0, y: 16 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ delay: 0.8 + i * 0.1, duration: 0.5 }}
+                                className="stat-card flex sm:flex-col items-center sm:items-center gap-3 sm:gap-2 px-4 sm:px-3 py-3 sm:py-4 rounded-2xl"
+                            >
+                                <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-primary-purple/10 flex items-center justify-center shrink-0">
+                                    <vp.icon className="w-4 h-4 sm:w-5 sm:h-5 text-primary-purple" />
+                                </div>
+                                <div className="text-left sm:text-center">
+                                    <p className="text-[11px] font-black text-slate-900 uppercase tracking-widest leading-tight">{vp.label}</p>
+                                    <p className="text-[10px] font-medium text-slate-400 mt-0.5">{vp.sub}</p>
+                                </div>
+                            </motion.div>
+                        ))}
                     </motion.div>
 
                     {/* Trust Indicators */}
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.8 }}
-                        className="mt-20 flex flex-wrap justify-center gap-8 md:gap-12 py-8 border-t border-slate-100"
+                        transition={{ delay: 1.1 }}
+                        className="flex flex-wrap justify-center gap-6 sm:gap-10 md:gap-12 py-6 border-t border-slate-100"
                     >
                         {[
                             "Validated Algorithms",

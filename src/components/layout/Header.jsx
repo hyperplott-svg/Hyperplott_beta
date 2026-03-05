@@ -6,7 +6,6 @@ import {
     LogOut,
     Settings as SettingsIcon,
     ChevronDown,
-    Command,
     HelpCircle,
     Home
 } from 'lucide-react';
@@ -14,7 +13,6 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { clsx } from 'clsx';
 import { useAuth } from '../../context/AuthContext';
-import { signOut } from 'firebase/auth';
 import { auth } from '../../firebase';
 
 const Header = ({ toggleSidebar, isSidebarOpen }) => {
@@ -22,6 +20,7 @@ const Header = ({ toggleSidebar, isSidebarOpen }) => {
     const { user, logout } = useAuth();
 
     const handleLogout = async () => {
+        setIsUserMenuOpen(false);
         try {
             await logout();
         } catch (error) {
@@ -29,116 +28,136 @@ const Header = ({ toggleSidebar, isSidebarOpen }) => {
         }
     };
 
+    // Derive display name from Firebase user
+    const displayName = user?.displayName || user?.email?.split('@')[0] || 'Researcher';
+    const displayEmail = user?.email || 'guest@hyperplott.com';
+    const initials = displayName.slice(0, 2).toUpperCase();
+
     return (
-        <header className="h-20 bg-white border-b border-gray-100 px-4 md:px-8 flex items-center justify-between sticky top-0 z-[40]">
-            <div className="flex items-center gap-2 md:gap-4">
+        <header className="h-16 md:h-20 bg-white/90 backdrop-blur-sm border-b border-gray-100 px-4 md:px-8 flex items-center justify-between sticky top-0 z-[40] shadow-sm shadow-slate-100/60">
+            {/* Left: Sidebar toggle + Home */}
+            <div className="flex items-center gap-2 md:gap-3">
                 <button
                     onClick={toggleSidebar}
-                    className="p-2.5 rounded-xl hover:bg-slate-50 text-slate-400 transition-all flex items-center justify-center lg:hidden"
+                    className="p-2.5 rounded-xl hover:bg-slate-50 text-slate-400 hover:text-slate-700 transition-all lg:hidden"
+                    aria-label="Toggle sidebar"
                 >
-                    <Command className="w-5 h-5" />
+                    <div className="w-5 h-5 flex flex-col justify-between gap-1.5">
+                        <span className="w-full h-0.5 bg-current rounded-full" />
+                        <span className="w-3.5 h-0.5 bg-current rounded-full" />
+                        <span className="w-full h-0.5 bg-current rounded-full" />
+                    </div>
                 </button>
+
                 <Link
                     to="/"
-                    className="flex items-center gap-2 p-2.5 rounded-xl bg-slate-50 border border-slate-100 text-slate-400 hover:text-emerald-500 hover:bg-emerald-50 transition-all group"
+                    className="flex items-center gap-2 p-2 rounded-xl bg-slate-50 border border-slate-100 text-slate-400 hover:text-primary-purple hover:bg-indigo-50 hover:border-indigo-100 transition-all group"
                     title="Back to Landing Page"
                 >
-                    <Home className="w-5 h-5 group-hover:scale-110 transition-transform" />
+                    <Home className="w-4 h-4 group-hover:scale-110 transition-transform" />
                     <span className="text-[10px] font-black uppercase tracking-widest hidden lg:block">Home</span>
                 </Link>
-                <div className="h-8 w-px bg-gray-100 mx-2" />
             </div>
 
-            <div className="flex-1 max-w-xl mx-auto">
-                <div className="relative group hidden md:block">
-                    <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 group-focus-within:text-primary-purple transition-colors" />
+            {/* Center: Search */}
+            <div className="flex-1 max-w-md mx-4 hidden md:block">
+                <div className="relative group">
+                    <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 group-focus-within:text-primary-purple transition-colors" />
                     <input
                         type="text"
-                        placeholder="Search DoE experiments or factorial matrices..."
-                        className="w-full bg-gray-50 border border-gray-100 rounded-[1.25rem] py-2.5 pl-12 pr-12 outline-none focus:bg-white focus:border-indigo-100 focus:ring-4 focus:ring-indigo-50/50 transition-all text-sm font-semibold text-text-primary placeholder:text-text-muted/60"
+                        placeholder="Search experiments..."
+                        className="w-full bg-gray-50 border border-gray-100 rounded-xl py-2.5 pl-10 pr-4 outline-none focus:bg-white focus:border-indigo-100 focus:ring-4 focus:ring-indigo-50/50 transition-all text-sm font-medium text-text-primary placeholder:text-text-muted/50"
                     />
-                    <div className="absolute right-4 top-1/2 -translate-y-1/2 flex items-center gap-1.5 px-2 py-1 bg-white rounded-lg border border-gray-100 shadow-sm pointer-events-none">
-                        <span className="text-[10px] font-bold text-gray-400">⌘</span>
-                        <span className="text-[10px] font-bold text-gray-400">K</span>
-                    </div>
                 </div>
             </div>
 
-            <div className="flex items-center gap-5">
-                <div className="flex items-center gap-2">
-                    <button className="p-2.5 rounded-xl hover:bg-gray-50 text-gray-400 hover:text-text-primary transition-all relative">
-                        <div className="absolute top-2.5 right-2.5 w-2 h-2 bg-secondary rounded-full border-2 border-white" />
-                        <Bell className="w-5 h-5" />
-                    </button>
+            {/* Right: Actions + User */}
+            <div className="flex items-center gap-1 md:gap-2">
+                <button className="p-2.5 rounded-xl hover:bg-gray-50 text-gray-400 hover:text-text-primary transition-all relative" aria-label="Notifications">
+                    <div className="absolute top-2 right-2 w-2 h-2 bg-primary-purple rounded-full border-2 border-white" />
+                    <Bell className="w-4.5 h-4.5 w-[18px] h-[18px]" />
+                </button>
 
-                    <button className="p-2.5 rounded-xl hover:bg-gray-50 text-gray-400 hover:text-text-primary transition-all">
-                        <HelpCircle className="w-5 h-5" />
-                    </button>
-                </div>
+                <Link to="/help" className="p-2.5 rounded-xl hover:bg-gray-50 text-gray-400 hover:text-text-primary transition-all hidden sm:flex items-center justify-center" aria-label="Help">
+                    <HelpCircle className="w-[18px] h-[18px]" />
+                </Link>
 
-                <div className="h-8 w-px bg-gray-100 mx-2" />
+                <div className="w-px h-6 bg-gray-100 mx-1 hidden sm:block" />
 
+                {/* User Menu */}
                 <div className="relative">
                     <button
                         onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
-                        className="flex items-center gap-3 p-1.5 rounded-2xl hover:bg-gray-50 transition-all group"
+                        className="flex items-center gap-2 md:gap-2.5 p-1.5 rounded-2xl hover:bg-gray-50 transition-all group"
                     >
-                        <div className="w-10 h-10 rounded-xl bg-indigo-50 flex items-center justify-center border border-indigo-100 shadow-sm overflow-hidden text-primary-purple font-black text-xs group-hover:bg-primary-purple group-hover:text-white transition-all">
+                        <div className="w-8 h-8 md:w-9 md:h-9 rounded-xl bg-gradient-to-br from-primary-purple to-primary flex items-center justify-center text-white font-black text-xs shadow-md overflow-hidden shrink-0">
                             {user?.photoURL ? (
-                                <img src={user.photoURL} alt="User" className="w-full h-full object-cover" />
+                                <img src={user.photoURL} alt={displayName} className="w-full h-full object-cover" />
                             ) : (
-                                <User className="w-5 h-5" />
+                                <span>{initials}</span>
                             )}
                         </div>
                         <div className="hidden lg:block text-left">
-                            <p className="text-xs font-black text-slate-900 leading-none mb-1">Hyperplott</p>
-                            <p className="text-[10px] font-bold text-primary-purple uppercase tracking-widest flex items-center gap-1">
-                                <span className="w-1.5 h-1.5 rounded-full bg-primary-purple animate-pulse" />
-                                Active Sentinel
-                            </p>
+                            <p className="text-xs font-black text-slate-900 leading-none mb-0.5 max-w-[100px] truncate">{displayName}</p>
+                            <p className="text-[10px] font-bold text-slate-400 max-w-[100px] truncate">{displayEmail}</p>
                         </div>
-                        <ChevronDown className={clsx("w-3.5 h-3.5 text-gray-400 transition-transform", isUserMenuOpen && "rotate-180")} />
+                        <ChevronDown className={clsx("w-3.5 h-3.5 text-gray-400 transition-transform duration-200", isUserMenuOpen && "rotate-180")} />
                     </button>
 
                     <AnimatePresence>
                         {isUserMenuOpen && (
-                            <motion.div
-                                initial={{ opacity: 0, y: 10, scale: 0.95 }}
-                                animate={{ opacity: 1, y: 0, scale: 1 }}
-                                exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                                className="absolute right-0 mt-3 w-64 bg-white rounded-[2rem] shadow-2xl border border-gray-100 overflow-hidden"
-                            >
-                                <div className="p-6 border-b border-gray-50 bg-gray-50/30">
-                                    <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-4">Laboratory Registry</p>
-                                    <div className="flex items-center gap-4">
-                                        <div className="w-12 h-12 rounded-2xl bg-white border border-gray-100 flex items-center justify-center text-primary-purple font-black shadow-sm">HP</div>
-                                        <div>
-                                            <p className="text-sm font-black text-slate-900">Admin Instance</p>
-                                            <p className="text-[10px] font-bold text-text-tertiary">Scientific Professional</p>
+                            <>
+                                {/* Backdrop */}
+                                <div className="fixed inset-0 z-[39]" onClick={() => setIsUserMenuOpen(false)} />
+                                <motion.div
+                                    initial={{ opacity: 0, y: 8, scale: 0.96 }}
+                                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                                    exit={{ opacity: 0, y: 8, scale: 0.96 }}
+                                    transition={{ duration: 0.15, ease: [0.16, 1, 0.3, 1] }}
+                                    className="absolute right-0 mt-2 w-60 bg-white rounded-2xl shadow-xl shadow-slate-200/60 border border-gray-100 overflow-hidden z-[40]"
+                                >
+                                    {/* User info header */}
+                                    <div className="p-4 border-b border-gray-50 bg-gradient-to-b from-slate-50/80 to-white">
+                                        <div className="flex items-center gap-3">
+                                            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary-purple to-primary flex items-center justify-center text-white font-black text-sm shadow-sm overflow-hidden shrink-0">
+                                                {user?.photoURL ? (
+                                                    <img src={user.photoURL} alt={displayName} className="w-full h-full object-cover" />
+                                                ) : (
+                                                    <span>{initials}</span>
+                                                )}
+                                            </div>
+                                            <div className="min-w-0">
+                                                <p className="text-sm font-black text-slate-900 truncate">{displayName}</p>
+                                                <p className="text-[10px] font-medium text-slate-400 truncate">{displayEmail}</p>
+                                            </div>
+                                        </div>
+                                        <div className="mt-3 flex items-center gap-1.5 px-2 py-1.5 rounded-lg bg-white border border-slate-100">
+                                            <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                                            <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Beta Researcher</span>
                                         </div>
                                     </div>
-                                </div>
 
-                                <div className="p-2">
-                                    <Link to="/settings" onClick={() => setIsUserMenuOpen(false)}>
-                                        <button className="w-full flex items-center gap-3 px-5 py-3 rounded-xl text-xs font-bold text-text-secondary hover:bg-indigo-50 hover:text-primary-purple transition-all group">
-                                            <User className="w-4 h-4" /> Profile Controls
+                                    <div className="p-2">
+                                        <Link to="/settings" onClick={() => setIsUserMenuOpen(false)}>
+                                            <button className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-bold text-text-secondary hover:bg-indigo-50 hover:text-primary-purple transition-all">
+                                                <User className="w-4 h-4" /> Profile Settings
+                                            </button>
+                                        </Link>
+                                        <Link to="/settings" onClick={() => setIsUserMenuOpen(false)}>
+                                            <button className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-bold text-text-secondary hover:bg-indigo-50 hover:text-primary-purple transition-all">
+                                                <SettingsIcon className="w-4 h-4" /> Workspace Config
+                                            </button>
+                                        </Link>
+                                        <div className="h-px bg-gray-100 my-1.5 mx-2" />
+                                        <button
+                                            onClick={handleLogout}
+                                            className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-black text-red-500 hover:bg-red-50 transition-all"
+                                        >
+                                            <LogOut className="w-4 h-4" /> Sign Out
                                         </button>
-                                    </Link>
-                                    <Link to="/settings" onClick={() => setIsUserMenuOpen(false)}>
-                                        <button className="w-full flex items-center gap-3 px-5 py-3 rounded-xl text-xs font-bold text-text-secondary hover:bg-indigo-50 hover:text-primary-purple transition-all group">
-                                            <SettingsIcon className="w-4 h-4" /> Global Registry
-                                        </button>
-                                    </Link>
-                                    <div className="h-px bg-gray-50 my-2 mx-4" />
-                                    <button
-                                        onClick={handleLogout}
-                                        className="w-full flex items-center gap-3 px-5 py-3 rounded-xl text-xs font-black text-red-500 hover:bg-red-50 transition-all cursor-pointer"
-                                    >
-                                        <LogOut className="w-4 h-4" /> Terminate Session
-                                    </button>
-                                </div>
-                            </motion.div>
+                                    </div>
+                                </motion.div>
+                            </>
                         )}
                     </AnimatePresence>
                 </div>
