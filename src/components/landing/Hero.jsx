@@ -1,5 +1,5 @@
 import React, { useRef, Suspense, useState, useEffect } from 'react';
-import { motion, useSpring, AnimatePresence } from 'framer-motion';
+import { motion, useSpring, AnimatePresence, useInView } from 'framer-motion';
 import { Canvas } from '@react-three/fiber';
 import { Environment, Float, PerspectiveCamera } from '@react-three/drei';
 import { ArrowRight, Play, CheckCircle, Zap, X, FlaskConical, BarChart2, FileText } from 'lucide-react';
@@ -17,6 +17,8 @@ const Hero = ({ showBanner, setShowBanner }) => {
     const { loginDemo } = useAuth();
     const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
     const [domainIndex, setDomainIndex] = useState(0);
+    const heroRef = useRef(null);
+    const isHeroInView = useInView(heroRef, { once: false, amount: 0.1 });
 
     useEffect(() => {
         const handleMouseMove = (e) => {
@@ -47,7 +49,7 @@ const Hero = ({ showBanner, setShowBanner }) => {
     ];
 
     return (
-        <section className="relative min-h-screen flex flex-col items-center justify-center pt-28 sm:pt-36 md:pt-48 pb-20 overflow-hidden bg-bg-primary">
+        <section ref={heroRef} className="relative min-h-screen flex flex-col items-center justify-center pt-28 sm:pt-36 md:pt-48 pb-20 overflow-hidden bg-bg-primary">
             {/* Beta Banner */}
             <AnimatePresence>
                 {showBanner && (
@@ -90,7 +92,8 @@ const Hero = ({ showBanner, setShowBanner }) => {
 
             {/* 3D Scene */}
             <div className="absolute inset-0 z-10 pointer-events-none opacity-40">
-                <ThreeErrorBoundary>
+                {isHeroInView && (
+                    <ThreeErrorBoundary>
                     <Canvas camera={{ position: [0, 0, 15], fov: 45 }}>
                         <Suspense fallback={null}>
                             <Environment preset="city" />
@@ -111,6 +114,7 @@ const Hero = ({ showBanner, setShowBanner }) => {
                         </Suspense>
                     </Canvas>
                 </ThreeErrorBoundary>
+                )}
             </div>
 
             <div className="container mx-auto px-4 sm:px-6 relative z-20">

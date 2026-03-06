@@ -309,19 +309,20 @@ const DesignOfExperimentView: React.FC<{ setActiveView: (view: ViewType) => void
         }
     };
 
-    const callWithRetry = async (fn: () => Promise<any>, maxRetries = 4) => {
+    const callWithRetry = async (fn: () => Promise<any>, maxRetries = 6) => {
         let attempt = 0;
         while (attempt < maxRetries) {
             try {
                 return await fn();
             } catch (err: any) {
                 attempt++;
-                const errText = err.message || '';
+                const errText = (err.message || '').toUpperCase();
                 const isRetryable = errText.includes('429') || err.status === 429 || errText.includes('RESOURCE_EXHAUSTED') ||
-                    errText.includes('503') || err.status === 503 || errText.includes('UNAVAILABLE');
+                    errText.includes('503') || err.status === 503 || errText.includes('UNAVAILABLE') || 
+                    errText.includes('OVERLOADED') || errText.includes('DEADLINE_EXCEEDED');
 
                 if (isRetryable && attempt < maxRetries) {
-                    const delay = Math.pow(2.5, attempt) * 1000 + Math.random() * 1000;
+                    const delay = Math.pow(2.2, attempt) * 1000 + Math.random() * 1000;
                     await new Promise(resolve => setTimeout(resolve, delay));
                     continue;
                 }
@@ -387,7 +388,7 @@ const DesignOfExperimentView: React.FC<{ setActiveView: (view: ViewType) => void
                         }
                     }
                 });
-                const responseText = (response as any).text || (response.candidates?.[0]?.content?.parts?.[0] as any)?.text || "";
+                const responseText = response.response?.text?.() || (response as any).text || (response.candidates?.[0]?.content?.parts?.[0] as any)?.text || "";
                 return safeJSONParse(responseText);
             });
 
@@ -445,7 +446,7 @@ const DesignOfExperimentView: React.FC<{ setActiveView: (view: ViewType) => void
                         }
                     }
                 });
-                const responseText = (response as any).text || (response.candidates?.[0]?.content?.parts?.[0] as any)?.text || "";
+                const responseText = response.response?.text?.() || (response as any).text || (response.candidates?.[0]?.content?.parts?.[0] as any)?.text || "";
                 return safeJSONParse(responseText);
             });
 
@@ -523,7 +524,7 @@ const DesignOfExperimentView: React.FC<{ setActiveView: (view: ViewType) => void
                         }
                     }
                 });
-                const responseText = (response as any).text || (response.candidates?.[0]?.content?.parts?.[0] as any)?.text || "";
+                const responseText = response.response?.text?.() || (response as any).text || (response.candidates?.[0]?.content?.parts?.[0] as any)?.text || "";
                 return safeJSONParse(responseText);
             });
 
