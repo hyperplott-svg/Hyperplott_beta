@@ -320,7 +320,7 @@ const DesignOfExperimentView: React.FC<{ setActiveView: (view: ViewType) => void
         throw new Error("Could not extract valid data from the AI response. It might be too complex or malformed.");
     };
 
-    const callWithRetry = async (fn: () => Promise<any>, maxRetries = 4, context = "AI Engine") => {
+    const callWithRetry = async (fn: () => Promise<any>, maxRetries = 6, context = "AI Engine") => {
         let attempt = 0;
         while (attempt < maxRetries) {
             try {
@@ -340,7 +340,7 @@ const DesignOfExperimentView: React.FC<{ setActiveView: (view: ViewType) => void
                     continue;
                 }
                 if (isRetryable) {
-                    throw new Error(`Server Overloaded: ${context} failed after ${maxRetries} attempts. Google Gemini 3 Flash Preview is in high demand right now.`);
+                    throw new Error(`Server Overloaded: ${context} failed after ${maxRetries} attempts. Google Gemini 3 Flash Preview is in extremely high demand right now.`);
                 } else {
                     throw err;
                 }
