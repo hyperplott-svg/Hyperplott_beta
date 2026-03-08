@@ -410,7 +410,8 @@ Objective: "${objective}"` }] }],
                             }
                         }
                     });
-                    const responseText = response.response?.text?.() || (response as any).text || (response.candidates?.[0]?.content?.parts?.[0] as any)?.text || "";
+                    const res = response as any;
+                    const responseText = res.response?.text?.() || res.text?.() || res.candidates?.[0]?.content?.parts?.[0]?.text || "";
                     const parsed = safeJSONParse(responseText);
                     if (!parsed || !parsed.factors || !parsed.responses) {
                         throw new Error("AI returned incomplete dimension probe data.");
@@ -478,7 +479,8 @@ Factors: ${factors.map(f => f.name).join(', ')}. Add 3-5 center points.` }]
                         }
                     }
                 });
-                const responseText = response.response?.text?.() || (response as any).text || (response.candidates?.[0]?.content?.parts?.[0] as any)?.text || "";
+                const res = response as any;
+                const responseText = res.response?.text?.() || res.text?.() || res.candidates?.[0]?.content?.parts?.[0]?.text || "";
                 const parsed = safeJSONParse(responseText);
                 if (!parsed || !Array.isArray(parsed) || parsed.length === 0) {
                     throw new Error("AI returned invalid matrix data.");
@@ -563,7 +565,8 @@ Responses: ${responses.map(r => r.name).join(', ')}` }]
                         }
                     }
                 });
-                const responseText = response.response?.text?.() || (response as any).text || (response.candidates?.[0]?.content?.parts?.[0] as any)?.text || "";
+                const res = response as any;
+                const responseText = res.response?.text?.() || res.text?.() || res.candidates?.[0]?.content?.parts?.[0]?.text || "";
                 const parsed = safeJSONParse(responseText);
                 if (!parsed || !parsed.analyses) {
                     throw new Error("AI returned incomplete analysis results.");
