@@ -178,7 +178,6 @@ const DesignOfExperimentView: React.FC<{ setActiveView: (view: ViewType) => void
     ]);
     const [runMatrix, setRunMatrix] = useState<DoERun[]>([]);
     const [analysis, setAnalysis] = useState<DoEAnalysisResult | null>(null);
-    const [aiModel, setAiModel] = useState<'gemini-3-flash-preview' | 'gemini-1.5-flash'>('gemini-3-flash-preview');
     const [lastAction, setLastAction] = useState<{ fn: () => Promise<void>, label: string } | null>(null);
     const [selectedAnalysisKey, setSelectedAnalysisKey] = useState<string>('');
     const [loadingState, setLoadingState] = useState<LoadingState>('idle');
@@ -341,7 +340,7 @@ const DesignOfExperimentView: React.FC<{ setActiveView: (view: ViewType) => void
                     continue;
                 }
                 if (isRetryable) {
-                    throw new Error(`Server Overloaded: ${context} failed after ${maxRetries} attempts. You might want to switch to "Stable Mode" in the header.`);
+                    setError(`Server Overloaded: Dimension Probe failed after ${maxRetries} attempts. Google Gemini 3 Flash Preview is in high demand right now.`);
                 } else {
                     throw err;
                 }
@@ -368,11 +367,11 @@ const DesignOfExperimentView: React.FC<{ setActiveView: (view: ViewType) => void
 
                 const genAi = new GoogleGenAI({ 
                     apiKey: apiKey as string,
-                    apiVersion: aiModel.includes('preview') ? 'v1beta' : 'v1'
+                    apiVersion: 'v1beta'
                 });
                 const result = await callWithRetry(async () => {
                     const response = await genAi.models.generateContent({
-                        model: aiModel,
+                        model: "gemini-3-flash-preview",
                         contents: [{ role: 'user', parts: [{ text: `System: Concise DoE Expert. Suggest 3-4 numerical factors and 1-2 responses for the following objective. Output RAW JSON ONLY. No preamble.
 Objective: "${objective}"` }] }],
                         config: {
@@ -444,12 +443,12 @@ Objective: "${objective}"` }] }],
             const methodology = designType;
             const genAi = new GoogleGenAI({ 
                 apiKey: apiKey as string,
-                apiVersion: aiModel.includes('preview') ? 'v1beta' : 'v1'
+                apiVersion: 'v1beta'
             });
 
             const coded = await callWithRetry(async () => {
                 const response = await genAi.models.generateContent({
-                    model: aiModel,
+                    model: "gemini-3-flash-preview",
                     contents: [{
                         role: 'user', parts: [{
                             text: `System: Fast DoE Engine. Generate accurate coded matrices for ${methodology}. Factor High: +1, Low: -1, Axial: alpha. Output RAW JSON ONLY.
@@ -511,14 +510,14 @@ Factors: ${factors.map(f => f.name).join(', ')}. Add 3-5 center points.` }]
 
             const genAi = new GoogleGenAI({ 
                 apiKey: apiKey as string,
-                apiVersion: aiModel.includes('preview') ? 'v1beta' : 'v1'
+                apiVersion: 'v1beta'
             });
             const result = await callWithRetry(async () => {
                 const response = await genAi.models.generateContent({
-                    model: aiModel,
+                    model: "gemini-3-flash-preview",
                     contents: [{
                         role: 'user', parts: [{
-                            text: `System: Expert Statistician. Fit a ${aiModel.includes('3') ? 'High-Precision ' : ''}Quadratic Response Surface Model. Output valid RAW JSON ONLY.
+                            text: `System: Expert Statistician. Fit a High-Precision Quadratic Response Surface Model. Output valid RAW JSON ONLY.
 Experiment: "${experimentName}"
 Data: ${JSON.stringify(runMatrix)}
 Responses: ${responses.map(r => r.name).join(', ')}` }]
@@ -761,21 +760,11 @@ Responses: ${responses.map(r => r.name).join(', ')}` }]
                         </div>
                     </div>
 
-                    <div className="flex items-center gap-2 bg-slate-100 p-1 rounded-full border border-slate-200">
-                        <button
-                            onClick={() => setAiModel('gemini-3-flash-preview')}
-                            className={`px-4 py-2 rounded-full text-[9px] font-black uppercase tracking-widest transition-all ${aiModel === 'gemini-3-flash-preview' ? 'bg-primary-purple text-white shadow-lg' : 'text-slate-400 hover:text-slate-600'}`}
-                            title="Experimental high-precision model"
-                        >
-                            Preview
-                        </button>
-                        <button
-                            onClick={() => setAiModel('gemini-1.5-flash')}
-                            className={`px-4 py-2 rounded-full text-[9px] font-black uppercase tracking-widest transition-all ${aiModel === 'gemini-1.5-flash' ? 'bg-emerald-500 text-white shadow-lg' : 'text-slate-400 hover:text-slate-600'}`}
-                            title="Stable production model"
-                        >
-                            Stable
-                        </button>
+                    <div className="flex items-center gap-2 bg-slate-100 p-2 sm:p-3 px-6 sm:px-8 rounded-full border border-slate-200 shadow-inner">
+                        <span className="w-2 h-2 rounded-full bg-primary-purple animate-pulse shrink-0" />
+                        <span className="text-[9px] sm:text-[10px] font-black text-slate-500 uppercase tracking-widest">
+                            Hyper Engine: <span className="text-primary-purple">Gemini 3 Preview</span>
+                        </span>
                     </div>
 
                     <button
