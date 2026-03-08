@@ -41,6 +41,9 @@ const Hero = ({ showBanner, setShowBanner }) => {
     const springConfig = { damping: 30, stiffness: 100 };
     const mouseX = useSpring(mousePos.x, springConfig);
     const mouseY = useSpring(mousePos.y, springConfig);
+    
+    const mouseXInverse = useSpring(mousePos.x * -0.5, springConfig);
+    const mouseYInverse = useSpring(mousePos.y * -0.5, springConfig);
 
     const valueProps = [
         { icon: Zap, label: 'Design Matrix', sub: 'in 60 seconds' },
@@ -106,7 +109,7 @@ const Hero = ({ showBanner, setShowBanner }) => {
                                 </motion.group>
                             </Float>
                             <Float speed={1.5} rotationIntensity={0.8} floatIntensity={1}>
-                                <motion.group style={{ x: useSpring(mousePos.x * -0.5, springConfig), y: useSpring(mousePos.y * -0.5, springConfig) }}>
+                                <motion.group style={{ x: mouseXInverse, y: mouseYInverse }}>
                                     <ResponseSurface position={[-9, -3, -2]} scale={1} />
                                 </motion.group>
                             </Float>
