@@ -314,11 +314,11 @@ const DesignOfExperimentView: React.FC<{ setActiveView: (view: ViewType) => void
                     }
                     throw markdownError;
                 } catch (extractionError) {
-                    console.error("Critical JSON Parse Failure:", { input, text });
-                    throw new Error("Invalid AI format. The result was too complex or malformed to parse. Please try again.");
+                    throw extractionError;
                 }
             }
         }
+        throw new Error("Could not extract valid data from the AI response. It might be too complex or malformed.");
     };
 
     const callWithRetry = async (fn: () => Promise<any>, maxRetries = 4, context = "AI Engine") => {
@@ -341,7 +341,7 @@ const DesignOfExperimentView: React.FC<{ setActiveView: (view: ViewType) => void
                     continue;
                 }
                 if (isRetryable) {
-                    setError(`Server Overloaded: ${context} failed after ${maxRetries} attempts. You might want to switch to "Stable Mode" in the header.`);
+                    throw new Error(`Server Overloaded: ${context} failed after ${maxRetries} attempts. You might want to switch to "Stable Mode" in the header.`);
                 } else {
                     throw err;
                 }
@@ -376,55 +376,57 @@ Objective: "${objective}"` }] }],
                             temperature: 0,
                             maxOutputTokens: 2048,
                             responseMimeType: "application/json",
-                        responseSchema: {
-                            type: Type.OBJECT,
-                            properties: {
-                                factors: {
-                                    type: Type.ARRAY,
-                                    items: {
-                                        type: Type.OBJECT,
-                                        properties: {
-                                            name: { type: Type.STRING },
-                                            unit: { type: Type.STRING },
-                                            low: { type: Type.NUMBER },
-                                            high: { type: Type.NUMBER }
-                                        },
-                                        required: ["name", "unit", "low", "high"]
+                            responseSchema: {
+                                type: Type.OBJECT,
+                                properties: {
+                                    factors: {
+                                        type: Type.ARRAY,
+                                        items: {
+                                            type: Type.OBJECT,
+                                            properties: {
+                                                name: { type: Type.STRING },
+                                                unit: { type: Type.STRING },
+                                                low: { type: Type.NUMBER },
+                                                high: { type: Type.NUMBER }
+                                            },
+                                            required: ["name", "unit", "low", "high"]
+                                        }
+                                    },
+                                    responses: {
+                                        type: Type.ARRAY,
+                                        items: {
+                                            type: Type.OBJECT,
+                                            properties: {
+                                                name: { type: Type.STRING },
+                                                unit: { type: Type.STRING }
+                                            },
+                                            required: ["name", "unit"]
+                                        }
                                     }
                                 },
-                                responses: {
-                                    type: Type.ARRAY,
-                                    items: {
-                                        type: Type.OBJECT,
-                                        properties: {
-                                            name: { type: Type.STRING },
-                                            unit: { type: Type.STRING }
-                                        },
-                                        required: ["name", "unit"]
-                                    }
-                                }
-                            },
-                            required: ["factors", "responses"]
+                                required: ["factors", "responses"]
+                            }
                         }
-                    }
-                });
-                const responseText = response.response?.text?.() || (response as any).text || (response.candidates?.[0]?.content?.parts?.[0] as any)?.text || "";
-                return safeJSONParse(responseText);
-            }, 4, "Dimension Probe");
+                    });
+                    const responseText = response.response?.text?.() || (response as any).text || (response.candidates?.[0]?.content?.parts?.[0] as any)?.text || "";
+                    return safeJSONParse(responseText);
+                }, 4, "Dimension Probe");
 
-            setFactors(result.factors.map((f: any) => ({
-                ...f,
-                id: Math.random().toString(),
-                type: 'Numerical',
-                low: Number(f.low),
-                high: Number(f.high)
-            })));
-            setResponses(result.responses.map((r: any) => ({ ...r, id: Math.random().toString(), goal: 'Maximize' })));
-        } catch (e) { handleError(e, "AI Dimension Probe"); }
-        finally { setIsSuggesting(false); }
+                if (!result || !result.factors || !result.responses) throw new Error("The AI returned an incomplete response. Please try again.");
+
+                setFactors(result.factors.map((f: any) => ({
+                    ...f,
+                    id: Math.random().toString(),
+                    type: 'Numerical',
+                    low: Number(f.low),
+                    high: Number(f.high)
+                })));
+                setResponses(result.responses.map((r: any) => ({ ...r, id: Math.random().toString(), goal: 'Maximize' })));
+            } catch (e) { handleError(e, "AI Dimension Probe"); }
+            finally { setIsSuggesting(false); }
+        };
+        await fn();
     };
-    fn();
-};
 
     const generateDesign = async () => {
         setLastAction({ fn: generateDesign, label: 'Generate Design' });
@@ -470,6 +472,8 @@ Factors: ${factors.map(f => f.name).join(', ')}. Add 3-5 center points.` }]
                 const responseText = response.response?.text?.() || (response as any).text || (response.candidates?.[0]?.content?.parts?.[0] as any)?.text || "";
                 return safeJSONParse(responseText);
             }, 4, "Matrix Generation");
+
+            if (!coded || !Array.isArray(coded)) throw new Error("The Matrix Engine returned an invalid format. Please try again.");
 
             const actual = coded.map((row: any) => {
                 const mapped: Record<string, number> = {};
@@ -546,6 +550,8 @@ Responses: ${responses.map(r => r.name).join(', ')}` }]
                 const responseText = response.response?.text?.() || (response as any).text || (response.candidates?.[0]?.content?.parts?.[0] as any)?.text || "";
                 return safeJSONParse(responseText);
             }, 4, "Regression Engine");
+
+            if (!result || !result.analyses) throw new Error("The Model Engine returned an incomplete analysis.");
 
             setAnalysis(result);
             setSelectedAnalysisKey(Object.keys(result.analyses || {})[0] || '');
