@@ -411,10 +411,12 @@ Objective: "${objective}"` }] }],
                         }
                     });
                     const responseText = response.response?.text?.() || (response as any).text || (response.candidates?.[0]?.content?.parts?.[0] as any)?.text || "";
-                    return safeJSONParse(responseText);
+                    const parsed = safeJSONParse(responseText);
+                    if (!parsed || !parsed.factors || !parsed.responses) {
+                        throw new Error("AI returned incomplete dimension probe data.");
+                    }
+                    return parsed;
                 }, 4, "Dimension Probe");
-
-                if (!result || !result.factors || !result.responses) throw new Error("The AI returned an incomplete response. Please try again.");
 
                 setFactors(result.factors.map((f: any) => ({
                     ...f,
@@ -475,10 +477,12 @@ Factors: ${factors.map(f => f.name).join(', ')}. Add 3-5 center points.` }]
                     }
                 });
                 const responseText = response.response?.text?.() || (response as any).text || (response.candidates?.[0]?.content?.parts?.[0] as any)?.text || "";
-                return safeJSONParse(responseText);
+                const parsed = safeJSONParse(responseText);
+                if (!parsed || !Array.isArray(parsed) || parsed.length === 0) {
+                    throw new Error("AI returned invalid matrix data.");
+                }
+                return parsed;
             }, 4, "Matrix Generation");
-
-            if (!coded || !Array.isArray(coded)) throw new Error("The Matrix Engine returned an invalid format. Please try again.");
 
             const actual = coded.map((row: any) => {
                 const mapped: Record<string, number> = {};
@@ -556,10 +560,12 @@ Responses: ${responses.map(r => r.name).join(', ')}` }]
                     }
                 });
                 const responseText = response.response?.text?.() || (response as any).text || (response.candidates?.[0]?.content?.parts?.[0] as any)?.text || "";
-                return safeJSONParse(responseText);
+                const parsed = safeJSONParse(responseText);
+                if (!parsed || !parsed.analyses) {
+                    throw new Error("AI returned incomplete analysis results.");
+                }
+                return parsed;
             }, 4, "Regression Engine");
-
-            if (!result || !result.analyses) throw new Error("The Model Engine returned an incomplete analysis.");
 
             setAnalysis(result);
             setSelectedAnalysisKey(Object.keys(result.analyses || {})[0] || '');
