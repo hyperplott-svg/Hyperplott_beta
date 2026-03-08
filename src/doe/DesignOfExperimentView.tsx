@@ -340,7 +340,7 @@ const DesignOfExperimentView: React.FC<{ setActiveView: (view: ViewType) => void
                     continue;
                 }
                 if (isRetryable) {
-                    setError(`Server Overloaded: Dimension Probe failed after ${maxRetries} attempts. Google Gemini 3 Flash Preview is in high demand right now.`);
+                    throw new Error(`Server Overloaded: ${context} failed after ${maxRetries} attempts. Google Gemini 3 Flash Preview is in high demand right now.`);
                 } else {
                     throw err;
                 }
@@ -418,6 +418,8 @@ Objective: "${objective}"` }] }],
                     return parsed;
                 }, 4, "Dimension Probe");
 
+                if (!result) return;
+
                 setFactors(result.factors.map((f: any) => ({
                     ...f,
                     id: Math.random().toString(),
@@ -483,6 +485,8 @@ Factors: ${factors.map(f => f.name).join(', ')}. Add 3-5 center points.` }]
                 }
                 return parsed;
             }, 4, "Matrix Generation");
+
+            if (!coded) return;
 
             const actual = coded.map((row: any) => {
                 const mapped: Record<string, number> = {};
@@ -566,6 +570,8 @@ Responses: ${responses.map(r => r.name).join(', ')}` }]
                 }
                 return parsed;
             }, 4, "Regression Engine");
+
+            if (!result) return;
 
             setAnalysis(result);
             setSelectedAnalysisKey(Object.keys(result.analyses || {})[0] || '');
