@@ -134,6 +134,16 @@ const PlotViewer: React.FC<{
 
             if (data.length > 0) Plotly.react(plotRef.current, data, layout, { responsive: true, displayModeBar: false });
         } catch (err) { console.error("Plotly Error:", err); }
+
+        return () => {
+            if (plotRef.current) {
+                try {
+                    Plotly.purge(plotRef.current);
+                } catch (e) {
+                    // Ignore purge errors
+                }
+            }
+        };
     }, [analysis, activePlot, predVsActualData]);
 
     return (
@@ -309,7 +319,7 @@ const DesignOfExperimentView: React.FC<{ setActiveView: (view: ViewType) => void
         }
     };
 
-    const callWithRetry = async (fn: () => Promise<any>, maxRetries = 6) => {
+    const callWithRetry = async (fn: () => Promise<any>, maxRetries = 4, context = "AI Engine") => {
         let attempt = 0;
         while (attempt < maxRetries) {
             try {
@@ -322,8 +332,10 @@ const DesignOfExperimentView: React.FC<{ setActiveView: (view: ViewType) => void
                     errText.includes('OVERLOADED') || errText.includes('DEADLINE_EXCEEDED');
 
                 if (isRetryable && attempt < maxRetries) {
-                    const delay = Math.pow(2.2, attempt) * 1000 + Math.random() * 1000;
+                    const delay = Math.min(Math.pow(1.8, attempt) * 1000, 10000) + Math.random() * 1000;
+                    setError(`${context} Busy (Attempt ${attempt}/${maxRetries}). Retrying in ${(delay/1000).toFixed(1)}s...`);
                     await new Promise(resolve => setTimeout(resolve, delay));
+                    setError(null);
                     continue;
                 }
                 throw err;
@@ -390,7 +402,7 @@ const DesignOfExperimentView: React.FC<{ setActiveView: (view: ViewType) => void
                 });
                 const responseText = response.response?.text?.() || (response as any).text || (response.candidates?.[0]?.content?.parts?.[0] as any)?.text || "";
                 return safeJSONParse(responseText);
-            });
+            }, 4, "Dimension Probe");
 
             setFactors(result.factors.map((f: any) => ({
                 ...f,
@@ -448,7 +460,7 @@ const DesignOfExperimentView: React.FC<{ setActiveView: (view: ViewType) => void
                 });
                 const responseText = response.response?.text?.() || (response as any).text || (response.candidates?.[0]?.content?.parts?.[0] as any)?.text || "";
                 return safeJSONParse(responseText);
-            });
+            }, 4, "Matrix Generation");
 
             const actual = coded.map((row: any) => {
                 const mapped: Record<string, number> = {};
@@ -526,7 +538,7 @@ const DesignOfExperimentView: React.FC<{ setActiveView: (view: ViewType) => void
                 });
                 const responseText = response.response?.text?.() || (response as any).text || (response.candidates?.[0]?.content?.parts?.[0] as any)?.text || "";
                 return safeJSONParse(responseText);
-            });
+            }, 4, "Regression Engine");
 
             setAnalysis(result);
             setSelectedAnalysisKey(Object.keys(result.analyses || {})[0] || '');
@@ -1201,11 +1213,11 @@ const DesignOfExperimentView: React.FC<{ setActiveView: (view: ViewType) => void
 
             {
                 error && (
-                    <motion.div initial={{ y: 60, opacity: 0 }} animate={{ y: 0, opacity: 1 }} className="fixed bottom-6 sm:bottom-12 left-4 right-4 sm:left-1/2 sm:-translate-x-1/2 z-[70] bg-red-600 text-white px-6 sm:px-10 py-4 sm:py-6 rounded-2xl sm:rounded-[3rem] shadow-3xl flex flex-col items-center gap-3 sm:gap-5 border border-red-500 max-w-lg text-center mx-auto">
+                    <motion.div initial={{ y: 60, opacity: 0 }} animate={{ y: 0, opacity: 1 }} className={`fixed bottom-6 sm:bottom-12 left-4 right-4 sm:left-1/2 sm:-translate-x-1/2 z-[70] ${error.includes('Retrying') ? 'bg-primary-purple' : 'bg-red-600'} text-white px-6 sm:px-10 py-4 sm:py-6 rounded-2xl sm:rounded-[3rem] shadow-3xl flex flex-col items-center gap-3 sm:gap-5 border ${error.includes('Retrying') ? 'border-primary-purple/50' : 'border-red-500'} max-w-lg text-center mx-auto transition-colors duration-500`}>
                         <div className="flex items-center gap-4 sm:gap-6 w-full">
-                            <InfoIcon className="w-5 h-5 sm:w-6 sm:h-6 shrink-0" />
+                            {error.includes('Retrying') ? <LoaderIcon className="w-5 h-5 sm:w-6 sm:h-6 shrink-0 animate-spin" /> : <InfoIcon className="w-5 h-5 sm:w-6 sm:h-6 shrink-0" />}
                             <span className="text-[9px] sm:text-[11px] font-black uppercase tracking-wider grow">{error}</span>
-                            <button onClick={() => setError(null)} className="p-1.5 hover:bg-white/20 rounded-full transition-colors shrink-0"><XIcon className="w-5 h-5 sm:w-6 sm:h-6" /></button>
+                            {!error.includes('Retrying') && <button onClick={() => setError(null)} className="p-1.5 hover:bg-white/20 rounded-full transition-colors shrink-0"><XIcon className="w-5 h-5 sm:w-6 sm:h-6" /></button>}
                         </div>
                     </motion.div>
                 )
