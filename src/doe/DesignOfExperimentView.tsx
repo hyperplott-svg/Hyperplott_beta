@@ -12,7 +12,7 @@ import {
     SparklesIcon, PlusIcon, InfoIcon,
     ZapIcon, TargetIcon, LoaderIcon, ChartBarIcon,
     DownloadIcon, XIcon, ChevronDownIcon, FileSignatureIcon,
-    TrashIcon, CopyIcon, CheckIcon
+    TrashIcon, CopyIcon, CheckIcon, RefreshCwIcon
 } from './constants';
 
 declare var Plotly: any;
@@ -178,6 +178,8 @@ const DesignOfExperimentView: React.FC<{ setActiveView: (view: ViewType) => void
     ]);
     const [runMatrix, setRunMatrix] = useState<DoERun[]>([]);
     const [analysis, setAnalysis] = useState<DoEAnalysisResult | null>(null);
+    const [aiModel, setAiModel] = useState<'gemini-3-flash-preview' | 'gemini-1.5-flash'>('gemini-3-flash-preview');
+    const [lastAction, setLastAction] = useState<{ fn: () => Promise<void>, label: string } | null>(null);
     const [selectedAnalysisKey, setSelectedAnalysisKey] = useState<string>('');
     const [loadingState, setLoadingState] = useState<LoadingState>('idle');
     const [isSuggesting, setIsSuggesting] = useState(false);
@@ -332,13 +334,17 @@ const DesignOfExperimentView: React.FC<{ setActiveView: (view: ViewType) => void
                     errText.includes('OVERLOADED') || errText.includes('DEADLINE_EXCEEDED');
 
                 if (isRetryable && attempt < maxRetries) {
-                    const delay = Math.min(Math.pow(1.8, attempt) * 1000, 10000) + Math.random() * 1000;
-                    setError(`${context} Busy (Attempt ${attempt}/${maxRetries}). Retrying in ${(delay/1000).toFixed(1)}s...`);
+                    const delay = Math.min(Math.pow(2.2, attempt) * 1000, 15000) + Math.random() * 1000;
+                    setError(`${context} Busy (Attempt ${attempt}/${maxRetries}). Retrying in ${(delay / 1000).toFixed(1)}s...`);
                     await new Promise(resolve => setTimeout(resolve, delay));
                     setError(null);
                     continue;
                 }
-                throw err;
+                if (isRetryable) {
+                    setError(`Server Overloaded: ${context} failed after ${maxRetries} attempts. You might want to switch to "Stable Mode" in the header.`);
+                } else {
+                    throw err;
+                }
             }
         }
     };
@@ -352,22 +358,24 @@ const DesignOfExperimentView: React.FC<{ setActiveView: (view: ViewType) => void
 
     const suggestVariablesWithAI = async () => {
         if (!objective.trim()) return;
-        setIsSuggesting(true);
-        setError(null);
-        try {
-            const apiKey = (import.meta as any).env.VITE_GEMINI_API_KEY || (import.meta as any).env.VITE_GOOGLE_API_KEY;
-            if (!apiKey) throw new Error("API Key is missing. Please configure VITE_GEMINI_API_KEY or GOOGLE_API_KEY in your environment variables.");
+        const fn = async () => {
+            setIsSuggesting(true);
+            setError(null);
+            setLastAction({ fn, label: 'Suggest Variables' });
+            try {
+                const apiKey = (import.meta as any).env.VITE_GEMINI_API_KEY || (import.meta as any).env.VITE_GOOGLE_API_KEY;
+                if (!apiKey) throw new Error("API Key is missing.");
 
-            const result = await callWithRetry(async () => {
-                const ai = new GoogleGenAI({ apiKey: apiKey as string });
-                const response = await ai.models.generateContent({
-                    model: "gemini-3-flash-preview",
-                    contents: [{ role: 'user', parts: [{ text: `Scientific Study Objective: "${objective}"` }] }],
-                    config: {
-                        temperature: 0,
-                        maxOutputTokens: 2048,
-                        systemInstruction: "Concise DoE Expert. Suggest 3-4 numerical factors and 1-2 responses. Output RAW JSON ONLY. No preamble, no postamble, no markdown. Standard JSON format.",
-                        responseMimeType: "application/json",
+                const genAi = new GoogleGenAI({ apiKey: apiKey as string });
+                const result = await callWithRetry(async () => {
+                    const response = await genAi.models.generateContent({
+                        model: aiModel,
+                        contents: [{ role: 'user', parts: [{ text: `System: Concise DoE Expert. Suggest 3-4 numerical factors and 1-2 responses for the following objective. Output RAW JSON ONLY. No preamble.
+Objective: "${objective}"` }] }],
+                        config: {
+                            temperature: 0,
+                            maxOutputTokens: 2048,
+                            responseMimeType: "application/json",
                         responseSchema: {
                             type: Type.OBJECT,
                             properties: {
@@ -415,32 +423,33 @@ const DesignOfExperimentView: React.FC<{ setActiveView: (view: ViewType) => void
         } catch (e) { handleError(e, "AI Dimension Probe"); }
         finally { setIsSuggesting(false); }
     };
+    fn();
+};
 
     const generateDesign = async () => {
+        setLastAction({ fn: generateDesign, label: 'Generate Design' });
         if (factors.length < 2) return setError("Minimum 2 factors required.");
         setLoadingState('loading');
         setError(null);
         try {
             const apiKey = (import.meta as any).env.VITE_GEMINI_API_KEY || (import.meta as any).env.VITE_GOOGLE_API_KEY;
-            if (!apiKey) throw new Error("API Key is missing. Please configure VITE_GEMINI_API_KEY or GOOGLE_API_KEY in your environment variables.");
+            if (!apiKey) throw new Error("API Key is missing.");
 
             const numFactors = factors.length;
             const methodology = designType;
+            const genAi = new GoogleGenAI({ apiKey: apiKey as string });
 
             const coded = await callWithRetry(async () => {
-                const ai = new GoogleGenAI({ apiKey: apiKey as string });
-                const response = await ai.models.generateContent({
-                    model: "gemini-3-flash-preview",
+                const response = await genAi.models.generateContent({
+                    model: aiModel,
                     contents: [{
                         role: 'user', parts: [{
-                            text: `Generate an accurate, industrially standard ${methodology} matrix for ${numFactors} factors: ${factors.map(f => f.name).join(', ')}. 
-                    Factor High: +1, Low: -1, Axial: alpha (sqrt(k) for CCD).
-                    Ensure standard run efficiency. Add 3-5 center points (0,0,...) for error estimation.` }]
+                            text: `System: Fast DoE Engine. Generate accurate coded matrices for ${methodology}. Factor High: +1, Low: -1, Axial: alpha. Output RAW JSON ONLY.
+Factors: ${factors.map(f => f.name).join(', ')}. Add 3-5 center points.` }]
                     }],
                     config: {
                         temperature: 0,
                         maxOutputTokens: 4096,
-                        systemInstruction: "Fast DoE Engine. Generate accurate coded matrices. Output RAW JSON ONLY. No preamble, no postamble. Numeric values must use dot notation.",
                         responseMimeType: "application/json",
                         responseSchema: {
                             type: Type.ARRAY,
@@ -482,30 +491,28 @@ const DesignOfExperimentView: React.FC<{ setActiveView: (view: ViewType) => void
     };
 
     const performAnalysis = async () => {
+        setLastAction({ fn: performAnalysis, label: 'Perform Analysis' });
         if (runMatrix.some(r => Object.values(r.responses).some(v => v === null))) return setError("Complete all data points in the Execution matrix.");
         setLoadingState('loading');
         setError(null);
         try {
             const apiKey = (import.meta as any).env.VITE_GEMINI_API_KEY || (import.meta as any).env.VITE_GOOGLE_API_KEY;
-            if (!apiKey) throw new Error("API Key is missing. Please configure VITE_GEMINI_API_KEY or GOOGLE_API_KEY in your environment variables.");
+            if (!apiKey) throw new Error("API Key is missing.");
 
+            const genAi = new GoogleGenAI({ apiKey: apiKey as string });
             const result = await callWithRetry(async () => {
-                const ai = new GoogleGenAI({ apiKey: apiKey as string });
-                const response = await ai.models.generateContent({
-                    model: "gemini-3-flash-preview",
+                const response = await genAi.models.generateContent({
+                    model: aiModel,
                     contents: [{
                         role: 'user', parts: [{
-                            text: `Perform high-precision statistical regression for "${experimentName}".
-                    Data: ${JSON.stringify(runMatrix)}
-                    Target Responses: ${responses.map(r => r.name).join(', ')}
-    
-                    Perform Stepwise Regression. Fit a Quadratic Model if curvature exists, otherwise Linear.
-                    Provide explicit "fittingModelUsed" (e.g. "Response Surface Quadratic Model").` }]
+                            text: `System: Expert Statistician. Fit a ${aiModel.includes('3') ? 'High-Precision ' : ''}Quadratic Response Surface Model. Output valid RAW JSON ONLY.
+Experiment: "${experimentName}"
+Data: ${JSON.stringify(runMatrix)}
+Responses: ${responses.map(r => r.name).join(', ')}` }]
                     }],
                     config: {
                         temperature: 0,
                         maxOutputTokens: 8192,
-                        systemInstruction: "Expert Statistician. Fit a Quadratic Response Surface Model. Output valid RAW JSON ONLY. No preamble, no postamble, no markdown. Ensure all numeric values are formatted correctly for JSON.parse.",
                         responseMimeType: "application/json",
                         responseSchema: {
                             type: Type.OBJECT,
@@ -737,6 +744,23 @@ const DesignOfExperimentView: React.FC<{ setActiveView: (view: ViewType) => void
                                 {experimentName}
                             </p>
                         </div>
+                    </div>
+
+                    <div className="flex items-center gap-2 bg-slate-100 p-1 rounded-full border border-slate-200">
+                        <button
+                            onClick={() => setAiModel('gemini-3-flash-preview')}
+                            className={`px-4 py-2 rounded-full text-[9px] font-black uppercase tracking-widest transition-all ${aiModel === 'gemini-3-flash-preview' ? 'bg-primary-purple text-white shadow-lg' : 'text-slate-400 hover:text-slate-600'}`}
+                            title="Experimental high-precision model"
+                        >
+                            Preview
+                        </button>
+                        <button
+                            onClick={() => setAiModel('gemini-1.5-flash')}
+                            className={`px-4 py-2 rounded-full text-[9px] font-black uppercase tracking-widest transition-all ${aiModel === 'gemini-1.5-flash' ? 'bg-emerald-500 text-white shadow-lg' : 'text-slate-400 hover:text-slate-600'}`}
+                            title="Stable production model"
+                        >
+                            Stable
+                        </button>
                     </div>
 
                     <button
@@ -1213,11 +1237,18 @@ const DesignOfExperimentView: React.FC<{ setActiveView: (view: ViewType) => void
 
             {
                 error && (
-                    <motion.div initial={{ y: 60, opacity: 0 }} animate={{ y: 0, opacity: 1 }} className={`fixed bottom-6 sm:bottom-12 left-4 right-4 sm:left-1/2 sm:-translate-x-1/2 z-[70] ${error.includes('Retrying') ? 'bg-primary-purple' : 'bg-red-600'} text-white px-6 sm:px-10 py-4 sm:py-6 rounded-2xl sm:rounded-[3rem] shadow-3xl flex flex-col items-center gap-3 sm:gap-5 border ${error.includes('Retrying') ? 'border-primary-purple/50' : 'border-red-500'} max-w-lg text-center mx-auto transition-colors duration-500`}>
-                        <div className="flex items-center gap-4 sm:gap-6 w-full">
+                    <motion.div initial={{ y: 60, opacity: 0 }} animate={{ y: 0, opacity: 1 }} className={`fixed bottom-6 sm:bottom-12 left-4 right-4 sm:left-1/2 sm:-translate-x-1/2 z-[70] ${error.includes('Retrying') ? 'bg-primary-purple' : error.includes('Overloaded') ? 'bg-slate-900' : 'bg-red-600'} text-white px-6 sm:px-10 py-4 sm:py-6 rounded-2xl sm:rounded-[3rem] shadow-3xl flex flex-col items-center gap-3 sm:gap-5 border ${error.includes('Retrying') ? 'border-primary-purple/50' : 'border-white/10'} max-w-lg text-center mx-auto transition-colors duration-500`}>
+                        <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-6 w-full">
                             {error.includes('Retrying') ? <LoaderIcon className="w-5 h-5 sm:w-6 sm:h-6 shrink-0 animate-spin" /> : <InfoIcon className="w-5 h-5 sm:w-6 sm:h-6 shrink-0" />}
                             <span className="text-[9px] sm:text-[11px] font-black uppercase tracking-wider grow">{error}</span>
-                            {!error.includes('Retrying') && <button onClick={() => setError(null)} className="p-1.5 hover:bg-white/20 rounded-full transition-colors shrink-0"><XIcon className="w-5 h-5 sm:w-6 sm:h-6" /></button>}
+                            <div className="flex items-center gap-2">
+                                {(error.includes('Overloaded') || !error.includes('Retrying')) && lastAction && (
+                                    <button onClick={() => { setError(null); lastAction.fn(); }} className="p-3 bg-white/10 hover:bg-white/20 rounded-xl transition-all flex items-center gap-2 text-[9px] font-black uppercase tracking-widest whitespace-nowrap">
+                                        <RefreshCwIcon className="w-4 h-4" /> RETRY
+                                    </button>
+                                )}
+                                {!error.includes('Retrying') && <button onClick={() => setError(null)} className="p-3 bg-white/10 hover:bg-white/20 rounded-xl transition-all shrink-0"><XIcon className="w-5 h-5 sm:w-6 sm:h-6" /></button>}
+                            </div>
                         </div>
                     </motion.div>
                 )
