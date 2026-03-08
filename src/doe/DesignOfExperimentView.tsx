@@ -366,7 +366,10 @@ const DesignOfExperimentView: React.FC<{ setActiveView: (view: ViewType) => void
                 const apiKey = (import.meta as any).env.VITE_GEMINI_API_KEY || (import.meta as any).env.VITE_GOOGLE_API_KEY;
                 if (!apiKey) throw new Error("API Key is missing.");
 
-                const genAi = new GoogleGenAI({ apiKey: apiKey as string });
+                const genAi = new GoogleGenAI({ 
+                    apiKey: apiKey as string,
+                    apiVersion: aiModel.includes('preview') ? 'v1beta' : 'v1'
+                });
                 const result = await callWithRetry(async () => {
                     const response = await genAi.models.generateContent({
                         model: aiModel,
@@ -439,7 +442,10 @@ Objective: "${objective}"` }] }],
 
             const numFactors = factors.length;
             const methodology = designType;
-            const genAi = new GoogleGenAI({ apiKey: apiKey as string });
+            const genAi = new GoogleGenAI({ 
+                apiKey: apiKey as string,
+                apiVersion: aiModel.includes('preview') ? 'v1beta' : 'v1'
+            });
 
             const coded = await callWithRetry(async () => {
                 const response = await genAi.models.generateContent({
@@ -503,7 +509,10 @@ Factors: ${factors.map(f => f.name).join(', ')}. Add 3-5 center points.` }]
             const apiKey = (import.meta as any).env.VITE_GEMINI_API_KEY || (import.meta as any).env.VITE_GOOGLE_API_KEY;
             if (!apiKey) throw new Error("API Key is missing.");
 
-            const genAi = new GoogleGenAI({ apiKey: apiKey as string });
+            const genAi = new GoogleGenAI({ 
+                apiKey: apiKey as string,
+                apiVersion: aiModel.includes('preview') ? 'v1beta' : 'v1'
+            });
             const result = await callWithRetry(async () => {
                 const response = await genAi.models.generateContent({
                     model: aiModel,
