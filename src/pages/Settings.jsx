@@ -1,35 +1,76 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
     User,
     CreditCard,
     Bell,
     Shield,
-    Monitor,
-    CheckCircle2,
     Download,
-    Lock,
-    Trash2,
-    ChevronRight,
-    ShieldCheck,
     Building2,
-    Mail,
     Camera,
     FlaskConical,
-    Settings as SettingsIcon,
-    Database,
     Zap,
-    Briefcase
+    Sparkles,
+    CheckCircle2,
+    ArrowRight,
+    Star
 } from 'lucide-react';
 import Button from '../components/common/Button';
 import Card from '../components/common/Card';
-import { Container, Grid } from '../components/common/Layout';
+import { Grid } from '../components/common/Layout';
 import { Badge } from '../components/common/UIElements';
 import { clsx } from 'clsx';
 import SEO from '../components/common/SEO';
+import { useAuth } from '../context/AuthContext';
+import { updateProfile } from 'firebase/auth';
+import { auth, storage } from '../firebase';
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 
 const Settings = () => {
+    const { user } = useAuth();
     const [activeTab, setActiveTab] = useState('profile');
+
+    // Profile state wired to real user
+    const displayName = user?.displayName || user?.email?.split('@')[0] || '';
+    const [profileName, setProfileName] = useState(displayName);
+    const [profileBio, setProfileBio] = useState('');
+    const [profileSaving, setProfileSaving] = useState(false);
+    const [profileSaved, setProfileSaved] = useState(false);
+    const [avatarUrl, setAvatarUrl] = useState(user?.photoURL || null);
+    const fileInputRef = useRef(null);
+
+    const handleAvatarChange = async (e) => {
+        const file = e.target.files?.[0];
+        if (!file || !user) return;
+        try {
+            if (storage) {
+                const storageRef = ref(storage, `avatars/${user.uid}`);
+                await uploadBytes(storageRef, file);
+                const url = await getDownloadURL(storageRef);
+                await updateProfile(auth.currentUser, { photoURL: url });
+                setAvatarUrl(url);
+            } else {
+                // No storage: show local preview only
+                setAvatarUrl(URL.createObjectURL(file));
+            }
+        } catch (err) {
+            console.error('Avatar upload error:', err);
+        }
+    };
+
+    const handleProfileSave = async () => {
+        if (!user) return;
+        setProfileSaving(true);
+        try {
+            await updateProfile(auth.currentUser, { displayName: profileName });
+            setProfileSaved(true);
+            setTimeout(() => setProfileSaved(false), 2500);
+        } catch (err) {
+            console.error('Profile save error:', err);
+        } finally {
+            setProfileSaving(false);
+        }
+    };
 
     const sidebarItems = [
         { id: 'profile', label: 'User Profile', icon: User },
@@ -97,36 +138,69 @@ const Settings = () => {
                             <motion.div key="profile" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-8">
                                 <Card className="p-12 border-none shadow-xl bg-white overflow-hidden relative">
                                     <div className="absolute top-0 right-0 p-12 opacity-5"><User className="w-64 h-64" /></div>
-                                    <h3 className="text-2xl font-black mb-10 relative z-10">Institutional Identity</h3>
+                                    <h3 className="text-2xl font-black mb-10 relative z-10">User Profile</h3>
 
                                     <div className="flex flex-col md:flex-row gap-12 items-start relative z-10 mb-12">
-                                        <div className="relative group/avatar">
-                                            <div className="w-32 h-32 rounded-[2.5rem] bg-slate-100 overflow-hidden border-4 border-white shadow-2xl">
-                                                <img src="https://i.pravatar.cc/150?img=12" alt="Profile" className="w-full h-full object-cover" />
+                                        {/* Avatar */}
+                                        <div className="relative group/avatar shrink-0">
+                                            <div className="w-32 h-32 rounded-[2.5rem] bg-gradient-to-br from-primary-purple to-primary overflow-hidden border-4 border-white shadow-2xl flex items-center justify-center">
+                                                {avatarUrl ? (
+                                                    <img src={avatarUrl} alt="Profile" className="w-full h-full object-cover" />
+                                                ) : (
+                                                    <span className="text-4xl font-black text-white">
+                                                        {(profileName || user?.email || 'U').slice(0, 2).toUpperCase()}
+                                                    </span>
+                                                )}
                                             </div>
-                                            <button className="absolute -bottom-2 -right-2 p-3 bg-primary-purple text-white rounded-2xl shadow-xl shadow-primary-purple/30 group-hover/avatar:scale-110 transition-transform">
+                                            <input ref={fileInputRef} type="file" accept="image/*" className="hidden" onChange={handleAvatarChange} />
+                                            <button
+                                                onClick={() => fileInputRef.current?.click()}
+                                                className="absolute -bottom-2 -right-2 p-3 bg-primary-purple text-white rounded-2xl shadow-xl shadow-primary-purple/30 group-hover/avatar:scale-110 transition-transform"
+                                            >
                                                 <Camera className="w-5 h-5" />
                                             </button>
                                         </div>
+
                                         <div className="flex-1 space-y-8 w-full">
                                             <div className="grid md:grid-cols-2 gap-8">
                                                 <div className="space-y-2">
                                                     <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Display Name</label>
-                                                    <input defaultValue="Antigravity Agent" className="w-full bg-slate-50 border-none rounded-xl px-6 py-4 text-sm font-bold outline-none focus:ring-2 ring-primary/20" />
+                                                    <input
+                                                        value={profileName}
+                                                        onChange={e => setProfileName(e.target.value)}
+                                                        className="w-full bg-slate-50 border-none rounded-xl px-6 py-4 text-sm font-bold outline-none focus:ring-2 ring-primary/20"
+                                                    />
                                                 </div>
                                                 <div className="space-y-2">
                                                     <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Email Address</label>
-                                                    <input defaultValue="antigravity@hyperplott.ai" className="w-full bg-slate-50 border-none rounded-xl px-6 py-4 text-sm font-bold outline-none focus:ring-2 ring-primary/20" />
+                                                    <input
+                                                        value={user?.email || ''}
+                                                        readOnly
+                                                        className="w-full bg-slate-100 border-none rounded-xl px-6 py-4 text-sm font-bold outline-none text-slate-500 cursor-not-allowed"
+                                                    />
                                                 </div>
                                             </div>
                                             <div className="space-y-2">
                                                 <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Professional Bio</label>
-                                                <textarea rows={3} defaultValue="Lead pharmaceutical researcher focused on optimizing drug formulation matrices through randomized orthogonal designs." className="w-full bg-slate-50 border-none rounded-xl px-6 py-4 text-sm font-medium outline-none focus:ring-2 ring-primary/20 resize-none" />
+                                                <textarea
+                                                    rows={3}
+                                                    value={profileBio}
+                                                    onChange={e => setProfileBio(e.target.value)}
+                                                    placeholder="Tell us about your research focus..."
+                                                    className="w-full bg-slate-50 border-none rounded-xl px-6 py-4 text-sm font-medium outline-none focus:ring-2 ring-primary/20 resize-none"
+                                                />
                                             </div>
                                         </div>
                                     </div>
-                                    <div className="flex justify-end pt-10 border-t border-slate-50 relative z-10">
-                                        <Button className="px-10 h-14">Save Identity</Button>
+                                    <div className="flex items-center justify-end gap-4 pt-10 border-t border-slate-50 relative z-10">
+                                        {profileSaved && (
+                                            <span className="flex items-center gap-1.5 text-emerald-600 text-sm font-black">
+                                                <CheckCircle2 className="w-4 h-4" /> Saved!
+                                            </span>
+                                        )}
+                                        <Button onClick={handleProfileSave} disabled={profileSaving} className="px-10 h-14">
+                                            {profileSaving ? 'Saving...' : 'Save Profile'}
+                                        </Button>
                                     </div>
                                 </Card>
                             </motion.div>
@@ -243,34 +317,69 @@ const Settings = () => {
                         )}
 
                         {activeTab === 'billing' && (
-                            <motion.div key="billing" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
-                                <Card className="p-0 border-none shadow-xl bg-white overflow-hidden rounded-[2.5rem]">
-                                    <div className="p-12 bg-white border-b border-slate-100 text-slate-900 border-none relative overflow-hidden group">
-                                        <div className="absolute top-0 right-0 p-12 opacity-[0.03] scale-150 group-hover:rotate-12 transition-transform duration-1000"><CreditCard className="w-48 h-48" /></div>
-                                        <Badge variant="primary" className="mb-6 bg-primary-purple/10 text-primary-purple border-primary-purple/20">Active Subscription</Badge>
-                                        <h3 className="text-4xl font-black mb-4 tracking-tight">Professional Institutional</h3>
-                                        <p className="text-slate-500 font-medium mb-10 leading-relaxed max-w-sm">Your license covers unlimited matrices and up to 5 institutional collaborators.</p>
-                                        <div className="flex items-center gap-4">
-                                            <Button className="bg-primary-purple text-white font-black px-8">Manage Billing</Button>
-                                            <Button variant="secondary" className="border-slate-100">View Ledger</Button>
+                            <motion.div key="billing" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-6">
+                                {/* Current Plan Banner */}
+                                <Card className="p-8 border-none shadow-xl bg-gradient-to-br from-primary-purple to-primary text-white overflow-hidden relative rounded-3xl">
+                                    <div className="absolute top-0 right-0 w-48 h-48 bg-white/10 blur-[60px] rounded-full -translate-y-1/2 translate-x-1/2 pointer-events-none" />
+                                    <div className="relative z-10">
+                                        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/20 text-white text-[9px] font-black uppercase tracking-widest mb-4">
+                                            <Star className="w-3 h-3" /> Free Beta — All Features Unlocked
                                         </div>
-                                    </div>
-                                    <div className="p-12">
-                                        <h4 className="text-[10px] font-black uppercase text-slate-400 tracking-widest mb-10">Ledger History</h4>
-                                        <table className="w-full text-left">
-                                            <tbody>
-                                                {[1, 2, 3].map(i => (
-                                                    <tr key={i} className="border-b border-slate-50 last:border-none">
-                                                        <td className="py-6 font-black text-sm text-slate-900">Professional Plan Renewal</td>
-                                                        <td className="py-6 text-sm font-bold text-slate-500">Jan 12, 202{4 - i}</td>
-                                                        <td className="py-6 text-sm font-black text-primary text-right">₹19,999</td>
-                                                        <td className="py-6 text-right pl-6"><button className="p-2.5 rounded-lg bg-slate-50 text-slate-400 hover:text-primary transition-all"><Download className="w-4 h-4" /></button></td>
-                                                    </tr>
-                                                ))}
-                                            </tbody>
-                                        </table>
+                                        <h3 className="text-2xl font-black mb-2 tracking-tight">You're on the Beta Plan</h3>
+                                        <p className="text-white/70 text-sm font-medium mb-6 max-w-sm">
+                                            All premium features are completely free during beta. Founding members lock in 50% off forever when we launch.
+                                        </p>
+                                        <a href="/pricing" className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-white text-primary-purple font-black text-xs uppercase tracking-widest hover:scale-105 transition-transform shadow-lg">
+                                            View Pricing Plans <ArrowRight className="w-3.5 h-3.5" />
+                                        </a>
                                     </div>
                                 </Card>
+
+                                {/* Pricing Cards */}
+                                <div className="grid md:grid-cols-2 gap-6">
+                                    {[
+                                        {
+                                            name: 'Researcher', price: '₹499', period: '/month',
+                                            badge: null, badgeColor: '',
+                                            desc: 'For individual researchers and students.',
+                                            features: ['Unlimited designs', 'AI statistical analysis', '3D visualizations', 'PDF export', 'Email support'],
+                                            cta: 'Upgrade After Beta', ctaStyle: 'btn-secondary',
+                                        },
+                                        {
+                                            name: 'Professional', price: '₹1,999', period: '/month',
+                                            badge: 'Most Popular', badgeColor: 'bg-primary-purple text-white',
+                                            desc: 'For labs, teams, and institutions.',
+                                            features: ['Everything in Researcher', '5 collaborator seats', 'Team design sharing', 'Priority AI queue', 'Dedicated support', 'Founding member discount'],
+                                            cta: 'Upgrade After Beta', ctaStyle: 'btn-primary',
+                                        },
+                                    ].map((plan, i) => (
+                                        <div key={i} className={`p-8 rounded-3xl border-2 ${i === 1 ? 'border-primary-purple/30 bg-primary-purple/5' : 'border-slate-100 bg-white'}`}>
+                                            <div className="flex items-center justify-between mb-4">
+                                                <h4 className="text-lg font-black text-slate-900">{plan.name}</h4>
+                                                {plan.badge && <span className={`px-2.5 py-1 rounded-full text-[9px] font-black uppercase tracking-widest ${plan.badgeColor}`}>{plan.badge}</span>}
+                                            </div>
+                                            <div className="flex items-end gap-1 mb-2">
+                                                <span className="text-4xl font-black text-slate-900">{plan.price}</span>
+                                                <span className="text-slate-400 font-medium mb-1">{plan.period}</span>
+                                            </div>
+                                            <p className="text-sm text-slate-500 font-medium mb-6">{plan.desc}</p>
+                                            <ul className="space-y-2.5 mb-8">
+                                                {plan.features.map((f, j) => (
+                                                    <li key={j} className="flex items-center gap-2.5 text-sm text-slate-600 font-medium">
+                                                        <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" /> {f}
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                            <button disabled className={`w-full h-12 rounded-xl font-black text-xs uppercase tracking-widest opacity-60 cursor-not-allowed flex items-center justify-center gap-2 ${plan.ctaStyle}`}>
+                                                {plan.cta}
+                                            </button>
+                                        </div>
+                                    ))}
+                                </div>
+
+                                <p className="text-center text-xs text-slate-400 font-medium">
+                                    Billing goes live when we exit beta. You'll be notified before any charges.
+                                </p>
                             </motion.div>
                         )}
                     </AnimatePresence>

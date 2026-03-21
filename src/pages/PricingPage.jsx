@@ -14,7 +14,7 @@ const PricingPage = () => {
     }, []);
 
     return (
-        <div className="bg-bg-primary min-h-screen text-text-primary font-sans selection:bg-emerald-500/20 selection:text-emerald-500 overflow-x-hidden">
+        <div className="bg-bg-primary min-h-screen text-text-primary font-sans selection:bg-primary-purple/20 selection:text-primary-purple overflow-x-hidden">
             <SEO
                 title="Pricing Plans — High-Precision DoE for Everyone"
                 description="Hyperplott is free during beta. Choose the plan that fits your research — from individual students to enterprise laboratories. First 100 users get 50% off lifetime."
@@ -25,23 +25,31 @@ const PricingPage = () => {
 
             <main className="pt-20">
                 {/* Header Section */}
-                <section className="relative py-24 sm:py-32 overflow-hidden">
-                    <div className="absolute top-0 right-1/2 translate-x-1/2 w-full h-full bg-gradient-to-b from-blue-500/5 to-transparent pointer-events-none" />
+                <section className="relative py-24 sm:py-32 overflow-hidden bg-bg-primary">
+                    <div className="absolute inset-0 pointer-events-none">
+                        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[500px] bg-primary-purple/5 blur-[120px] rounded-full" />
+                        <div className="absolute inset-0 opacity-[0.35]"
+                            style={{
+                                backgroundImage: `linear-gradient(#e2e8f0 1px, transparent 1px), linear-gradient(90deg, #e2e8f0 1px, transparent 1px)`,
+                                backgroundSize: '60px 60px'
+                            }}
+                        />
+                    </div>
 
-                    <div className="container mx-auto px-6 relative z-10 text-center">
+                    <div className="container mx-auto px-4 sm:px-6 relative z-10 text-center">
                         <motion.div
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.6 }}
                             className="max-w-4xl mx-auto"
                         >
-                            <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-500 text-[10px] font-black uppercase tracking-[0.3em] mb-8">
-                                <Sparkles className="w-4 h-4" /> Scalable Intelligence
+                            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary-purple/10 border border-primary-purple/20 text-primary-purple text-[10px] font-black uppercase tracking-[0.3em] mb-6">
+                                <Sparkles className="w-3.5 h-3.5" /> Scalable Intelligence
                             </div>
-                            <h1 className="text-5xl sm:text-8xl font-black text-white leading-none tracking-tighter uppercase mb-8">
+                            <h1 className="text-5xl sm:text-7xl md:text-8xl font-black text-slate-900 leading-none tracking-tighter mb-8">
                                 Invest in <span className="text-gradient">Precision</span>
                             </h1>
-                            <p className="text-xl text-text-secondary opacity-80 max-w-2xl mx-auto font-medium leading-relaxed">
+                            <p className="text-xl text-slate-500 max-w-2xl mx-auto font-medium leading-relaxed">
                                 Flexible pricing tailored for students, independent researchers, and industry-leading laboratories.
                                 Accelerate your discovery without compromise.
                             </p>
@@ -51,15 +59,16 @@ const PricingPage = () => {
 
                 <Pricing />
 
-                {/* Comparative Features */}
-                <section className="py-24 bg-white/5 border-y border-white/5">
-                    <div className="container mx-auto px-6">
-                        <div className="text-center mb-20">
-                            <h2 className="text-3xl md:text-5xl font-black text-white uppercase tracking-tight mb-4">Included in All Plans</h2>
-                            <p className="text-text-secondary opacity-60">Every tier benefits from our core precision infrastructure.</p>
+                {/* Included in All Plans */}
+                <section className="py-24 bg-bg-secondary border-y border-slate-100">
+                    <div className="container mx-auto px-4 sm:px-6 max-w-6xl">
+                        <div className="text-center mb-16">
+                            <div className="section-badge">Every Plan Includes</div>
+                            <h2 className="text-3xl md:text-5xl font-black text-slate-900 tracking-tighter mb-4">Included in All Plans</h2>
+                            <p className="text-slate-500 font-medium">Every tier benefits from our core precision infrastructure.</p>
                         </div>
 
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                             {[
                                 "Advanced Factorial Designs",
                                 "AI-Powered Factor Suggestion",
@@ -73,16 +82,16 @@ const PricingPage = () => {
                             ].map((feature, i) => (
                                 <motion.div
                                     key={i}
-                                    initial={{ opacity: 0, scale: 0.95 }}
-                                    whileInView={{ opacity: 1, scale: 1 }}
+                                    initial={{ opacity: 0, y: 16 }}
+                                    whileInView={{ opacity: 1, y: 0 }}
                                     viewport={{ once: true }}
                                     transition={{ delay: i * 0.05 }}
-                                    className="flex items-center gap-4 p-6 rounded-2xl bg-white/5 border border-white/10"
+                                    className="flex items-center gap-4 p-5 rounded-2xl bg-white border border-slate-200 hover:border-primary-purple/30 hover:shadow-md transition-all"
                                 >
-                                    <div className="w-6 h-6 rounded-full bg-emerald-500/20 flex items-center justify-center text-emerald-500 shrink-0">
+                                    <div className="w-8 h-8 rounded-full bg-primary-purple/10 flex items-center justify-center text-primary-purple shrink-0">
                                         <CheckCircle2 className="w-4 h-4" />
                                     </div>
-                                    <span className="text-sm font-bold text-white/80">{feature}</span>
+                                    <span className="text-sm font-bold text-slate-700">{feature}</span>
                                 </motion.div>
                             ))}
                         </div>

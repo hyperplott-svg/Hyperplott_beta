@@ -4,11 +4,7 @@ import Hero from '../components/landing/Hero';
 import ProblemStatement from '../components/landing/ProblemStatement';
 import HowItWorks from '../components/landing/HowItWorks';
 import Features from '../components/landing/Features';
-import VisualizationShowcase from '../components/landing/VisualizationShowcase';
-import FounderStory from '../components/landing/FounderStory';
 import BetaProgram from '../components/landing/BetaProgram';
-import Pricing from '../components/landing/Pricing';
-import FAQ from '../components/landing/FAQ';
 import CTA from '../components/landing/CTA';
 import Footer from '../components/landing/Footer';
 import SEO from '../components/common/SEO';
@@ -29,11 +25,7 @@ const LandingPage = () => {
                 <ProblemStatement />
                 <HowItWorks />
                 <Features />
-                <VisualizationShowcase />
-                <Pricing />
-                <FounderStory />
                 <BetaProgram />
-                <FAQ />
                 <CTA />
             </main>
             <Footer />

@@ -1,6 +1,8 @@
 import { initializeApp } from "firebase/app";
 import { getAuth, GoogleAuthProvider, signInWithPopup as firebaseSignInWithPopup, signOut as firebaseSignOut } from "firebase/auth";
 import { getAnalytics } from "firebase/analytics";
+import { getFirestore } from "firebase/firestore";
+import { getStorage } from "firebase/storage";
 
 const firebaseConfig = {
     apiKey: import.meta.env.VITE_FIREBASE_API_KEY || import.meta.env.VITE_GOOGLE_API_KEY,
@@ -16,6 +18,8 @@ const firebaseConfig = {
 let auth;
 let googleProvider;
 let analytics;
+let db;
+let storage;
 let signInWithPopup = () => Promise.reject(new Error("Auth not initialized"));
 let signOut = () => Promise.resolve();
 
@@ -26,15 +30,18 @@ try {
     const app = initializeApp(firebaseConfig);
     auth = getAuth(app);
     analytics = getAnalytics(app);
+    db = getFirestore(app);
+    storage = getStorage(app);
     googleProvider = new GoogleAuthProvider();
     signInWithPopup = firebaseSignInWithPopup;
     signOut = firebaseSignOut;
 } catch (error) {
     console.error("Firebase Initialization Error:", error.message);
-    // Provide mock objects to prevent site-wide crashes
     auth = { onAuthStateChanged: (cb) => { cb(null); return () => { }; } };
     googleProvider = {};
     analytics = {};
+    db = null;
+    storage = null;
 }
 
-export { auth, googleProvider, signInWithPopup, signOut, analytics };
+export { auth, googleProvider, signInWithPopup, signOut, analytics, db, storage };

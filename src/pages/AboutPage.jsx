@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
 import Navbar from '../components/landing/Navbar';
-import FounderStory from '../components/landing/FounderStory';
 import Founders from '../components/landing/Founders';
 import CTA from '../components/landing/CTA';
 import Footer from '../components/landing/Footer';
@@ -14,7 +13,7 @@ const AboutPage = () => {
     }, []);
 
     return (
-        <div className="bg-bg-primary min-h-screen text-text-primary font-sans selection:bg-emerald-500/20 selection:text-emerald-500 overflow-x-hidden">
+        <div className="bg-bg-primary min-h-screen text-text-primary font-sans selection:bg-primary-purple/20 selection:text-primary-purple overflow-x-hidden">
             <SEO
                 title="About Us — The Team Behind Hyperplott"
                 description="Hyperplott is built by PhD researchers and engineers on a mission to democratize advanced experimental design. Learn our story and meet the team."
@@ -25,23 +24,31 @@ const AboutPage = () => {
 
             <main className="pt-20">
                 {/* Hero Section */}
-                <section className="relative py-24 sm:py-32 overflow-hidden">
-                    <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full bg-gradient-to-b from-emerald-500/5 to-transparent pointer-events-none" />
+                <section className="relative py-24 sm:py-32 overflow-hidden bg-bg-primary">
+                    <div className="absolute inset-0 pointer-events-none">
+                        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[500px] bg-primary-purple/5 blur-[120px] rounded-full" />
+                        <div className="absolute inset-0 opacity-[0.35]"
+                            style={{
+                                backgroundImage: `linear-gradient(#e2e8f0 1px, transparent 1px), linear-gradient(90deg, #e2e8f0 1px, transparent 1px)`,
+                                backgroundSize: '60px 60px'
+                            }}
+                        />
+                    </div>
 
-                    <div className="container mx-auto px-6 relative z-10 text-center">
+                    <div className="container mx-auto px-4 sm:px-6 relative z-10 text-center">
                         <motion.div
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.6 }}
                             className="max-w-4xl mx-auto"
                         >
-                            <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-500 text-[10px] font-black uppercase tracking-[0.3em] mb-8">
-                                <Sparkles className="w-4 h-4" /> Our Scientific Mission
+                            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary-purple/10 border border-primary-purple/20 text-primary-purple text-[10px] font-black uppercase tracking-[0.3em] mb-6">
+                                <Sparkles className="w-3.5 h-3.5" /> Our Scientific Mission
                             </div>
-                            <h1 className="text-5xl sm:text-8xl font-black text-white leading-none tracking-tighter uppercase mb-8">
+                            <h1 className="text-5xl sm:text-7xl md:text-8xl font-black text-slate-900 leading-none tracking-tighter mb-8">
                                 Democratizing <span className="text-gradient">Precision</span>
                             </h1>
-                            <p className="text-xl text-text-secondary opacity-80 max-w-2xl mx-auto font-medium leading-relaxed">
+                            <p className="text-xl text-slate-500 max-w-2xl mx-auto font-medium leading-relaxed">
                                 We're on a mission to put powerful statistical design tools into the hands of every researcher,
                                 eliminating the technical barriers to scientific discovery.
                             </p>
@@ -50,9 +57,9 @@ const AboutPage = () => {
                 </section>
 
                 {/* Core Values */}
-                <section className="py-24 bg-white/5 border-y border-white/5">
-                    <div className="container mx-auto px-6">
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
+                <section className="py-20 bg-bg-secondary border-y border-slate-100">
+                    <div className="container mx-auto px-4 sm:px-6 max-w-6xl">
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                             {[
                                 {
                                     icon: <Target className="w-8 h-8" />,
@@ -76,20 +83,20 @@ const AboutPage = () => {
                                     whileInView={{ opacity: 1, y: 0 }}
                                     viewport={{ once: true }}
                                     transition={{ delay: i * 0.1 }}
-                                    className="p-10 rounded-[2.5rem] bg-white/5 border border-white/10 hover:border-emerald-500/30 transition-all group"
+                                    whileHover={{ y: -4, transition: { type: 'spring', stiffness: 400, damping: 20 } }}
+                                    className="p-8 rounded-2xl bg-white border border-slate-200 hover:border-primary-purple/30 hover:shadow-xl hover:shadow-primary-purple/5 transition-all duration-300 group"
                                 >
-                                    <div className="w-16 h-16 rounded-2xl bg-emerald-500/10 flex items-center justify-center text-emerald-500 mb-8 group-hover:scale-110 transition-transform">
+                                    <div className="w-14 h-14 rounded-2xl bg-primary-purple/10 flex items-center justify-center text-primary-purple mb-6 group-hover:scale-110 transition-transform">
                                         {value.icon}
                                     </div>
-                                    <h3 className="text-2xl font-black text-white uppercase tracking-tight mb-4">{value.title}</h3>
-                                    <p className="text-text-secondary opacity-70 leading-relaxed">{value.desc}</p>
+                                    <h3 className="text-xl font-black text-slate-900 uppercase tracking-tight mb-3">{value.title}</h3>
+                                    <p className="text-slate-500 leading-relaxed font-medium text-sm">{value.desc}</p>
                                 </motion.div>
                             ))}
                         </div>
                     </div>
                 </section>
 
-                <FounderStory />
                 <Founders />
                 <CTA />
             </main>

@@ -274,8 +274,32 @@ const DesignOfExperimentView: React.FC<{ setActiveView: (view: ViewType) => void
         let text = String(input).trim();
 
         const cleanJSONString = (str: string) => {
-            // Remove trailing commas in objects and arrays
-            return str.replace(/,\s*([\]}])/g, '$1');
+            // Step 1: Remove trailing commas in objects and arrays
+            let cleaned = str.replace(/,\s*([\]}])/g, '$1');
+            // Step 2: Replace NaN/Infinity with null (invalid in JSON)
+            cleaned = cleaned
+                .replace(/:\s*NaN\b/g, ': null')
+                .replace(/:\s*Infinity\b/g, ': null')
+                .replace(/:\s*-Infinity\b/g, ': null');
+            // Step 3: Fix unescaped control characters inside JSON string values
+            // (Gemini sometimes emits literal newlines/tabs inside strings)
+            let result = '';
+            let inString = false;
+            let escaped = false;
+            for (let i = 0; i < cleaned.length; i++) {
+                const ch = cleaned[i];
+                if (escaped) { result += ch; escaped = false; continue; }
+                if (ch === '\\' && inString) { result += ch; escaped = true; continue; }
+                if (ch === '"') { inString = !inString; result += ch; continue; }
+                if (inString) {
+                    if (ch === '\n') { result += '\\n'; continue; }
+                    if (ch === '\r') { result += '\\r'; continue; }
+                    if (ch === '\t') { result += '\\t'; continue; }
+                    if (ch.charCodeAt(0) < 32) continue; // drop other control chars
+                }
+                result += ch;
+            }
+            return result;
         };
 
         try {
@@ -318,6 +342,14 @@ const DesignOfExperimentView: React.FC<{ setActiveView: (view: ViewType) => void
             }
         }
         throw new Error("Could not extract valid data from the AI response. It might be too complex or malformed.");
+    };
+
+    const safeGetText = (res: any): string => {
+        if (typeof res?.text === 'string') return res.text;
+        if (typeof res?.text === 'function') return res.text();
+        if (typeof res?.response?.text === 'function') return res.response.text();
+        if (typeof res?.response?.text === 'string') return res.response.text;
+        return res?.candidates?.[0]?.content?.parts?.[0]?.text || "";
     };
 
     const callWithRetry = async (fn: () => Promise<any>, maxRetries = 6, context = "AI Engine") => {
@@ -411,7 +443,7 @@ Objective: "${objective}"` }] }],
                         }
                     });
                     const res = response as any;
-                    const responseText = res.response?.text?.() || res.text?.() || res.candidates?.[0]?.content?.parts?.[0]?.text || "";
+                    const responseText = safeGetText(res);
                     const parsed = safeJSONParse(responseText);
                     if (!parsed || !parsed.factors || !parsed.responses) {
                         throw new Error("AI returned incomplete dimension probe data.");
@@ -480,7 +512,7 @@ Factors: ${factors.map(f => f.name).join(', ')}. Add 3-5 center points.` }]
                     }
                 });
                 const res = response as any;
-                const responseText = res.response?.text?.() || res.text?.() || res.candidates?.[0]?.content?.parts?.[0]?.text || "";
+                const responseText = safeGetText(res);
                 const parsed = safeJSONParse(responseText);
                 if (!parsed || !Array.isArray(parsed) || parsed.length === 0) {
                     throw new Error("AI returned invalid matrix data.");
@@ -566,7 +598,7 @@ Responses: ${responses.map(r => r.name).join(', ')}` }]
                     }
                 });
                 const res = response as any;
-                const responseText = res.response?.text?.() || res.text?.() || res.candidates?.[0]?.content?.parts?.[0]?.text || "";
+                const responseText = safeGetText(res);
                 const parsed = safeJSONParse(responseText);
                 if (!parsed || !parsed.analyses) {
                     throw new Error("AI returned incomplete analysis results.");
@@ -755,110 +787,104 @@ Responses: ${responses.map(r => r.name).join(', ')}` }]
 
     return (
         <div className="h-full flex flex-col bg-bg-primary overflow-hidden selection:bg-primary-purple/20">
-            <header className="glass border-b border-slate-100 px-3 sm:px-10 py-3 sm:py-5 flex flex-col lg:flex-row items-center justify-between gap-4 sm:gap-6 z-30 relative">
+            <header className="bg-white border-b border-slate-100 px-4 sm:px-8 py-3 flex items-center justify-between gap-4 z-30 relative">
                 {/* Branding Section */}
-                <div className="flex items-center justify-between w-full lg:w-auto gap-8 relative z-10">
-                    <div className="flex items-center gap-6">
-                        <div className="relative group cursor-pointer" onClick={() => setActiveView('dashboard')}>
-                            <div className="absolute inset-0 bg-primary-purple/20 blur-2xl group-hover:bg-primary-purple/40 transition-all rounded-full" />
-                            <Logo className="w-12 h-12 shadow-2xl rounded-2xl relative z-10 border border-white/50 backdrop-blur-sm" />
-                        </div>
-                        <div>
-                            <h2 className="text-2xl sm:text-3xl font-black tracking-tighter text-slate-900 uppercase flex items-center gap-2">
-                                Hyper<span className="text-gradient">Plott</span>
-                                <span className="text-[9px] sm:text-[10px] bg-primary-purple text-white px-2 py-0.5 sm:py-1 rounded-md leading-none font-black tracking-widest ml-1 shadow-lg shadow-primary-purple/20">PRO</span>
+                <div className="flex items-center gap-3 min-w-0">
+                    <div className="relative cursor-pointer shrink-0" onClick={() => setActiveView('dashboard')}>
+                        <Logo className="w-8 h-8 rounded-xl border border-slate-100 shadow-sm" />
+                    </div>
+                    <div className="min-w-0">
+                        <div className="flex items-center gap-2">
+                            <h2 className="text-sm font-black tracking-tight text-slate-900 uppercase">
+                                Hyper<span className="text-primary-purple">Plott</span>
                             </h2>
-                            <p className="text-[8px] sm:text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] sm:tracking-[0.3em] flex items-center gap-2 -mt-1 truncate max-w-[150px] sm:max-w-none">
-                                <span className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-emerald-500 animate-pulse shrink-0" />
-                                {experimentName}
-                            </p>
+                            <span className="text-[8px] bg-primary-purple/10 text-primary-purple px-1.5 py-0.5 rounded font-black tracking-widest">PRO</span>
                         </div>
+                        <p className="text-[9px] font-semibold text-slate-400 flex items-center gap-1.5 truncate max-w-[140px] sm:max-w-[200px]">
+                            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse shrink-0" />
+                            {experimentName}
+                        </p>
                     </div>
 
-                    <div className="flex items-center gap-2 bg-slate-100 p-2 sm:p-3 px-6 sm:px-8 rounded-full border border-slate-200 shadow-inner">
-                        <span className="w-2 h-2 rounded-full bg-primary-purple animate-pulse shrink-0" />
-                        <span className="text-[9px] sm:text-[10px] font-black text-slate-500 uppercase tracking-widest">
-                            Hyper Engine: <span className="text-primary-purple">Gemini 3 Preview</span>
-                        </span>
+                    <div className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-50 border border-slate-200/80 ml-1">
+                        <span className="w-1.5 h-1.5 rounded-full bg-violet-500 animate-pulse shrink-0" />
+                        <span className="text-[9px] font-bold text-slate-400 tracking-wide">Gemini 3 Flash</span>
                     </div>
 
                     <button
                         onClick={runFullDemo}
-                        className="hidden sm:flex items-center gap-3 px-6 py-2.5 bg-emerald-50 text-emerald-600 rounded-full text-[10px] font-black uppercase tracking-[0.2em] border border-emerald-100 hover:bg-emerald-100 hover:shadow-lg hover:shadow-emerald-500/10 transition-all active:scale-95 group"
+                        className="hidden md:flex items-center gap-1.5 px-3 py-1.5 bg-white text-slate-500 rounded-lg text-[9px] font-black uppercase tracking-widest border border-slate-200 hover:border-violet-300 hover:text-violet-600 hover:bg-violet-50 transition-all active:scale-95 shadow-sm group"
                     >
-                        <SparklesIcon className="w-4 h-4 group-hover:rotate-12 transition-transform" />
-                        Live Demo
+                        <SparklesIcon className="w-3 h-3 group-hover:scale-110 transition-transform" />
+                        Demo
                     </button>
 
-                    <div className="lg:hidden">
-                        <span className="text-[10px] font-black text-white bg-primary-purple px-4 py-2 rounded-full shadow-xl shadow-primary-purple/20">
-                            STEP {(['Dimension', 'Execution', 'Insight', 'Synthesis'].indexOf(activeTab) + 1)}/4
+                    <div className="lg:hidden ml-auto">
+                        <span className="text-[9px] font-black text-primary-purple bg-primary-purple/10 px-3 py-1.5 rounded-lg">
+                            {(['Dimension', 'Execution', 'Insight', 'Synthesis'].indexOf(activeTab) + 1)}/4
                         </span>
                     </div>
                 </div>
 
-                <nav className="flex items-center bg-slate-100/30 p-1 sm:p-1.5 rounded-full gap-1 border border-slate-100 w-full lg:w-auto overflow-x-auto no-scrollbar relative z-10 scroll-smooth">
+                <nav className="hidden lg:flex items-center bg-slate-100/60 p-1 rounded-xl gap-0.5 border border-slate-200/60">
                     {(['Dimension', 'Execution', 'Insight', 'Synthesis'] as DoETab[]).map(tab => (
                         <button
                             key={tab}
                             onClick={() => setActiveTab(tab)}
-                            className={`px-4 sm:px-10 py-2.5 sm:py-3 text-[9px] sm:text-[10px] font-black uppercase tracking-[0.15em] sm:tracking-[0.25em] rounded-full transition-all duration-500 whitespace-nowrap flex-1 lg:flex-none relative group overflow-hidden ${activeTab === tab
-                                ? 'bg-white text-primary-purple shadow-lg sm:shadow-xl shadow-primary-purple/10 translate-y-[-1px]'
-                                : 'text-slate-400 hover:text-slate-600 hover:bg-white/50'
+                            className={`px-5 py-2 text-[9px] font-black uppercase tracking-[0.2em] rounded-lg transition-all duration-300 whitespace-nowrap relative ${activeTab === tab
+                                ? 'bg-white text-primary-purple shadow-sm shadow-slate-200'
+                                : 'text-slate-400 hover:text-slate-600 hover:bg-white/60'
                                 }`}
                         >
-                            <span className="relative z-10">{tab}</span>
-                            {activeTab === tab && (
-                                <motion.div layoutId="tab-highlight" className="absolute inset-0 bg-primary-purple/5 opacity-50 rounded-full" />
-                            )}
+                            {tab}
                         </button>
                     ))}
                 </nav>
             </header>
 
-            <main className="flex-1 overflow-y-auto p-3 sm:p-8 lg:p-12 bg-[#FBFCFE] custom-scrollbar">
+            <main className="flex-1 overflow-y-auto p-4 sm:p-8 bg-slate-50/50 custom-scrollbar">
                 <AnimatePresence mode="wait">
                     {activeTab === 'Dimension' && (
-                        <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -15 }} className="max-w-6xl mx-auto space-y-6 sm:space-y-12 pb-20">
-                            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-10">
-                                <section className="space-y-4 sm:space-y-8">
-                                    <div className="card-premium p-5 sm:p-12">
-                                        <div className="mb-6 sm:mb-10">
+                        <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -12 }} className="max-w-6xl mx-auto space-y-5 sm:space-y-8 pb-20">
+                            <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 sm:gap-8">
+                                <section className="space-y-4 sm:space-y-5">
+                                    <div className="card-premium p-5 sm:p-8">
+                                        <div className="mb-5">
                                             <div className="section-badge">Optimization Context</div>
-                                            <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-3 sm:mb-4 block">Experiment Identifier</label>
+                                            <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-2 block">Experiment Identifier</label>
                                             <input
                                                 value={experimentName}
                                                 onChange={e => setExperimentName(e.target.value)}
                                                 className="w-full bg-slate-50/50 px-4 sm:px-8 py-3 sm:py-5 rounded-xl sm:rounded-2xl border border-slate-100 focus:border-primary-purple focus:ring-4 focus:ring-primary-purple/5 text-slate-900 text-base sm:text-xl font-black transition-all outline-none"
                                             />
                                         </div>
-                                        <div className="mb-6 sm:mb-10">
-                                            <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-3 sm:mb-4 block">Scientific Objective</label>
+                                        <div className="mb-5">
+                                            <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-2 block">Scientific Objective</label>
                                             <textarea
                                                 value={objective}
                                                 onChange={e => setObjective(e.target.value)}
                                                 placeholder="e.g. Seeking high-precision yield optimization..."
-                                                className="w-full bg-slate-50/50 p-4 sm:p-8 rounded-2xl sm:rounded-3xl border border-slate-100 focus:border-primary-purple focus:ring-4 focus:ring-primary-purple/5 h-24 sm:h-48 resize-none text-slate-800 text-xs sm:text-lg font-medium transition-all outline-none"
+                                                className="w-full bg-slate-50/50 p-4 sm:p-5 rounded-xl sm:rounded-2xl border border-slate-100 focus:border-primary-purple focus:ring-4 focus:ring-primary-purple/5 h-28 sm:h-36 resize-none text-slate-800 text-xs sm:text-sm font-medium transition-all outline-none"
                                             />
                                         </div>
-                                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-5 mt-4">
+                                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-4">
                                             <button
                                                 onClick={suggestVariablesWithAI}
                                                 disabled={isSuggesting || !objective}
-                                                className="btn-primary group !py-4 sm:!py-6"
+                                                className="btn-primary group !py-3 text-[10px] tracking-widest disabled:opacity-50 disabled:cursor-not-allowed"
                                             >
-                                                {isSuggesting ? <LoaderIcon className="w-4 h-4 sm:w-5 sm:h-5 animate-spin" /> : <SparklesIcon className="w-4 h-4 sm:w-5 sm:h-5 group-hover:scale-110 transition-all text-white/80" />}
-                                                <span className="tracking-[0.1em] sm:tracking-[0.2em] text-[10px] sm:text-xs">{isSuggesting ? 'PROBING...' : 'AI DIMENSIONING'}</span>
+                                                {isSuggesting ? <LoaderIcon className="w-4 h-4 animate-spin" /> : <SparklesIcon className="w-4 h-4 group-hover:scale-110 transition-transform text-white/80" />}
+                                                {isSuggesting ? 'Analyzing...' : 'AI Suggest Variables'}
                                             </button>
-                                            <button onClick={runFullDemo} className="btn-secondary !py-4 sm:!py-6 border-emerald-100 bg-emerald-50/30 text-emerald-600 hover:bg-emerald-50 text-[10px] sm:text-xs">
-                                                <ZapIcon className="w-4 h-4 sm:w-5 sm:h-5 fill-current" />
-                                                <span className="tracking-[0.1em] sm:tracking-[0.2em]">DEMO WORKFLOW</span>
+                                            <button onClick={runFullDemo} className="btn-secondary !py-3 text-[10px] tracking-widest flex items-center justify-center gap-2">
+                                                <ZapIcon className="w-4 h-4" />
+                                                Run Demo
                                             </button>
                                         </div>
                                     </div>
-                                    <div className="card-premium p-5 sm:p-12">
-                                        <div className="section-badge">Model selection</div>
-                                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-6 block">Experimental Design Framework</label>
+                                    <div className="card-premium p-5 sm:p-8">
+                                        <div className="section-badge">Model Selection</div>
+                                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-3 block">Experimental Design Framework</label>
                                         <div className="grid grid-cols-2 gap-2 sm:gap-4">
                                             {['Central Composite Design (CCD)', 'Box-Behnken Design (BBD)', 'Full Factorial', 'Partial Factorial'].map(t => (
                                                 <button
@@ -874,18 +900,19 @@ Responses: ${responses.map(r => r.name).join(', ')}` }]
                                         </div>
                                     </div>
                                 </section>
-                                <section className="space-y-4 sm:space-y-8">
-                                    <div className="card-premium p-5 sm:p-12">
-                                        <div className="flex justify-between items-center mb-8">
+                                <section className="space-y-4 sm:space-y-5">
+                                    <div className="card-premium p-5 sm:p-8">
+                                        <div className="flex justify-between items-center mb-6">
                                             <div>
                                                 <div className="section-badge">Input parameters</div>
                                                 <p className="text-[10px] font-black text-slate-900 uppercase tracking-[0.2em]">Variable Factors (X)</p>
                                             </div>
                                             <button
                                                 onClick={() => setFactors([...factors, { id: Math.random().toString(), name: 'New Factor', unit: 'u', low: 0, high: 100, type: 'Numerical' }])}
-                                                className="w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center bg-primary-purple text-white rounded-xl sm:rounded-2xl hover:bg-primary-purple/90 transition-all shadow-xl shadow-primary-purple/20"
+                                                className="flex items-center gap-1.5 px-3 py-1.5 text-[9px] font-black uppercase tracking-widest text-primary-purple bg-primary-purple/10 hover:bg-primary-purple hover:text-white rounded-lg transition-all"
                                             >
-                                                <PlusIcon className="w-5 h-5 sm:w-6 sm:h-6" />
+                                                <PlusIcon className="w-3.5 h-3.5" />
+                                                Add Factor
                                             </button>
                                         </div>
                                         <div className="space-y-4">
@@ -928,17 +955,18 @@ Responses: ${responses.map(r => r.name).join(', ')}` }]
                                             ))}
                                         </div>
                                     </div>
-                                    <div className="card-premium p-5 sm:p-12">
-                                        <div className="flex justify-between items-center mb-8">
+                                    <div className="card-premium p-5 sm:p-8">
+                                        <div className="flex justify-between items-center mb-6">
                                             <div>
                                                 <div className="section-badge">Response metrics</div>
                                                 <p className="text-[10px] font-black text-slate-900 uppercase tracking-[0.2em]">Quality Indicators (Y)</p>
                                             </div>
                                             <button
                                                 onClick={() => setResponses([...responses, { id: Math.random().toString(), name: 'New Response', unit: '%', goal: 'Maximize' }])}
-                                                className="w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center bg-primary-purple/10 text-primary-purple rounded-xl sm:rounded-2xl hover:bg-primary-purple/20 transition-all"
+                                                className="flex items-center gap-1.5 px-3 py-1.5 text-[9px] font-black uppercase tracking-widest text-primary-purple bg-primary-purple/10 hover:bg-primary-purple hover:text-white rounded-lg transition-all"
                                             >
-                                                <PlusIcon className="w-5 h-5 sm:w-6 sm:h-6" />
+                                                <PlusIcon className="w-3.5 h-3.5" />
+                                                Add Response
                                             </button>
                                         </div>
                                         <div className="space-y-4">
@@ -984,12 +1012,12 @@ Responses: ${responses.map(r => r.name).join(', ')}` }]
                                     </div>
                                 </section>
                             </div>
-                            <div className="flex justify-center pb-12 px-4">
+                            <div className="flex justify-center pb-8 px-4">
                                 <button
                                     onClick={generateDesign}
-                                    className="btn-primary w-full sm:w-auto !px-12 sm:!px-20 !py-5 sm:!py-8 text-xs sm:text-sm tracking-[0.3em] sm:tracking-[0.4em] shadow-2xl shadow-primary-purple/20"
+                                    className="btn-primary w-full sm:w-auto !px-10 sm:!px-16 !py-4 sm:!py-5 text-xs sm:text-sm tracking-[0.3em] shadow-xl shadow-primary-purple/20"
                                 >
-                                    INITIALIZE DESIGN MATRIX
+                                    Generate Design Matrix
                                 </button>
                             </div>
                         </motion.div >

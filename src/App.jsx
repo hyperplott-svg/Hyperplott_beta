@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
 import { AuthProvider, useAuth } from './context/AuthContext';
+import { ToastProvider } from './components/common/Toast';
 import LandingPage from './pages/LandingPage';
 import DashboardPage from './pages/Dashboard';
 import CreateDesign from './pages/CreateDesign';
@@ -14,6 +15,11 @@ import PrivacyPolicy from './pages/PrivacyPolicy';
 import TermsAndConditions from './pages/TermsAndConditions';
 import AboutPage from './pages/AboutPage';
 import PricingPage from './pages/PricingPage';
+import FAQPage from './pages/FAQPage';
+import DocsPage from './pages/DocsPage';
+import BlogPage from './pages/BlogPage';
+import ChangelogPage from './pages/ChangelogPage';
+import ContactPage from './pages/ContactPage';
 
 const ProtectedRoute = ({ children }) => {
   const { user, loading } = useAuth();
@@ -50,6 +56,7 @@ const RootRedirect = () => {
 function App() {
   return (
     <HelmetProvider>
+      <ToastProvider>
       <AuthProvider>
         <Router>
           <Routes>
@@ -61,6 +68,11 @@ function App() {
             <Route path="/terms" element={<TermsAndConditions />} />
             <Route path="/about" element={<AboutPage />} />
             <Route path="/pricing" element={<PricingPage />} />
+            <Route path="/faq" element={<FAQPage />} />
+            <Route path="/docs" element={<DocsPage />} />
+            <Route path="/blog" element={<BlogPage />} />
+            <Route path="/changelog" element={<ChangelogPage />} />
+            <Route path="/contact" element={<ContactPage />} />
 
             {/* Private Routes */}
             <Route path="/dashboard" element={<ProtectedRoute><MainLayout><DashboardPage /></MainLayout></ProtectedRoute>} />
@@ -78,6 +90,7 @@ function App() {
           </Routes>
         </Router>
       </AuthProvider>
+      </ToastProvider>
     </HelmetProvider>
   );
 }

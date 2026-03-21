@@ -23,9 +23,10 @@ const Navbar = ({ bannerActive }) => {
 
     const navLinks = [
         { name: 'Features', href: '/#features', type: 'anchor' },
+        { name: 'Docs', href: '/docs', type: 'link' },
         { name: 'Pricing', href: '/pricing', type: 'link' },
         { name: 'About', href: '/about', type: 'link' },
-        { name: 'Docs', href: '/#docs', type: 'anchor' },
+        { name: 'Blog', href: '/blog', type: 'link' },
     ];
 
     return (

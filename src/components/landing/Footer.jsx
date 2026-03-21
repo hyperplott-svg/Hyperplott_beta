@@ -2,6 +2,13 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Github, Twitter, Linkedin, Youtube, Mail } from 'lucide-react';
 
+const socialLinks = [
+    { Icon: Linkedin, href: 'https://linkedin.com/company/hyperplott', label: 'LinkedIn' },
+    { Icon: Twitter, href: 'https://twitter.com/hyperplott', label: 'Twitter' },
+    { Icon: Github, href: 'https://github.com/hyperplott', label: 'GitHub' },
+    { Icon: Youtube, href: 'https://youtube.com/@hyperplott', label: 'YouTube' },
+];
+
 const Footer = () => {
     return (
         <footer className="bg-bg-dark text-white pt-20 pb-12 relative overflow-hidden">
@@ -28,8 +35,9 @@ const Footer = () => {
                             Democratizing experimental design for researchers, scientists, and students worldwide.
                         </p>
                         <div className="flex gap-3">
-                            {[Linkedin, Twitter, Github, Youtube].map((Icon, i) => (
-                                <a key={i} href="#" className="w-9 h-9 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-slate-400 hover:bg-white/10 hover:text-white transition-all hover:-translate-y-1">
+                            {socialLinks.map(({ Icon, href, label }) => (
+                                <a key={label} href={href} target="_blank" rel="noreferrer" aria-label={label}
+                                    className="w-9 h-9 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-slate-400 hover:bg-white/10 hover:text-white transition-all hover:-translate-y-1">
                                     <Icon className="w-4 h-4" />
                                 </a>
                             ))}
@@ -40,20 +48,11 @@ const Footer = () => {
                     <div>
                         <h4 className="text-[10px] font-black uppercase tracking-[0.35em] text-slate-500 mb-6">Product</h4>
                         <ul className="space-y-4">
-                            {[
-                                { label: 'Matrix Generation', href: '/#features' },
-                                { label: '3D Optimization', href: '/#features' },
-                                { label: 'Statistical Engine', href: '/#features' },
-                            ].map(item => (
-                                <li key={item.label}>
-                                    <a href={item.href} className="text-slate-400 hover:text-white transition-colors text-sm font-medium">
-                                        {item.label}
-                                    </a>
-                                </li>
-                            ))}
-                            <li>
-                                <Link to="/pricing" className="text-slate-400 hover:text-white transition-colors text-sm font-medium">Pricing</Link>
-                            </li>
+                            <li><a href="/#features" className="text-slate-400 hover:text-white transition-colors text-sm font-medium">Matrix Generation</a></li>
+                            <li><a href="/#features" className="text-slate-400 hover:text-white transition-colors text-sm font-medium">3D Optimization</a></li>
+                            <li><a href="/#features" className="text-slate-400 hover:text-white transition-colors text-sm font-medium">Statistical Engine</a></li>
+                            <li><Link to="/pricing" className="text-slate-400 hover:text-white transition-colors text-sm font-medium">Pricing</Link></li>
+                            <li><Link to="/changelog" className="text-slate-400 hover:text-white transition-colors text-sm font-medium">Changelog</Link></li>
                         </ul>
                     </div>
 
@@ -63,8 +62,8 @@ const Footer = () => {
                         <ul className="space-y-4">
                             <li><Link to="/about" className="text-slate-400 hover:text-white transition-colors text-sm font-medium">About Us</Link></li>
                             <li><Link to="/about" className="text-slate-400 hover:text-white transition-colors text-sm font-medium">Our Team</Link></li>
-                            <li><a href="/#beta" className="text-slate-400 hover:text-white transition-colors text-sm font-medium">Beta Program</a></li>
-                            <li><Link to="/pricing" className="text-slate-400 hover:text-white transition-colors text-sm font-medium">Pricing</Link></li>
+                            <li><Link to="/blog" className="text-slate-400 hover:text-white transition-colors text-sm font-medium">Blog</Link></li>
+                            <li><Link to="/contact" className="text-slate-400 hover:text-white transition-colors text-sm font-medium">Contact</Link></li>
                         </ul>
                     </div>
 
@@ -72,12 +71,14 @@ const Footer = () => {
                     <div>
                         <h4 className="text-[10px] font-black uppercase tracking-[0.35em] text-slate-500 mb-6">Resources</h4>
                         <ul className="space-y-4">
+                            <li><Link to="/docs" className="text-slate-400 hover:text-white transition-colors text-sm font-medium">Documentation</Link></li>
+                            <li><Link to="/faq" className="text-slate-400 hover:text-white transition-colors text-sm font-medium">FAQ</Link></li>
                             <li><Link to="/privacy" className="text-slate-400 hover:text-white transition-colors text-sm font-medium">Privacy Policy</Link></li>
                             <li><Link to="/terms" className="text-slate-400 hover:text-white transition-colors text-sm font-medium">Terms of Service</Link></li>
                             <li>
                                 <a href="mailto:hello@hyperplott.com" className="flex items-center gap-2 text-slate-400 hover:text-white transition-colors text-sm font-medium group">
                                     <Mail className="w-3.5 h-3.5 group-hover:text-primary-purple transition-colors" />
-                                    Contact Us
+                                    hello@hyperplott.com
                                 </a>
                             </li>
                         </ul>
@@ -97,7 +98,7 @@ const Footer = () => {
                     <div className="flex gap-6 text-xs font-medium">
                         <Link to="/privacy" className="hover:text-white transition-all">Privacy</Link>
                         <Link to="/terms" className="hover:text-white transition-all">Terms</Link>
-                        <a href="mailto:hello@hyperplott.com" className="hover:text-white transition-all">Contact</a>
+                        <Link to="/contact" className="hover:text-white transition-all">Contact</Link>
                     </div>
                 </div>
             </div>
