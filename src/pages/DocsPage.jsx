@@ -20,8 +20,6 @@ const sidebar = [
         items: [
             { id: 'factorial', label: 'Factorial Designs' },
             { id: 'rsm', label: 'Response Surface (RSM)' },
-            { id: 'taguchi', label: 'Taguchi Methods' },
-            { id: 'mixture', label: 'Mixture Designs' },
         ]
     },
     {
@@ -54,7 +52,7 @@ const docs = {
 Traditional DoE software (Minitab, JMP, Design-Expert) requires weeks of training and costs thousands per license. Hyperplott delivers the same statistical rigor with:
 
 - **AI-guided setup** — describe your experiment and we suggest optimal factor ranges
-- **Instant design matrix** — generate full/fractional factorial, CCD, BBD, Taguchi, or Mixture designs in seconds
+- **Instant design matrix** — generate full/fractional factorial, CCD, and BBD designs in seconds
 - **Automated analysis** — AI runs ANOVA, regression, and generates 3D response surfaces
 - **Publication-ready exports** — one-click PDF, DOCX, and Excel reports
 
@@ -165,52 +163,6 @@ An efficient alternative to CCD with no corner points (axial runs).
 - After factorial screening narrows factors to 2–5
 - When you expect curved (non-linear) relationships
 - When finding a global optimum matters`,
-    },
-    taguchi: {
-        title: 'Taguchi Methods',
-        content: `Taguchi methods use orthogonal arrays to study many factors with few experiments, focusing on robust design — making products insensitive to noise.
-
-### Orthogonal Arrays
-| Array | Factors | Runs |
-|-------|---------|------|
-| L4    | 3       | 4    |
-| L8    | 7       | 8    |
-| L9    | 4       | 9    |
-| L12   | 11      | 12   |
-| L16   | 15      | 16   |
-| L18   | 7 (mixed) | 18 |
-
-### Signal-to-Noise Ratio
-Taguchi analysis uses S/N ratios to identify settings that minimize variability:
-- **Smaller is Better** — minimize defects, waste
-- **Larger is Better** — maximize yield, strength
-- **Nominal is Best** — target a specific value
-
-### Use Cases
-- Quality engineering in manufacturing
-- Pharmaceutical process robustness
-- Electronic component tolerance design`,
-    },
-    mixture: {
-        title: 'Mixture Designs',
-        content: `Mixture designs are used when the factors are ingredients of a mixture and must sum to a constant (e.g., 100%).
-
-### Simplex-Lattice Design
-Studies mixtures where all combinations of proportions are possible.
-- 3 components → 6 points
-- 4 components → 10 points
-
-### Simplex-Centroid Design
-Includes centroid points for better coverage of the mixture space.
-
-### Use Cases
-- Pharmaceutical formulation (tablet excipients)
-- Food formulation (recipe optimization)
-- Polymer blends
-- Coating compositions
-
-### Key Constraint
-All factor proportions must sum to 1 (or 100%). Hyperplott enforces this automatically and constrains your design accordingly.`,
     },
     anova: {
         title: 'Understanding ANOVA Results',
@@ -377,7 +329,7 @@ const DocsPage = () => {
         <div className="bg-bg-primary min-h-screen text-text-primary font-sans overflow-x-hidden">
             <SEO
                 title="Documentation — Hyperplott"
-                description="Complete documentation for Hyperplott DoE platform. Learn about factorial designs, RSM, Taguchi methods, ANOVA analysis, and report generation."
+                description="Complete documentation for Hyperplott DoE platform. Learn about factorial designs, RSM, ANOVA analysis, and report generation."
                 keywords="DoE documentation, design of experiments guide, factorial design tutorial, ANOVA guide, response surface methodology"
                 url="https://hyperplott.com/docs"
             />

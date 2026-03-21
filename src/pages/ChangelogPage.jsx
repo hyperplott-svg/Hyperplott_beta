@@ -75,7 +75,7 @@ const releases = [
         labelColor: 'bg-slate-400',
         changes: [
             { type: 'feature', text: 'Public beta launch — full AI-powered DoE engine live' },
-            { type: 'feature', text: 'Factorial, RSM (CCD/BBD), Taguchi, and Mixture design types' },
+            { type: 'feature', text: 'Factorial and RSM (CCD/BBD) design types' },
             { type: 'feature', text: 'AI-powered factor suggestion using Google Gemini' },
             { type: 'feature', text: 'Automated ANOVA and regression analysis' },
             { type: 'feature', text: '3D response surface plots with WebGL' },

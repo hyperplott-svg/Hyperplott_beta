@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
 import Navbar from '../components/landing/Navbar';
-import Founders from '../components/landing/Founders';
 import CTA from '../components/landing/CTA';
 import Footer from '../components/landing/Footer';
 import SEO from '../components/common/SEO';
@@ -97,7 +96,6 @@ const AboutPage = () => {
                     </div>
                 </section>
 
-                <Founders />
                 <CTA />
             </main>
 

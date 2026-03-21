@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, useInView, AnimatePresence } from 'framer-motion';
 import {
-    Grid3X3, Shapes, FlaskConical, Zap, ArrowRight, ArrowUpRight,
-    FileSpreadsheet, Activity, Database, Cpu, Sparkles, TrendingUp,
-    BarChart2, Clock, CheckCircle2, Play, Plus, ChevronRight,
-    Atom, Layers, Target, Beaker
+    Grid3X3, Shapes, FlaskConical, Zap, ArrowUpRight,
+    Activity, Database, Cpu, Sparkles, TrendingUp,
+    Clock, Play, ChevronRight,
+    Atom, Layers, Beaker
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
@@ -83,9 +83,7 @@ const StatCard = ({ label, value, suffix = '', icon: Icon, delay = 0, color, bgC
 // ── Design type badge ────────────────────────────────────────────────────────
 const typeMeta = {
     RSM:      { color: 'bg-violet-100 text-violet-700', dot: 'bg-violet-500' },
-    Mixture:  { color: 'bg-cyan-100 text-cyan-700',    dot: 'bg-cyan-500' },
     Factorial:{ color: 'bg-indigo-100 text-indigo-700',dot: 'bg-indigo-500' },
-    Taguchi:  { color: 'bg-rose-100 text-rose-700',    dot: 'bg-rose-500' },
 };
 
 // ── Terminal line ────────────────────────────────────────────────────────────
@@ -102,7 +100,7 @@ const TerminalLine = ({ label, value, valueColor = 'text-primary-purple', delay 
 );
 
 // ── Icon map for design types ────────────────────────────────────────────────
-const typeIconMap = { RSM: Atom, Mixture: Beaker, Factorial: Layers, Taguchi: Target };
+const typeIconMap = { RSM: Atom, Factorial: Layers };
 
 // ── Main Dashboard ───────────────────────────────────────────────────────────
 const Dashboard = () => {
@@ -155,15 +153,8 @@ const Dashboard = () => {
     const quickLaunch = [
         { title: "Factorial Design", desc: "Full & fractional screening",   icon: Grid3X3,    from: 'from-blue-500', to: 'to-indigo-600',   glow: 'shadow-blue-500/20',   path: "/workspace" },
         { title: "Response Surface", desc: "CCD & Box-Behnken optimization",icon: Shapes,     from: 'from-violet-500', to: 'to-purple-700', glow: 'shadow-violet-500/20', path: "/workspace" },
-        { title: "Mixture Design",   desc: "Simplex-Lattice formulation",   icon: FlaskConical,from:'from-fuchsia-500',to:'to-pink-600',    glow: 'shadow-fuchsia-500/20',path: "/workspace" },
     ];
 
-    const activity = [
-        { label: 'AI analysis completed', sub: 'Catalyst Optimization · R² = 0.982',  icon: CheckCircle2, color: 'text-emerald-500', bg: 'bg-emerald-50', time: '2m ago' },
-        { label: 'Design matrix generated', sub: 'Drug Formulation · 15 runs',          icon: Zap,          color: 'text-violet-500',  bg: 'bg-violet-50',  time: '1h ago' },
-        { label: 'Export complete',         sub: 'Yield Screen · PDF + DOCX',           icon: FileSpreadsheet,color:'text-cyan-500',   bg: 'bg-cyan-50',    time: '3h ago' },
-        { label: 'New experiment created',  sub: 'Battery Testing · Factorial 2⁴',      icon: Plus,         color: 'text-indigo-500',  bg: 'bg-indigo-50',  time: '5h ago' },
-    ];
 
     const handleOnboardingDone = () => {
         if (user) localStorage.setItem(`onboarding_done_${user.uid}`, '1');
@@ -324,70 +315,34 @@ const Dashboard = () => {
                 {stats.map((s, i) => <StatCard key={i} {...s} />)}
             </div>
 
-            {/* ── Two-column: Quick Launch + Activity ──────────────────── */}
-            <div className="grid lg:grid-cols-3 gap-6 md:gap-8">
-                {/* Quick Launch — 2/3 width */}
-                <div className="lg:col-span-2 space-y-4">
-                    <div className="flex items-center gap-3">
-                        <div className="w-1 h-5 bg-gradient-to-b from-primary-purple to-primary rounded-full" />
-                        <h2 className="text-sm font-black text-slate-900 uppercase tracking-widest">Quick Launch</h2>
-                    </div>
-                    <div className="grid sm:grid-cols-3 gap-4">
-                        {quickLaunch.map((item, i) => (
-                            <Link key={i} to={item.path} className="group">
-                                <motion.div
-                                    initial={{ opacity: 0, y: 16 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    transition={{ duration: 0.5, delay: i * 0.08 }}
-                                    whileHover={{ y: -6, transition: { type: 'spring', stiffness: 400, damping: 20 } }}
-                                    className="relative overflow-hidden rounded-2xl border border-slate-100 bg-white p-6 h-full shadow-sm hover:shadow-xl hover:shadow-slate-200/50 transition-shadow duration-300"
-                                >
-                                    {/* Corner glow */}
-                                    <div className={`absolute -top-6 -right-6 w-20 h-20 bg-gradient-to-br ${item.from} ${item.to} opacity-10 rounded-full blur-xl group-hover:opacity-20 group-hover:scale-150 transition-all duration-500`} />
-
-                                    <div className={`w-12 h-12 rounded-2xl bg-gradient-to-br ${item.from} ${item.to} flex items-center justify-center text-white mb-4 shadow-lg ${item.glow} group-hover:scale-110 group-hover:rotate-6 transition-transform duration-300`}>
-                                        <item.icon className="w-6 h-6" />
-                                    </div>
-                                    <h3 className="text-base font-black text-slate-900 mb-1 leading-tight">{item.title}</h3>
-                                    <p className="text-[11px] font-medium text-slate-400 mb-4 leading-snug">{item.desc}</p>
-                                    <div className="flex items-center gap-1 text-[10px] font-black text-slate-300 group-hover:text-primary-purple uppercase tracking-widest transition-colors">
-                                        Launch <ChevronRight className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" />
-                                    </div>
-                                </motion.div>
-                            </Link>
-                        ))}
-                    </div>
+            {/* ── Quick Launch ──────────────────────────────────────────── */}
+            <div className="space-y-4">
+                <div className="flex items-center gap-3">
+                    <div className="w-1 h-5 bg-gradient-to-b from-primary-purple to-primary rounded-full" />
+                    <h2 className="text-sm font-black text-slate-900 uppercase tracking-widest">Quick Launch</h2>
                 </div>
-
-                {/* Activity feed — 1/3 width */}
-                <div className="space-y-4">
-                    <div className="flex items-center gap-3">
-                        <div className="w-1 h-5 bg-gradient-to-b from-accent-teal to-cyan-400 rounded-full" />
-                        <h2 className="text-sm font-black text-slate-900 uppercase tracking-widest">Recent Activity</h2>
-                    </div>
-                    <div className="bg-white rounded-2xl border border-slate-100 divide-y divide-slate-50 shadow-sm overflow-hidden">
-                        {activity.map((a, i) => {
-                            const Icon = a.icon;
-                            return (
-                                <motion.div
-                                    key={i}
-                                    initial={{ opacity: 0, x: 16 }}
-                                    animate={{ opacity: 1, x: 0 }}
-                                    transition={{ duration: 0.4, delay: i * 0.07 }}
-                                    className="flex items-start gap-3 p-4 hover:bg-slate-50/50 transition-colors group cursor-default"
-                                >
-                                    <div className={`w-8 h-8 rounded-xl ${a.bg} flex items-center justify-center shrink-0 mt-0.5`}>
-                                        <Icon className={`w-3.5 h-3.5 ${a.color}`} />
-                                    </div>
-                                    <div className="flex-1 min-w-0">
-                                        <p className="text-xs font-black text-slate-800 leading-tight truncate">{a.label}</p>
-                                        <p className="text-[10px] font-medium text-slate-400 truncate mt-0.5">{a.sub}</p>
-                                    </div>
-                                    <span className="text-[9px] font-bold text-slate-300 whitespace-nowrap mt-0.5">{a.time}</span>
-                                </motion.div>
-                            );
-                        })}
-                    </div>
+                <div className="grid sm:grid-cols-2 gap-4">
+                    {quickLaunch.map((item, i) => (
+                        <Link key={i} to={item.path} className="group">
+                            <motion.div
+                                initial={{ opacity: 0, y: 16 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 0.5, delay: i * 0.08 }}
+                                whileHover={{ y: -6, transition: { type: 'spring', stiffness: 400, damping: 20 } }}
+                                className="relative overflow-hidden rounded-2xl border border-slate-100 bg-white p-6 h-full shadow-sm hover:shadow-xl hover:shadow-slate-200/50 transition-shadow duration-300"
+                            >
+                                <div className={`absolute -top-6 -right-6 w-20 h-20 bg-gradient-to-br ${item.from} ${item.to} opacity-10 rounded-full blur-xl group-hover:opacity-20 group-hover:scale-150 transition-all duration-500`} />
+                                <div className={`w-12 h-12 rounded-2xl bg-gradient-to-br ${item.from} ${item.to} flex items-center justify-center text-white mb-4 shadow-lg ${item.glow} group-hover:scale-110 group-hover:rotate-6 transition-transform duration-300`}>
+                                    <item.icon className="w-6 h-6" />
+                                </div>
+                                <h3 className="text-base font-black text-slate-900 mb-1 leading-tight">{item.title}</h3>
+                                <p className="text-[11px] font-medium text-slate-400 mb-4 leading-snug">{item.desc}</p>
+                                <div className="flex items-center gap-1 text-[10px] font-black text-slate-300 group-hover:text-primary-purple uppercase tracking-widest transition-colors">
+                                    Launch <ChevronRight className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" />
+                                </div>
+                            </motion.div>
+                        </Link>
+                    ))}
                 </div>
             </div>
 
@@ -522,36 +477,6 @@ const Dashboard = () => {
                 )}
             </section>
 
-            {/* ── Bottom CTA Banner ─────────────────────────────────────── */}
-            <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.4 }}
-                className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-primary-purple via-violet-600 to-primary p-6 md:p-8 flex flex-col sm:flex-row items-center justify-between gap-5"
-            >
-                <div className="absolute inset-0 pointer-events-none">
-                    <div className="absolute right-0 top-0 w-60 h-60 bg-white/5 blur-[60px] rounded-full -translate-y-1/2 translate-x-1/4" />
-                </div>
-                <div className="relative z-10">
-                    <div className="flex items-center gap-2 mb-2">
-                        <BarChart2 className="w-4 h-4 text-white/60" />
-                        <span className="text-[10px] font-black uppercase tracking-widest text-white/60">AI Analysis Engine</span>
-                    </div>
-                    <h3 className="text-xl md:text-2xl font-black text-white leading-tight">
-                        Ready to run your next experiment?
-                    </h3>
-                    <p className="text-white/60 text-sm font-medium mt-1">From objective to publication-ready report in minutes.</p>
-                </div>
-                <Link to="/workspace" className="relative z-10 shrink-0">
-                    <motion.button
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
-                        className="h-11 px-8 rounded-xl bg-white text-primary-purple font-black text-sm uppercase tracking-widest flex items-center gap-2 shadow-xl shadow-black/20 hover:shadow-black/30 transition-shadow"
-                    >
-                        Launch DoE Engine <ArrowRight className="w-4 h-4" />
-                    </motion.button>
-                </Link>
-            </motion.div>
         </div>
     );
 };

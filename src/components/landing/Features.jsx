@@ -4,7 +4,7 @@ import { Canvas } from '@react-three/fiber';
 import { Environment, Float, PerspectiveCamera } from '@react-three/drei';
 import FeatureIcon3D from '../3d/FeatureIcon3D';
 import ThreeErrorBoundary from '../common/ThreeErrorBoundary';
-import { ChevronRight, Zap, Boxes, Activity, FlaskConical, Database, Globe } from 'lucide-react';
+import { ChevronRight, Boxes, Activity, Database, Globe } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const Features = () => {
@@ -22,20 +22,6 @@ const Features = () => {
             icon: Activity,
             title: "Response Surface",
             description: "Optimize your process with CCD and Box-Behnken designs to find the mathematically perfect setup."
-        },
-        {
-            type: 'array',
-            color: "#1e3a8a",
-            icon: Zap,
-            title: "Taguchi Methods",
-            description: "Achieve robust quality with orthogonal arrays. Optimize processes to be insensitive to noise."
-        },
-        {
-            type: 'mixture',
-            color: "#7c3aed",
-            icon: FlaskConical,
-            title: "Mixture Designs",
-            description: "Perfect your formulation. Handle component dependencies efficiently with Simplex-Lattice designs."
         },
         {
             type: 'chart',

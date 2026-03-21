@@ -282,7 +282,7 @@ const HowItWorks = () => {
             number: "02",
             badge: "Smart Recommendation",
             title: "Select Your Strategy",
-            description: "Hyperplott evaluates your objectives and resources, then recommends the optimal DoE methodology with a clear rationale — Full Factorial, RSM, Taguchi, and more.",
+            description: "Hyperplott evaluates your objectives and resources, then recommends the optimal DoE methodology with a clear rationale — Full Factorial, RSM, and more.",
             gradient: "from-primary to-accent-teal",
             mockup: <StrategyMockup />,
         },

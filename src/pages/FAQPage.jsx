@@ -38,7 +38,7 @@ const questions = [
     {
         category: 'features',
         q: "What design types does Hyperplott support?",
-        a: "Hyperplott supports all major DoE methodologies: Full Factorial, Fractional Factorial (for screening), Response Surface Methodology (CCD & Box-Behnken for optimization), Taguchi Orthogonal Arrays (for robust design), and Mixture Designs (Simplex-Lattice & Simplex-Centroid for formulation studies)."
+        a: "Hyperplott supports Full Factorial, Fractional Factorial (for screening), and Response Surface Methodology (CCD & Box-Behnken for optimization)."
     },
     {
         category: 'features',

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Sidebar from './Sidebar';
 import Header from './Header';
 import { motion } from 'framer-motion';
@@ -6,13 +6,6 @@ import { clsx } from 'clsx';
 
 const MainLayout = ({ children, noPadding = false }) => {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-
-    useEffect(() => {
-        const check = () => setIsSidebarOpen(window.innerWidth >= 1024);
-        check();
-        window.addEventListener('resize', check);
-        return () => window.removeEventListener('resize', check);
-    }, []);
 
     return (
         <div className="flex h-screen bg-bg-primary overflow-hidden transition-colors duration-500">

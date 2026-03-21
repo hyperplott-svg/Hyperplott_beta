@@ -8,6 +8,9 @@ import * as docx from "docx";
 import type { ViewType, LoadingState, DoEFactor, DoEResponse, DoERun, DoEAnalysisResult, DoEDesignType, ResponseAnalysis } from './types';
 import Logo from './components/Logo';
 import WelcomeScreen from './components/WelcomeScreen';
+import SessionSidebar from './components/SessionSidebar';
+import { useSessionHistory } from './hooks/useSessionHistory';
+import type { DoESession } from './hooks/useSessionHistory';
 import {
     SparklesIcon, PlusIcon, InfoIcon,
     ZapIcon, TargetIcon, LoaderIcon, ChartBarIcon,
@@ -186,6 +189,69 @@ const DesignOfExperimentView: React.FC<{ setActiveView: (view: ViewType) => void
     const [showExportMenu, setShowExportMenu] = useState(false);
     const [copiedAnova, setCopiedAnova] = useState(false);
     const [isDemoAutoRunning, setIsDemoAutoRunning] = useState(false);
+    const [activeSessionId, setActiveSessionId] = useState<string | null>(null);
+    const [isHistorySidebarOpen, setIsHistorySidebarOpen] = useState(false);
+
+    // ── Session history (localStorage, no DB) ─────────────────────────────────
+    const { sessions, saveSession, updateSession, deleteSession } = useSessionHistory();
+
+    const saveCurrentSession = useCallback((analysisResult?: DoEAnalysisResult | null) => {
+        const data = {
+            title: experimentName || 'Untitled Experiment',
+            objective,
+            designType,
+            factors,
+            responses,
+            runMatrix,
+            analysis: analysisResult !== undefined ? analysisResult : analysis,
+            activeTab,
+        };
+        if (activeSessionId) {
+            updateSession(activeSessionId, data);
+        } else {
+            const id = saveSession(data);
+            setActiveSessionId(id);
+        }
+    }, [experimentName, objective, designType, factors, responses, runMatrix, analysis, activeTab, activeSessionId, saveSession, updateSession]);
+
+    const handleLoadSession = useCallback((session: DoESession) => {
+        setExperimentName(session.title);
+        setObjective(session.objective);
+        setDesignType(session.designType);
+        setFactors(session.factors);
+        setResponses(session.responses);
+        setRunMatrix(session.runMatrix);
+        setAnalysis(session.analysis);
+        setActiveTab((session.activeTab as DoETab) || 'Dimension');
+        setActiveSessionId(session.id);
+        if (session.analysis) {
+            setSelectedAnalysisKey(Object.keys(session.analysis.analyses || {})[0] || '');
+        } else {
+            setSelectedAnalysisKey('');
+        }
+        setError(null);
+        setLoadingState('idle');
+    }, []);
+
+    const handleNewExperiment = useCallback(() => {
+        setExperimentName('New Optimization Project');
+        setObjective('');
+        setFactors([
+            { id: 'f1', name: 'Lipid Concentration', unit: 'mg/mL', low: 1, high: 10, type: 'Numerical' },
+            { id: 'f2', name: 'Temperature', unit: '°C', low: 20, high: 80, type: 'Numerical' }
+        ]);
+        setResponses([
+            { id: 'r1', name: 'Entrapment Efficiency', unit: '%', goal: 'Maximize' },
+            { id: 'r2', name: 'Particle Size', unit: 'nm', goal: 'Minimize' }
+        ]);
+        setRunMatrix([]);
+        setAnalysis(null);
+        setActiveTab('Dimension');
+        setActiveSessionId(null);
+        setSelectedAnalysisKey('');
+        setError(null);
+        setLoadingState('idle');
+    }, []);
 
     const loadDemo = useCallback(() => {
         setExperimentName("Nanoparticle Synthesis Optimization");
@@ -638,6 +704,8 @@ Responses: ${responses.map(r => r.name).join(', ')}` }]
             setSelectedAnalysisKey(Object.keys(result.analyses || {})[0] || '');
             setActiveTab('Insight');
             setLoadingState('success');
+            // Auto-save to local history after successful analysis
+            setTimeout(() => saveCurrentSession(result), 0);
         } catch (e) { handleError(e, "Analysis Engine"); }
     };
 
@@ -812,7 +880,20 @@ Responses: ${responses.map(r => r.name).join(', ')}` }]
     };
 
     return (
-        <div className="h-full flex flex-col bg-bg-primary overflow-hidden selection:bg-primary-purple/20">
+        <div className="h-full flex bg-bg-primary overflow-hidden selection:bg-primary-purple/20">
+            {/* Session History Sidebar */}
+            <SessionSidebar
+                sessions={sessions}
+                activeSessionId={activeSessionId}
+                onLoad={handleLoadSession}
+                onNew={handleNewExperiment}
+                onDelete={deleteSession}
+                isOpen={isHistorySidebarOpen}
+                onToggle={() => setIsHistorySidebarOpen(o => !o)}
+            />
+
+            {/* Main content */}
+            <div className="flex-1 flex flex-col min-h-0 overflow-hidden">
             <header className="bg-white border-b border-slate-100 px-4 sm:px-8 py-3 flex items-center justify-between gap-4 z-30 relative">
                 {/* Branding Section */}
                 <div className="flex items-center gap-3 min-w-0">
@@ -831,19 +912,6 @@ Responses: ${responses.map(r => r.name).join(', ')}` }]
                             {experimentName}
                         </p>
                     </div>
-
-                    <div className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-50 border border-slate-200/80 ml-1">
-                        <span className="w-1.5 h-1.5 rounded-full bg-violet-500 animate-pulse shrink-0" />
-                        <span className="text-[9px] font-bold text-slate-400 tracking-wide">Gemini 3 Flash</span>
-                    </div>
-
-                    <button
-                        onClick={runFullDemo}
-                        className="hidden md:flex items-center gap-1.5 px-3 py-1.5 bg-white text-slate-500 rounded-lg text-[9px] font-black uppercase tracking-widest border border-slate-200 hover:border-violet-300 hover:text-violet-600 hover:bg-violet-50 transition-all active:scale-95 shadow-sm group"
-                    >
-                        <SparklesIcon className="w-3 h-3 group-hover:scale-110 transition-transform" />
-                        Demo
-                    </button>
 
                     <div className="lg:hidden ml-auto">
                         <span className="text-[9px] font-black text-primary-purple bg-primary-purple/10 px-3 py-1.5 rounded-lg">
@@ -1326,7 +1394,8 @@ Responses: ${responses.map(r => r.name).join(', ')}` }]
                     </motion.div>
                 )
             }
-        </div >
+            </div>{/* end main content wrapper */}
+        </div>
     );
 };
 

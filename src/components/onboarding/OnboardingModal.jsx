@@ -14,7 +14,7 @@ const RESEARCH_AREAS = [
 const DOE_LEVELS = [
     { id: 'beginner', label: 'Beginner', desc: "I'm new to experimental design" },
     { id: 'intermediate', label: 'Intermediate', desc: "I've used basic factorial designs" },
-    { id: 'advanced', label: 'Advanced', desc: "I'm comfortable with RSM, Taguchi, etc." },
+    { id: 'advanced', label: 'Advanced', desc: "I'm comfortable with RSM and similar methods." },
 ];
 
 const steps = ['Research Area', 'Experience', 'Ready!'];
