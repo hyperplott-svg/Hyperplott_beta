@@ -337,7 +337,32 @@ const DesignOfExperimentView: React.FC<{ setActiveView: (view: ViewType) => void
                     }
                     throw markdownError;
                 } catch (extractionError) {
-                    throw extractionError;
+                    // Fourth pass: attempt to repair truncated / mid-array-cut JSON
+                    try {
+                        const repairTruncated = (s: string): string => {
+                            const stack: string[] = [];
+                            let inStr = false, esc = false, lastGood = 0;
+                            for (let i = 0; i < s.length; i++) {
+                                const c = s[i];
+                                if (esc) { esc = false; continue; }
+                                if (inStr) { if (c === '\\') { esc = true; } else if (c === '"') { inStr = false; lastGood = i; } continue; }
+                                if (c === '"') { inStr = true; continue; }
+                                if (c === '{' || c === '[') { stack.push(c === '{' ? '}' : ']'); continue; }
+                                if (c === '}' || c === ']') { stack.pop(); lastGood = i; continue; }
+                                if (/[-\d.tfn]/.test(c)) {
+                                    const m = s.slice(i).match(/^(-?\d+\.?\d*(?:[eE][+-]?\d+)?|true|false|null)/);
+                                    if (m) { lastGood = i + m[0].length - 1; i += m[0].length - 1; }
+                                }
+                            }
+                            if (stack.length === 0) return s;
+                            let fixed = s.slice(0, lastGood + 1).replace(/,\s*$/, '');
+                            for (let j = stack.length - 1; j >= 0; j--) fixed += stack[j];
+                            return fixed;
+                        };
+                        return JSON.parse(repairTruncated(cleanJSONString(text)));
+                    } catch {
+                        throw extractionError;
+                    }
                 }
             }
         }
@@ -361,8 +386,9 @@ const DesignOfExperimentView: React.FC<{ setActiveView: (view: ViewType) => void
                 attempt++;
                 const errText = (err.message || '').toUpperCase();
                 const isRetryable = errText.includes('429') || err.status === 429 || errText.includes('RESOURCE_EXHAUSTED') ||
-                    errText.includes('503') || err.status === 503 || errText.includes('UNAVAILABLE') || 
-                    errText.includes('OVERLOADED') || errText.includes('DEADLINE_EXCEEDED');
+                    errText.includes('503') || err.status === 503 || errText.includes('UNAVAILABLE') ||
+                    errText.includes('OVERLOADED') || errText.includes('DEADLINE_EXCEEDED') ||
+                    err instanceof SyntaxError || errText.includes('JSON') || errText.includes('UNEXPECTED TOKEN');
 
                 if (isRetryable && attempt < maxRetries) {
                     const delay = Math.min(Math.pow(2.2, attempt) * 1000, 15000) + Math.random() * 1000;
